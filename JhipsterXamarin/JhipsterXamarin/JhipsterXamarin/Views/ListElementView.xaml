@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:MvxContentPage  xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms" 
+                       x:TypeArguments="viewModels:ListViewModel" 
+                       xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms" 
+                       xmlns:viewModels="clr-namespace:JhipsterXamarin.ViewModels;assembly=JhipsterXamarin"
+                       xmlns="http://xamarin.com/schemas/2014/forms"            
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       x:Class="JhipsterXamarin.Views.ListElementView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
+                <Label Text="Application Test" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
+            </Frame>
+            <Label Text="{Binding NbElement, Mode=OneWay}" />
+            <Button Text="Ajouter" Command="{Binding AddCommand}" FontSize="16"/>
+            <Button Text="Supprimer"  Command="{Binding RemoveCommand}" FontSize="16"/>
+            <ListView x:Name="listView" ItemsSource="{Binding ListElement}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding .}" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</views:MvxContentPage>
