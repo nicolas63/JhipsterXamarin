@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 using JhipsterXamarin.Services;
+using MvvmCross.Navigation;
+using System.Net.Http;
 
 namespace JhipsterXamarin.ViewModels
 {
@@ -14,10 +16,16 @@ namespace JhipsterXamarin.ViewModels
         public MvvmCross.Commands.IMvxCommand AddCommand { get; set; }
         public MvvmCross.Commands.IMvxCommand RemoveCommand { get; set; }
 
+        private readonly IMvxNavigationService _navigationService;
+
         readonly IListService _listService;
 
-        public ListViewModel(IListService listService)
+        public IMvxAsyncCommand NavigateToSecondPageCommand { get; private set; }
+
+        public ListViewModel(IMvxNavigationService navigationService, IListService listService)
         {
+            _navigationService = navigationService;
+
             _listService = listService;
             AddCommand = new MvxCommand(() =>
             {
@@ -27,6 +35,9 @@ namespace JhipsterXamarin.ViewModels
             {
                 NbElement--;
             });
+
+            NavigateToSecondPageCommand = new MvxAsyncCommand(() => 
+            _navigationService.Navigate<LoginViewModel>());
 
         }
 

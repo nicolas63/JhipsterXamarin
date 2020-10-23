@@ -12,6 +12,7 @@
                 <Label Text="Application Test" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
             </Frame>
             <Label Text="{Binding NbElement, Mode=OneWay}" />
+            <Button Text="Sign in" Command="{Binding NavigateToSecondPageCommand}"/>
             <Button Text="Ajouter" Command="{Binding AddCommand}" FontSize="16"/>
             <Button Text="Supprimer"  Command="{Binding RemoveCommand}" FontSize="16"/>
             <ListView x:Name="listView" ItemsSource="{Binding ListElement}">
