@@ -10,16 +10,16 @@ namespace JhipsterXamarin.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private const string BaseUri = "http://10.0.2.2:8080/";
+        private const string BaseUri = "http://10.0.2.2:5001/";
         private const string AuthenticatationUrl = "api/authenticate";
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";
 
         public bool IsAuthenticated { get; set; }
-        public static JwtToken JwtToken { get; set; }
+        public JwtToken JwtToken { get; set; }
         public UserModel CurrentUser { get; set; }
 
-        private readonly HttpClient _httpClient;
+        readonly HttpClient _httpClient;
 
         public AuthenticationService(HttpClient httpClient)
         {
@@ -44,7 +44,7 @@ namespace JhipsterXamarin.Services
             _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {jwtToken.IdToken}");
             try
             {
-                CurrentUser = await _httpClient.GetFromJsonAsync<UserModel>(AccountUrl);
+                CurrentUser = await _httpClient.GetFromJsonAsync<UserModel>(BaseUri + AccountUrl);
             }
             catch
             {

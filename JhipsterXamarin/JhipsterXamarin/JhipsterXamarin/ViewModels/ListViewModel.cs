@@ -16,39 +16,11 @@ namespace JhipsterXamarin.ViewModels
         public MvvmCross.Commands.IMvxCommand AddCommand { get; set; }
         public MvvmCross.Commands.IMvxCommand RemoveCommand { get; set; }
 
-        private readonly IMvxNavigationService _navigationService;
+        readonly IMvxNavigationService _navigationService;
 
         readonly IListService _listService;
 
         public IMvxAsyncCommand NavigateToSecondPageCommand { get; private set; }
-
-        public ListViewModel(IMvxNavigationService navigationService, IListService listService)
-        {
-            _navigationService = navigationService;
-
-            _listService = listService;
-            AddCommand = new MvxCommand(() =>
-            {
-                NbElement++;
-            });
-            RemoveCommand = new MvxCommand(() =>
-            {
-                NbElement--;
-            });
-
-            NavigateToSecondPageCommand = new MvxAsyncCommand(() => 
-            _navigationService.Navigate<LoginViewModel>());
-
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
-
-            _nbElement = 5;
-
-            Regenerate();
-        }
 
         private int _nbElement;
         public int NbElement
@@ -71,6 +43,34 @@ namespace JhipsterXamarin.ViewModels
                 _listElement = value;
                 RaisePropertyChanged(() => ListElement);
             }
+        }
+
+        public ListViewModel(IMvxNavigationService navigationService, IListService listService)
+        {
+            _navigationService = navigationService;
+            _listService = listService;
+
+            AddCommand = new MvxCommand(() =>
+            {
+                NbElement++;
+            });
+            RemoveCommand = new MvxCommand(() =>
+            {
+                NbElement--;
+            });
+
+            NavigateToSecondPageCommand = new MvxAsyncCommand(() => 
+            _navigationService.Navigate<LoginViewModel, HttpClient>(new HttpClient()));
+
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            _nbElement = 5;
+
+            Regenerate();
         }
 
         private void Regenerate()

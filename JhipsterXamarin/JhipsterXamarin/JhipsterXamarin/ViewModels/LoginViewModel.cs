@@ -1,5 +1,6 @@
 ﻿using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
+using JhipsterXamarin.Views;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -11,30 +12,42 @@ using System.Threading.Tasks;
 
 namespace JhipsterXamarin.ViewModels
 {
-    public class LoginViewModel : MvxViewModel
+    public class LoginViewModel : MvxViewModel<HttpClient>
     {
         public MvvmCross.Commands.IMvxCommand SignIn { get; set; }
 
-        readonly IAuthenticationService _authenticationService;
+        public IMvxAsyncCommand Navigate { get; private set; }
 
-        public LoginViewModel(IMvxNavigationService navigationService)
-        {
-            _authenticationService = new AuthenticationService(new HttpClient());
-            SignIn = new MvxCommand(async () => {
-                await signIn();               
-            });
-        }
+        private IAuthenticationService _authenticationService;
 
-        public Task<bool> signIn()
-        {          
-            var model = new LoginModel();
-            model.Username = Username;
-            model.Password = Password;
-            model.RememberMe = RememberMe;
-            return _authenticationService.SignIn(model);            
-        }
+        private IMvxNavigationService _navigationService;
+
+        private HttpClient _httpClient;
 
         private string _username;
+
+        private bool _active = false;
+
+        public bool Active
+        {
+            get => _active;
+            set
+            {
+                _active = value;
+                RaisePropertyChanged(() => Active);
+            }
+        }
+
+        private bool _enabled = false;
+
+        public bool Enabled {
+            get => _enabled;
+            set
+            {
+                _enabled = value;
+                RaisePropertyChanged(() => Enabled);
+            }
+        }
 
         public string Username
         {
@@ -43,6 +56,7 @@ namespace JhipsterXamarin.ViewModels
             {
                 _username = value;
                 RaisePropertyChanged(() => Username);
+                ReloadActive();
             }
         }
 
@@ -54,6 +68,7 @@ namespace JhipsterXamarin.ViewModels
             {
                 _password = value;
                 RaisePropertyChanged(() => Password);
+                ReloadActive();
             }
         }
 
@@ -68,9 +83,49 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
+        public string FirstName
+        {
+            get => _authenticationService.CurrentUser.FirstName;
+        }
+
+        public LoginViewModel(IMvxNavigationService navigationService)
+        {
+            _navigationService = navigationService;
+
+            Navigate = new MvxAsyncCommand(() =>
+            _navigationService.Navigate<MyEntityViewModel, HttpClient>(_httpClient));
+
+            SignIn = new MvxCommand(async () => {
+                Enabled = !(await signIn());  
+            });
+        }
+
+        public void ReloadActive()
+        {
+            if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Username))
+                Active = false;
+            else
+                Active = (Password.Length > 4 && Username.Length > 4);
+        }
+
+        public Task<bool> signIn()
+        {          
+            var model = new LoginModel();
+            model.Username = Username;
+            model.Password = Password;
+            model.RememberMe = RememberMe;
+            return _authenticationService.SignIn(model);            
+        }
+
         public override async Task Initialize()
         {
             await base.Initialize();
+        }
+
+        public override void Prepare(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+            _authenticationService = new AuthenticationService(_httpClient);
         }
     }
 }

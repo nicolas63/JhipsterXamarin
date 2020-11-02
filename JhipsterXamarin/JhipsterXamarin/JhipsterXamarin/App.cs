@@ -17,6 +17,8 @@ namespace JhipsterXamarin
         {
             Mvx.IoCProvider.RegisterType<IListService, ListService>();
             Mvx.IoCProvider.RegisterType<IAuthenticationService, AuthenticationService>();
+            Mvx.IoCProvider.RegisterType<IMyEntityService, MyEntityService>();
+
 
             RegisterAppStart<ListViewModel>();
 

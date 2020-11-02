@@ -18,6 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\MyEntityView.xaml.cs">
+      <DependentUpon>MyEntityView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="FormsApp.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
