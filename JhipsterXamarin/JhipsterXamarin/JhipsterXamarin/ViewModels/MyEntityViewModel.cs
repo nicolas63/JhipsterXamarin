@@ -37,7 +37,7 @@ namespace JhipsterXamarin.ViewModels
             _navigationService = navigationService;
             AddCommand = new MvxCommand(async () =>
             {
-                ListElement = await _myEntityService.GetEntities();
+                // Add a new MyEntity
             });
         }
 
@@ -50,6 +50,7 @@ namespace JhipsterXamarin.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize();
+            ListElement = await _myEntityService.GetEntities();
         }
     }
 }

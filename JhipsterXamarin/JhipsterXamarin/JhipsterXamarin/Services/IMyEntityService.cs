@@ -9,5 +9,6 @@ namespace JhipsterXamarin.Services
     public interface IMyEntityService
     {
         Task<List<MyEntityModel>> GetEntities();
+        Task<MyEntityModel> GetEntity(int v);
     }
 }
