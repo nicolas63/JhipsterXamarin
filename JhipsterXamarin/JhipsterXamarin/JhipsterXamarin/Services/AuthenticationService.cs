@@ -10,7 +10,7 @@ namespace JhipsterXamarin.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private const string BaseUri = "http://10.0.2.2:5001/";
+        private const string BaseUri = "http://10.0.2.2:8080/";
         private const string AuthenticatationUrl = "api/authenticate";
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";

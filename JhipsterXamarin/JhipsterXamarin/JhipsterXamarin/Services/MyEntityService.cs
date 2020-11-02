@@ -11,8 +11,8 @@ namespace JhipsterXamarin.Services
     public class MyEntityService : IMyEntityService
     {
         private readonly HttpClient _httpClient;
-        private const string BaseUri = "http://10.0.2.2:5001/";
-        private const string ListEntitiesUrl = "api/myentitites/1";
+        private const string BaseUri = "http://10.0.2.2:8080/";
+        private const string ListEntitiesUrl = "api/myentitites";
 
         public MyEntityService(HttpClient httpClient)
         {
