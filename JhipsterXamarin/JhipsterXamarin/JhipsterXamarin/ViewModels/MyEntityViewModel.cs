@@ -35,10 +35,6 @@ namespace JhipsterXamarin.ViewModels
         public MyEntityViewModel(IMvxNavigationService navigationService)
         {            
             _navigationService = navigationService;
-            AddCommand = new MvxCommand(async () =>
-            {
-                // Add a new MyEntity
-            });
         }
 
         public override void Prepare(HttpClient httpClient)
