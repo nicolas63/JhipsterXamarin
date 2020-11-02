@@ -29,5 +29,15 @@ namespace JhipsterXamarin.Services
         {
             return await _httpClient.GetFromJsonAsync<MyEntityModel>($"{BaseUri}/{ListEntitiesUrl}/{id}");
         }
+
+        public async Task CreateEntity(MyEntityModel newElement)
+        {
+            await _httpClient.PostAsJsonAsync<MyEntityModel>($"{BaseUri}/{ListEntitiesUrl}", newElement);
+        }
+
+        public async Task DeleteEntity(MyEntityModel currentElement)
+        {
+            await _httpClient.DeleteAsync($"{BaseUri}/{ListEntitiesUrl}/{currentElement.Id}");
+        }
     }
 }

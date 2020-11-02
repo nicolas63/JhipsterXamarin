@@ -5,6 +5,7 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,11 +31,35 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
+        private MyEntityModel _currentElement;
+        public MyEntityModel CurrentElement
+        {
+            get => _currentElement;
+            set
+            {
+                _currentElement = value;
+                RaisePropertyChanged(() => CurrentElement);
+            }
+        }
+
         private HttpClient _httpClient;
 
         public MyEntityViewModel(IMvxNavigationService navigationService)
         {            
             _navigationService = navigationService;
+            AddCommand = new MvxCommand(async () =>
+            {
+                var myEntity = new MyEntityModel();
+                myEntity.Name = "Name";
+                myEntity.Age = 10;
+                await _myEntityService.CreateEntity(myEntity);
+                await RefreshList();
+            });
+            RemoveCommand = new MvxCommand(async () =>
+            {
+                await _myEntityService.DeleteEntity(CurrentElement);
+                await RefreshList();
+            });
         }
 
         public override void Prepare(HttpClient httpClient)
@@ -43,10 +68,15 @@ namespace JhipsterXamarin.ViewModels
             _myEntityService = new MyEntityService(_httpClient);
         }
 
+        public async Task RefreshList()
+        {
+            ListElement = await _myEntityService.GetEntities();
+        }
+
         public override async Task Initialize()
         {
             await base.Initialize();
-            ListElement = await _myEntityService.GetEntities();
+            await RefreshList();
         }
     }
 }
