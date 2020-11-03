@@ -17,13 +17,14 @@ namespace JhipsterXamarin.ViewModels
         private IAuthenticationService _authenticationService;
         private IMvxNavigationService _navigationService;
         private readonly HttpClient _httpClient;
-
-        public MvvmCross.Commands.IMvxCommand SignIn { get; set; }
-        public IMvxAsyncCommand Navigate { get; private set; }
-
         private string _username;
-
         private bool _active = false;
+        private bool _enabled = false;
+        private string _password;
+        private bool _rememberMe;
+
+        public MvvmCross.Commands.IMvxCommand SignIn { get; private set; }
+        public IMvxAsyncCommand Navigate { get; private set; }
 
         public bool Active
         {
@@ -33,9 +34,7 @@ namespace JhipsterXamarin.ViewModels
                 _active = value;
                 RaisePropertyChanged(() => Active);
             }
-        }
-
-        private bool _enabled = false;
+        }       
 
         public bool Enabled {
             get => _enabled;
@@ -56,8 +55,7 @@ namespace JhipsterXamarin.ViewModels
                 ReloadActive();
             }
         }
-
-        private string _password;
+        
         public string Password
         {
             get => _password;
@@ -68,8 +66,7 @@ namespace JhipsterXamarin.ViewModels
                 ReloadActive();
             }
         }
-
-        private bool _rememberMe;
+        
         public bool RememberMe
         {
             get => _rememberMe;

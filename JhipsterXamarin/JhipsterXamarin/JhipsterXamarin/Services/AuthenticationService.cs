@@ -14,12 +14,11 @@ namespace JhipsterXamarin.Services
         private const string AuthenticatationUrl = "api/authenticate";
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";
+        private readonly HttpClient _httpClient;
+        private JwtToken JwtToken { get; set; }
 
         public bool IsAuthenticated { get; set; }       
         public UserModel CurrentUser { get; set; }
-
-        private readonly HttpClient _httpClient;
-        private JwtToken JwtToken { get; set; }
 
         public AuthenticationService(HttpClient httpClient)
         {
@@ -37,6 +36,14 @@ namespace JhipsterXamarin.Services
             return IsAuthenticated;
         }
 
+        public void SignOut()
+        {
+            _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
+            JwtToken = null;
+            IsAuthenticated = false;
+            CurrentUser = null;
+        }
+
         private async Task SetUserAndAuthorizationHeader(JwtToken jwtToken)
         {
             IsAuthenticated = true;
@@ -50,14 +57,6 @@ namespace JhipsterXamarin.Services
             {
                 IsAuthenticated = false;
             }
-        }
-
-        public void SignOut()
-        {
-            _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
-            JwtToken = null;
-            IsAuthenticated = false;
-            CurrentUser = null;
         }
     }
 }

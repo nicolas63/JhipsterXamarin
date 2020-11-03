@@ -18,12 +18,15 @@ namespace JhipsterXamarin.ViewModels
         private IMyEntityService _myEntityService;
         private IMvxNavigationService _navigationService;
         private readonly HttpClient _httpClient;
-
-        public MvvmCross.Commands.IMvxCommand AddCommand { get; set; }
-        public MvvmCross.Commands.IMvxCommand RemoveCommand { get; set; }
-        public MvvmCross.Commands.IMvxCommand EditCommand { get; set; }        
-
         private List<MyEntityModel> _listElement;
+        private MyEntityModel _currentElement;
+        private string _name;
+        private int _age;
+
+        public MvvmCross.Commands.IMvxCommand AddCommand { get; private set; }
+        public MvvmCross.Commands.IMvxCommand RemoveCommand { get; private set; }
+        public MvvmCross.Commands.IMvxCommand EditCommand { get; private set; }        
+        
         public List<MyEntityModel> ListElement
         {
             get => _listElement;
@@ -33,8 +36,7 @@ namespace JhipsterXamarin.ViewModels
                 RaisePropertyChanged(() => ListElement);
             }
         }
-
-        private MyEntityModel _currentElement;
+        
         public MyEntityModel CurrentElement
         {
             get => _currentElement;
@@ -50,8 +52,6 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        private string _name;
-
         public string Name
         {
             get => _name;
@@ -61,8 +61,7 @@ namespace JhipsterXamarin.ViewModels
                 RaisePropertyChanged(() => Name);
             }
         }
-
-        private int _age;
+     
         public int Age
         {
             get => _age;
