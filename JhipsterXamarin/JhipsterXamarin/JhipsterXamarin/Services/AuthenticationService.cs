@@ -15,11 +15,11 @@ namespace JhipsterXamarin.Services
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";
 
-        public bool IsAuthenticated { get; set; }
-        public JwtToken JwtToken { get; set; }
+        public bool IsAuthenticated { get; set; }       
         public UserModel CurrentUser { get; set; }
 
-        readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
+        private JwtToken JwtToken { get; set; }
 
         public AuthenticationService(HttpClient httpClient)
         {

@@ -12,7 +12,6 @@ namespace JhipsterXamarin.Services
         Task<bool> SignIn(LoginModel model);
         void SignOut();
         bool IsAuthenticated { get; set; }
-        JwtToken JwtToken { get; set; }
         UserModel CurrentUser { get; set; }
     }
 }
