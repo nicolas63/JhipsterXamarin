@@ -14,15 +14,12 @@ namespace JhipsterXamarin.ViewModels
 {
     public class LoginViewModel : MvxViewModel
     {
-        public MvvmCross.Commands.IMvxCommand SignIn { get; set; }
-
-        public IMvxAsyncCommand Navigate { get; private set; }
-
         private IAuthenticationService _authenticationService;
-
         private IMvxNavigationService _navigationService;
+        private readonly HttpClient _httpClient;
 
-        private HttpClient _httpClient;
+        public MvvmCross.Commands.IMvxCommand SignIn { get; set; }
+        public IMvxAsyncCommand Navigate { get; private set; }
 
         private string _username;
 
@@ -81,11 +78,6 @@ namespace JhipsterXamarin.ViewModels
                 _rememberMe = value;
                 RaisePropertyChanged(() => RememberMe);
             }
-        }
-
-        public string FirstName
-        {
-            get => _authenticationService.CurrentUser.FirstName;
         }
 
         public LoginViewModel(IMvxNavigationService navigationService, HttpClient httpClient)
