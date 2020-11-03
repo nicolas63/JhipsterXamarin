@@ -4,8 +4,9 @@ using System.Text;
 
 namespace JhipsterXamarin.Models
 {
-    public class MyEntityModel : MyEntityModelSimple
+    public class MyEntityModelSimple
     {
-        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
     }
 }

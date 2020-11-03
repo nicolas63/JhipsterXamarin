@@ -11,6 +11,9 @@
             <Label Text="MyEntities" FontSize="Title"/>
             <Button Text="Ajouter" Command="{Binding AddCommand}" FontSize="16"/>
             <Button Text="Supprimer"  Command="{Binding RemoveCommand}" FontSize="16"/>
+            <Button Text="Modifier" Command="{Binding EditCommand}" FontSize="16"/>
+            <Entry Placeholder="Name" Text="{Binding Name}"/>
+            <Entry Placeholder="Age" Keyboard="Numeric" Text="{Binding Age}"/>
             <ListView SelectedItem="{Binding CurrentElement}" x:Name="listView" ItemsSource="{Binding ListElement}">
                 <ListView.ItemTemplate>
                     <DataTemplate>

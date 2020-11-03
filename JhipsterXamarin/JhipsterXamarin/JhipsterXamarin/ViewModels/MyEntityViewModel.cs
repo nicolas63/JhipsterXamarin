@@ -6,6 +6,7 @@ using MvvmCross.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace JhipsterXamarin.ViewModels
 
         public MvvmCross.Commands.IMvxCommand AddCommand { get; set; }
         public MvvmCross.Commands.IMvxCommand RemoveCommand { get; set; }
+        public MvvmCross.Commands.IMvxCommand EditCommand { get; set; }
 
         private List<MyEntityModel> _listElement;
         public List<MyEntityModel> ListElement
@@ -38,7 +40,35 @@ namespace JhipsterXamarin.ViewModels
             set
             {
                 _currentElement = value;
+                if (_currentElement != null)
+                {
+                    Name = _currentElement.Name;
+                    Age = _currentElement.Age;
+                }
                 RaisePropertyChanged(() => CurrentElement);
+            }
+        }
+
+        private string _name;
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                RaisePropertyChanged(() => Name);
+            }
+        }
+
+        private int _age;
+        public int Age
+        {
+            get => _age;
+            set
+            {
+                _age = value;
+                RaisePropertyChanged(() => Age);
             }
         }
 
@@ -49,15 +79,19 @@ namespace JhipsterXamarin.ViewModels
             _navigationService = navigationService;
             AddCommand = new MvxCommand(async () =>
             {
-                var myEntity = new MyEntityModel();
-                myEntity.Name = "Name";
-                myEntity.Age = 10;
-                await _myEntityService.CreateEntity(myEntity);
+                await _myEntityService.CreateEntity(Name, Age);
                 await RefreshList();
             });
             RemoveCommand = new MvxCommand(async () =>
             {
                 await _myEntityService.DeleteEntity(CurrentElement);
+                await RefreshList();
+            });
+            EditCommand = new MvxCommand(async () =>
+            {
+                CurrentElement.Age = Age;
+                CurrentElement.Name = Name;
+                await _myEntityService.UpdateEntity(CurrentElement);
                 await RefreshList();
             });
         }

@@ -1,7 +1,7 @@
 ﻿using JhipsterXamarin.Models;
+using MvvmCross.Base;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -30,14 +30,22 @@ namespace JhipsterXamarin.Services
             return await _httpClient.GetFromJsonAsync<MyEntityModel>($"{BaseUri}/{ListEntitiesUrl}/{id}");
         }
 
-        public async Task CreateEntity(MyEntityModel newElement)
+        public async Task CreateEntity(string name, int age)
         {
-            await _httpClient.PostAsJsonAsync<MyEntityModel>($"{BaseUri}/{ListEntitiesUrl}", newElement);
+            var entity = new MyEntityModelSimple();
+            entity.Name = name;
+            entity.Age = age;
+            await _httpClient.PostAsJsonAsync<MyEntityModelSimple>($"{BaseUri}/{ListEntitiesUrl}", entity);
         }
 
         public async Task DeleteEntity(MyEntityModel currentElement)
         {
             await _httpClient.DeleteAsync($"{BaseUri}/{ListEntitiesUrl}/{currentElement.Id}");
+        }
+
+        public async Task UpdateEntity(MyEntityModel currentElement)
+        {
+            await _httpClient.PutAsJsonAsync<MyEntityModel>($"{BaseUri}/{ListEntitiesUrl}", currentElement);
         }
     }
 }

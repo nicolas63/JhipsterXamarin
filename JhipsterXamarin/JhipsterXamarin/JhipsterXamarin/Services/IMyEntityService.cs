@@ -10,7 +10,8 @@ namespace JhipsterXamarin.Services
     {
         Task<List<MyEntityModel>> GetEntities();
         Task<MyEntityModel> GetEntity(int v);
-        Task CreateEntity(MyEntityModel newElement);
+        Task CreateEntity(string name, int age);
         Task DeleteEntity(MyEntityModel currentElement);
+        Task UpdateEntity(MyEntityModel currentElement);
     }
 }
