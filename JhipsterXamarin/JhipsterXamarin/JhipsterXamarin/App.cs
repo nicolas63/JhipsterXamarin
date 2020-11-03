@@ -15,12 +15,11 @@ namespace JhipsterXamarin
     {
         public override void Initialize()
         {
-            Mvx.IoCProvider.RegisterType<IListService, ListService>();
             Mvx.IoCProvider.RegisterType<IAuthenticationService, AuthenticationService>();
             Mvx.IoCProvider.RegisterType<IMyEntityService, MyEntityService>();
+            Mvx.IoCProvider.RegisterSingleton<HttpClient>(new HttpClient());
 
-
-            RegisterAppStart<ListViewModel>();
+            RegisterAppStart<LoginViewModel>();
 
         }
     }

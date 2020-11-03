@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace JhipsterXamarin.ViewModels
 {
-    public class LoginViewModel : MvxViewModel<HttpClient>
+    public class LoginViewModel : MvxViewModel
     {
         public MvvmCross.Commands.IMvxCommand SignIn { get; set; }
 
@@ -88,12 +88,15 @@ namespace JhipsterXamarin.ViewModels
             get => _authenticationService.CurrentUser.FirstName;
         }
 
-        public LoginViewModel(IMvxNavigationService navigationService)
+        public LoginViewModel(IMvxNavigationService navigationService, HttpClient httpClient)
         {
             _navigationService = navigationService;
 
+            _httpClient = httpClient;
+            _authenticationService = new AuthenticationService(_httpClient);
+
             Navigate = new MvxAsyncCommand(() =>
-            _navigationService.Navigate<MyEntityViewModel, HttpClient>(_httpClient));
+            _navigationService.Navigate<MyEntityViewModel>());
 
             SignIn = new MvxCommand(async () => {
                 Enabled = !(await signIn());  
@@ -105,7 +108,7 @@ namespace JhipsterXamarin.ViewModels
             if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Username))
                 Active = false;
             else
-                Active = (Password.Length > 4 && Username.Length > 4);
+                Active = (Password.Length > 3);
         }
 
         public Task<bool> signIn()
@@ -120,12 +123,6 @@ namespace JhipsterXamarin.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize();
-        }
-
-        public override void Prepare(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-            _authenticationService = new AuthenticationService(_httpClient);
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace JhipsterXamarin.ViewModels
 {
-    public class MyEntityViewModel : MvxViewModel<HttpClient>
+    public class MyEntityViewModel : MvxViewModel
     {
         private IMyEntityService _myEntityService;
         private IMvxNavigationService _navigationService;
@@ -74,9 +74,12 @@ namespace JhipsterXamarin.ViewModels
 
         private HttpClient _httpClient;
 
-        public MyEntityViewModel(IMvxNavigationService navigationService)
+        public MyEntityViewModel(IMvxNavigationService navigationService, HttpClient httpClient)
         {            
             _navigationService = navigationService;
+            _httpClient = httpClient;
+            _myEntityService = new MyEntityService(_httpClient);
+
             AddCommand = new MvxCommand(async () =>
             {
                 await _myEntityService.CreateEntity(Name, Age);
@@ -94,12 +97,6 @@ namespace JhipsterXamarin.ViewModels
                 await _myEntityService.UpdateEntity(CurrentElement);
                 await RefreshList();
             });
-        }
-
-        public override void Prepare(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-            _myEntityService = new MyEntityService(_httpClient);
         }
 
         public async Task RefreshList()

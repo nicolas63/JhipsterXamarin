@@ -8,23 +8,33 @@
                        x:Class="JhipsterXamarin.Views.MyEntityView">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="MyEntities" FontSize="Title"/>
-            <Button Text="Ajouter" Command="{Binding AddCommand}" FontSize="16"/>
-            <Button Text="Supprimer"  Command="{Binding RemoveCommand}" FontSize="16"/>
-            <Button Text="Modifier" Command="{Binding EditCommand}" FontSize="16"/>
-            <Entry Placeholder="Name" Text="{Binding Name}"/>
-            <Entry Placeholder="Age" Keyboard="Numeric" Text="{Binding Age}"/>
-            <ListView SelectedItem="{Binding CurrentElement}" x:Name="listView" ItemsSource="{Binding ListElement}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding .}" />
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
+                <Label Text="MyEntities Management" HorizontalOptions="Center" TextColor="White" FontSize="Title"/>
+            </Frame>
+            <StackLayout Margin="10">
+                <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Horizontal">
+                    <Button Text="Ajouter" Command="{Binding AddCommand}" FontSize="16"/>
+                    <Button Text="Supprimer"  Command="{Binding RemoveCommand}" FontSize="16"/>
+                    <Button Text="Modifier" Command="{Binding EditCommand}" FontSize="16"/>
+                </StackLayout>
+
+                <Entry Placeholder="Name" Text="{Binding Name}"/>
+
+                <Entry Placeholder="Age" Keyboard="Numeric" Text="{Binding Age}"/>
+
+                <Label Text="Entities" HorizontalOptions="StartAndExpand" FontSize="Title"/>
+                <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentElement}" x:Name="listView" ItemsSource="{Binding ListElement}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Name}" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </views:MvxContentPage>

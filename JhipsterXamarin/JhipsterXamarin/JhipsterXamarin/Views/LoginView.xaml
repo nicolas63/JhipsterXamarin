@@ -8,12 +8,20 @@
                        x:Class="JhipsterXamarin.Views.LoginView">
     <ContentPage.Content>
         <StackLayout>
-            <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}"/>
-            <Entry Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}"/>
-            <Label Text="Remember me"/>
-            <CheckBox IsChecked="{Binding RememberMe}"/>
-            <Button Text="Sign In" Command="{Binding SignIn}" IsEnabled="{Binding Active}"/>
-            <Button Text="MyEntity Management" Command="{Binding Navigate}" IsEnabled="{Binding Enabled}"/>
+            <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
+                <Label Text="Connection" HorizontalOptions="Center" TextColor="White" FontSize="Title"/>
+            </Frame>
+            <StackLayout Margin="10">
+                <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}"/>
+                <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}"/>
+            
+                <StackLayout Orientation="Horizontal">
+                    <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me"/>
+                    <CheckBox IsChecked="{Binding RememberMe}"/>
+                </StackLayout>
+                <Button Text="Sign In" Command="{Binding SignIn}" IsEnabled="{Binding Active}"/>
+                <Button Text="MyEntity Management" Command="{Binding Navigate}" IsEnabled="{Binding Enabled}"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </views:MvxContentPage>
