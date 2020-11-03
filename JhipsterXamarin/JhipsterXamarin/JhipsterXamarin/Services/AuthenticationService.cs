@@ -1,10 +1,7 @@
-﻿using JhipsterXamarin.Models;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
+using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
 {
@@ -15,15 +12,16 @@ namespace JhipsterXamarin.Services
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";
         private readonly HttpClient _httpClient;
-        private JwtToken JwtToken { get; set; }
-
-        public bool IsAuthenticated { get; set; }       
-        public UserModel CurrentUser { get; set; }
 
         public AuthenticationService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
+
+        private JwtToken JwtToken { get; set; }
+
+        public bool IsAuthenticated { get; set; }
+        public UserModel CurrentUser { get; set; }
 
         public async Task<bool> SignIn(LoginModel loginModel)
         {
@@ -33,6 +31,7 @@ namespace JhipsterXamarin.Services
                 JwtToken = await result.Content.ReadFromJsonAsync<JwtToken>();
                 await SetUserAndAuthorizationHeader(JwtToken);
             }
+
             return IsAuthenticated;
         }
 

@@ -1,17 +1,13 @@
-﻿using JhipsterXamarin.Models;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
 {
     public interface IAuthenticationService
     {
-        Task<bool> SignIn(LoginModel model);
-        void SignOut();
         bool IsAuthenticated { get; set; }
         UserModel CurrentUser { get; set; }
+        Task<bool> SignIn(LoginModel model);
+        void SignOut();
     }
 }

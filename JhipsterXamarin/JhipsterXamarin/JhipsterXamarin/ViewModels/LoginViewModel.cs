@@ -1,30 +1,39 @@
-﻿using JhipsterXamarin.Models;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
+using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
-using JhipsterXamarin.Views;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JhipsterXamarin.ViewModels
 {
     public class LoginViewModel : MvxViewModel
     {
-        private IAuthenticationService _authenticationService;
-        private IMvxNavigationService _navigationService;
         private readonly HttpClient _httpClient;
-        private string _username;
-        private bool _active = false;
-        private bool _enabled = false;
+        private bool _active;
+        private readonly IAuthenticationService _authenticationService;
+        private bool _enabled;
+        private readonly IMvxNavigationService _navigationService;
         private string _password;
         private bool _rememberMe;
+        private string _username;
 
-        public MvvmCross.Commands.IMvxCommand SignIn { get; private set; }
-        public IMvxAsyncCommand Navigate { get; private set; }
+        public LoginViewModel(IMvxNavigationService navigationService, HttpClient httpClient)
+        {
+            _navigationService = navigationService;
+
+            _httpClient = httpClient;
+            _authenticationService = new AuthenticationService(_httpClient);
+
+            Navigate = new MvxAsyncCommand(() =>
+                _navigationService.Navigate<MyEntityViewModel>());
+
+            SignIn = new MvxCommand(async () => { Enabled = !await signIn(); });
+        }
+
+        public IMvxCommand SignIn { get; }
+        public IMvxAsyncCommand Navigate { get; }
 
         public bool Active
         {
@@ -34,9 +43,10 @@ namespace JhipsterXamarin.ViewModels
                 _active = value;
                 RaisePropertyChanged(() => Active);
             }
-        }       
+        }
 
-        public bool Enabled {
+        public bool Enabled
+        {
             get => _enabled;
             set
             {
@@ -55,7 +65,7 @@ namespace JhipsterXamarin.ViewModels
                 ReloadActive();
             }
         }
-        
+
         public string Password
         {
             get => _password;
@@ -66,7 +76,7 @@ namespace JhipsterXamarin.ViewModels
                 ReloadActive();
             }
         }
-        
+
         public bool RememberMe
         {
             get => _rememberMe;
@@ -77,36 +87,21 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public LoginViewModel(IMvxNavigationService navigationService, HttpClient httpClient)
-        {
-            _navigationService = navigationService;
-
-            _httpClient = httpClient;
-            _authenticationService = new AuthenticationService(_httpClient);
-
-            Navigate = new MvxAsyncCommand(() =>
-            _navigationService.Navigate<MyEntityViewModel>());
-
-            SignIn = new MvxCommand(async () => {
-                Enabled = !(await signIn());  
-            });
-        }
-
         public void ReloadActive()
         {
             if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Username))
                 Active = false;
             else
-                Active = (Password.Length > 3);
+                Active = Password.Length > 3;
         }
 
         public Task<bool> signIn()
-        {          
+        {
             var model = new LoginModel();
             model.Username = Username;
             model.Password = Password;
             model.RememberMe = RememberMe;
-            return _authenticationService.SignIn(model);            
+            return _authenticationService.SignIn(model);
         }
 
         public override async Task Initialize()

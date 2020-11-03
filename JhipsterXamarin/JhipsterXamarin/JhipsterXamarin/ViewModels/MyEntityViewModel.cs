@@ -1,79 +1,26 @@
-﻿using JhipsterXamarin.Models;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JhipsterXamarin.ViewModels
 {
     public class MyEntityViewModel : MvxViewModel
     {
-        private IMyEntityService _myEntityService;
-        private IMvxNavigationService _navigationService;
         private readonly HttpClient _httpClient;
-        private List<MyEntityModel> _listElement;
-        private MyEntityModel _currentElement;
-        private string _name;
         private int _age;
-
-        public MvvmCross.Commands.IMvxCommand AddCommand { get; private set; }
-        public MvvmCross.Commands.IMvxCommand RemoveCommand { get; private set; }
-        public MvvmCross.Commands.IMvxCommand EditCommand { get; private set; }        
-        
-        public List<MyEntityModel> ListElement
-        {
-            get => _listElement;
-            set
-            {
-                _listElement = value;
-                RaisePropertyChanged(() => ListElement);
-            }
-        }
-        
-        public MyEntityModel CurrentElement
-        {
-            get => _currentElement;
-            set
-            {
-                _currentElement = value;
-                if (_currentElement != null)
-                {
-                    Name = _currentElement.Name;
-                    Age = _currentElement.Age;
-                }
-                RaisePropertyChanged(() => CurrentElement);
-            }
-        }
-
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                RaisePropertyChanged(() => Name);
-            }
-        }
-     
-        public int Age
-        {
-            get => _age;
-            set
-            {
-                _age = value;
-                RaisePropertyChanged(() => Age);
-            }
-        }     
+        private MyEntityModel _currentElement;
+        private List<MyEntityModel> _listElement;
+        private readonly IMyEntityService _myEntityService;
+        private string _name;
+        private IMvxNavigationService _navigationService;
 
         public MyEntityViewModel(IMvxNavigationService navigationService, HttpClient httpClient)
-        {            
+        {
             _navigationService = navigationService;
             _httpClient = httpClient;
             _myEntityService = new MyEntityService(_httpClient);
@@ -95,6 +42,56 @@ namespace JhipsterXamarin.ViewModels
                 await _myEntityService.UpdateEntity(CurrentElement);
                 await RefreshList();
             });
+        }
+
+        public IMvxCommand AddCommand { get; }
+        public IMvxCommand RemoveCommand { get; }
+        public IMvxCommand EditCommand { get; }
+
+        public List<MyEntityModel> ListElement
+        {
+            get => _listElement;
+            set
+            {
+                _listElement = value;
+                RaisePropertyChanged(() => ListElement);
+            }
+        }
+
+        public MyEntityModel CurrentElement
+        {
+            get => _currentElement;
+            set
+            {
+                _currentElement = value;
+                if (_currentElement != null)
+                {
+                    Name = _currentElement.Name;
+                    Age = _currentElement.Age;
+                }
+
+                RaisePropertyChanged(() => CurrentElement);
+            }
+        }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                RaisePropertyChanged(() => Name);
+            }
+        }
+
+        public int Age
+        {
+            get => _age;
+            set
+            {
+                _age = value;
+                RaisePropertyChanged(() => Age);
+            }
         }
 
         public async Task RefreshList()

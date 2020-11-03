@@ -1,19 +1,16 @@
-﻿using JhipsterXamarin.Models;
-using MvvmCross.Base;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
+using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
 {
     public class MyEntityService : IMyEntityService
     {
-        private readonly HttpClient _httpClient;
         private const string BaseUri = "http://10.0.2.2:8080";
         private const string ListEntitiesUrl = "api/myentities";
+        private readonly HttpClient _httpClient;
 
         public MyEntityService(HttpClient httpClient)
         {
@@ -35,7 +32,7 @@ namespace JhipsterXamarin.Services
             var entity = new MyEntityModelSimple();
             entity.Name = name;
             entity.Age = age;
-            await _httpClient.PostAsJsonAsync<MyEntityModelSimple>($"{BaseUri}/{ListEntitiesUrl}", entity);
+            await _httpClient.PostAsJsonAsync($"{BaseUri}/{ListEntitiesUrl}", entity);
         }
 
         public async Task DeleteEntity(MyEntityModel currentElement)
@@ -45,7 +42,7 @@ namespace JhipsterXamarin.Services
 
         public async Task UpdateEntity(MyEntityModel currentElement)
         {
-            await _httpClient.PutAsJsonAsync<MyEntityModel>($"{BaseUri}/{ListEntitiesUrl}", currentElement);
+            await _httpClient.PutAsJsonAsync($"{BaseUri}/{ListEntitiesUrl}", currentElement);
         }
     }
 }
