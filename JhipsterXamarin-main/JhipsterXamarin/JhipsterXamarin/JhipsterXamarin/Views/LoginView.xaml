@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:MvxContentPage  xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms" 
+                       x:TypeArguments="viewModels:LoginViewModel" 
+                       xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms" 
+                       xmlns:viewModels="clr-namespace:JhipsterXamarin.ViewModels;assembly=JhipsterXamarin"
+                       xmlns="http://xamarin.com/schemas/2014/forms"            
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       x:Class="JhipsterXamarin.Views.LoginView">
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry Placeholder="Username" Text="{Binding Username}"/>
+            <Entry Placeholder="Password" Text="{Binding Password}"/>
+            <Label Text="Remember me"/>
+            <CheckBox IsChecked="{Binding RememberMe}"/>
+            <Button Text="Sign In" Command="{Binding SignIn}"/>
+        </StackLayout>
+    </ContentPage.Content>
+</views:MvxContentPage>
