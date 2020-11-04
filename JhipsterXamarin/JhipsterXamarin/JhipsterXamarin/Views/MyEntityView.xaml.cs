@@ -3,9 +3,9 @@ using MvvmCross.Forms.Views;
 
 namespace JhipsterXamarin.Views
 {
-    public partial class LoginView : MvxContentPage<LoginViewModel>
+    public partial class MyEntityView : MvxContentPage<MyEntityViewModel>
     {
-        public LoginView()
+        public MyEntityView()
         {
             InitializeComponent();
         }

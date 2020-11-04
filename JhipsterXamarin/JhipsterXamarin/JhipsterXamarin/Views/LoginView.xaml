@@ -1,18 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<views:MvxContentPage  xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms" 
-                       x:TypeArguments="viewModels:LoginViewModel" 
-                       xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms" 
-                       xmlns:viewModels="clr-namespace:JhipsterXamarin.ViewModels;assembly=JhipsterXamarin"
-                       xmlns="http://xamarin.com/schemas/2014/forms"            
-                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                       x:Class="JhipsterXamarin.Views.LoginView">
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<views:MvxContentPage xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
+                      x:TypeArguments="viewModels:LoginViewModel"
+                      xmlns:viewModels="clr-namespace:JhipsterXamarin.ViewModels;assembly=JhipsterXamarin"
+                      xmlns="http://xamarin.com/schemas/2014/forms"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="JhipsterXamarin.Views.LoginView">
     <ContentPage.Content>
         <StackLayout>
-            <Entry Placeholder="Username" Text="{Binding Username}"/>
-            <Entry Placeholder="Password" Text="{Binding Password}"/>
-            <Label Text="Remember me"/>
-            <CheckBox IsChecked="{Binding RememberMe}"/>
-            <Button Text="Sign In" Command="{Binding SignIn}"/>
+            <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
+                <Label Text="Connection" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
+            </Frame>
+            <StackLayout Margin="10">
+                <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
+                <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
+
+                <StackLayout Orientation="Horizontal">
+                    <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me" />
+                    <CheckBox IsChecked="{Binding RememberMe}" />
+                </StackLayout>
+                <Button Text="Sign In" Command="{Binding SignIn}" IsEnabled="{Binding Active}" />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </views:MvxContentPage>

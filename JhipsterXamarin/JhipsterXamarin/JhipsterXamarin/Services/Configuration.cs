@@ -4,8 +4,8 @@ using System.Text;
 
 namespace JhipsterXamarin.Services
 {
-    public interface IListService
+    public static class Configuration
     {
-        List<string> GenerateList(int nb);
+        public const string BaseUri = "http://10.0.2.2:8080/";
     }
 }
