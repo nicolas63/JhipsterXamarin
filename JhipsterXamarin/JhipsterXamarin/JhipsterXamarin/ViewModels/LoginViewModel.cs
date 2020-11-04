@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
@@ -15,10 +13,20 @@ namespace JhipsterXamarin.ViewModels
         private readonly IMvxNavigationService _navigationService;
 
         private bool _active;
-        private bool _enabled;
-        private bool _rememberMe;
         private string _password;
+        private bool _rememberMe;
         private string _username;
+
+        public LoginViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
+        {
+            _navigationService = navigationService;
+            _authenticationService = authenticationService;
+
+            SignIn = new MvxCommand(async () =>
+            {
+                if (!await SignInConnection()) await _navigationService.Navigate<MyEntityViewModel>();
+            });
+        }
 
         public IMvxCommand SignIn { get; }
 
@@ -62,17 +70,6 @@ namespace JhipsterXamarin.ViewModels
                 _rememberMe = value;
                 RaisePropertyChanged(() => RememberMe);
             }
-        }
-
-        public LoginViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
-        {
-            _navigationService = navigationService;
-            _authenticationService = authenticationService;
-
-            SignIn = new MvxCommand(async () =>
-            {
-                if (!await SignInConnection()) await _navigationService.Navigate<MyEntityViewModel>();
-            });
         }
 
         public void ReloadActive()
