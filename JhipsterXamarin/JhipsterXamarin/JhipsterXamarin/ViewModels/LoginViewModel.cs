@@ -10,27 +10,14 @@ namespace JhipsterXamarin.ViewModels
 {
     public class LoginViewModel : MvxViewModel
     {
-        private readonly HttpClient _httpClient;
-        private bool _active;
         private readonly IAuthenticationService _authenticationService;
-        private bool _enabled;
         private readonly IMvxNavigationService _navigationService;
-        private string _password;
+
+        private bool _active;
+        private bool _enabled;
         private bool _rememberMe;
+        private string _password;
         private string _username;
-
-        public LoginViewModel(IMvxNavigationService navigationService, HttpClient httpClient)
-        {
-            _navigationService = navigationService;
-
-            _httpClient = httpClient;
-            _authenticationService = new AuthenticationService(_httpClient);
-
-            Navigate = new MvxAsyncCommand(() =>
-                _navigationService.Navigate<MyEntityViewModel>());
-
-            SignIn = new MvxCommand(async () => { Enabled = !await signIn(); });
-        }
 
         public IMvxCommand SignIn { get; }
         public IMvxAsyncCommand Navigate { get; }
@@ -87,6 +74,17 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
+        public LoginViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
+        {
+            _navigationService = navigationService;
+            _authenticationService = authenticationService;
+
+            Navigate = new MvxAsyncCommand(() =>
+                _navigationService.Navigate<MyEntityViewModel>());
+
+            SignIn = new MvxCommand(async () => { Enabled = !await signIn(); });
+        }
+
         public void ReloadActive()
         {
             if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Username))
@@ -97,10 +95,12 @@ namespace JhipsterXamarin.ViewModels
 
         public Task<bool> signIn()
         {
-            var model = new LoginModel();
-            model.Username = Username;
-            model.Password = Password;
-            model.RememberMe = RememberMe;
+            var model = new LoginModel
+            {
+                Username = Username,
+                Password = Password,
+                RememberMe = RememberMe
+            };
             return _authenticationService.SignIn(model);
         }
 
