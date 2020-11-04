@@ -20,7 +20,6 @@
                     <CheckBox IsChecked="{Binding RememberMe}" />
                 </StackLayout>
                 <Button Text="Sign In" Command="{Binding SignIn}" IsEnabled="{Binding Active}" />
-                <Button Text="MyEntity Management" Command="{Binding Navigate}" IsEnabled="{Binding Enabled}" />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

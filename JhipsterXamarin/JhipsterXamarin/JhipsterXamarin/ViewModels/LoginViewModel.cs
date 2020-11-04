@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
@@ -20,7 +21,6 @@ namespace JhipsterXamarin.ViewModels
         private string _username;
 
         public IMvxCommand SignIn { get; }
-        public IMvxAsyncCommand Navigate { get; }
 
         public bool Active
         {
@@ -29,16 +29,6 @@ namespace JhipsterXamarin.ViewModels
             {
                 _active = value;
                 RaisePropertyChanged(() => Active);
-            }
-        }
-
-        public bool Enabled
-        {
-            get => _enabled;
-            set
-            {
-                _enabled = value;
-                RaisePropertyChanged(() => Enabled);
             }
         }
 
@@ -79,10 +69,10 @@ namespace JhipsterXamarin.ViewModels
             _navigationService = navigationService;
             _authenticationService = authenticationService;
 
-            Navigate = new MvxAsyncCommand(() =>
-                _navigationService.Navigate<MyEntityViewModel>());
-
-            SignIn = new MvxCommand(async () => { Enabled = !await signIn(); });
+            SignIn = new MvxCommand(async () =>
+            {
+                if (!await SignInConnection()) await _navigationService.Navigate<MyEntityViewModel>();
+            });
         }
 
         public void ReloadActive()
@@ -93,7 +83,7 @@ namespace JhipsterXamarin.ViewModels
                 Active = Password.Length > 3;
         }
 
-        public Task<bool> signIn()
+        public Task<bool> SignInConnection()
         {
             var model = new LoginModel
             {
