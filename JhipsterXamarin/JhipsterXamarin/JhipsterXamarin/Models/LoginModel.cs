@@ -1,4 +1,8 @@
-﻿namespace JhipsterXamarin.Models
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace JhipsterXamarin.Models
 {
     public class LoginModel
     {

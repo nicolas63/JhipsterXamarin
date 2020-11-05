@@ -1,4 +1,8 @@
-﻿using Foundation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Foundation;
 using MvvmCross.Forms.Platforms.Ios.Core;
 using UIKit;
 
@@ -8,7 +12,7 @@ namespace JhipsterXamarin.iOS
     // User Interface of the application, as well as listening (and optionally responding) to 
     // application events from iOS.
     [Register("AppDelegate")]
-    public class AppDelegate : MvxFormsApplicationDelegate<MvxFormsIosSetup<App, FormsApp>, App, FormsApp>
+    public partial class AppDelegate : MvxFormsApplicationDelegate<MvxFormsIosSetup<App, FormsApp>, App, FormsApp>
     {
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
