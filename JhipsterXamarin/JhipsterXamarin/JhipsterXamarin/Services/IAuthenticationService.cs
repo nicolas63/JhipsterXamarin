@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
@@ -7,6 +8,7 @@ namespace JhipsterXamarin.Services
     {
         bool IsAuthenticated { get; set; }
         UserModel CurrentUser { get; set; }
+        HttpClient _httpClient { get; set; }
         Task<bool> SignIn(LoginModel model);
         void SignOut();
     }
