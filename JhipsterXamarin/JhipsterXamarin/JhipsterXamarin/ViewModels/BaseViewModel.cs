@@ -5,10 +5,6 @@ namespace JhipsterXamarin.ViewModels
 {
     public abstract class BaseViewModel : MvxViewModel
     {
-        protected BaseViewModel()
-        {
-        }
-
         /// <summary>
         /// Gets the internationalized string at the given <paramref name="index"/>, which is the key of the resource.
         /// </summary>
