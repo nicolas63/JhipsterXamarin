@@ -18,7 +18,7 @@ jobs:
    runs-on: macos-latest
    steps:
      - name: build App Android 
-       uses: JhipsterXamarin/JhipsterXamarin@main
+       uses: JhipsterXamarin@main
  test:
    name: Test app
    runs-on: macos-latest
