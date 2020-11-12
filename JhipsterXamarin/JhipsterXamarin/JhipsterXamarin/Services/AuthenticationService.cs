@@ -51,7 +51,7 @@ namespace JhipsterXamarin.Services
             BlobCache.Secure.InvalidateAll();
         }
 
-        public async Task SetUserAndAuthorizationHeader(JwtToken jwtToken, bool save = false)
+        private async Task SetUserAndAuthorizationHeader(JwtToken jwtToken, bool save = false)
         {
             IsAuthenticated = true;
             _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
