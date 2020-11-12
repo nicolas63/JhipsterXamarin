@@ -17,11 +17,11 @@ jobs:
    name:  Building Xamarin App
    runs-on: macos-latest
    steps:
-     - uses: JhipsterXamarin/JhipsterXamarin@UT
      - name: build App Android 
+       uses: JhipsterXamarin/JhipsterXamarin@UT
  test:
    name: Test app
    runs-on: macos-latest
    steps:
-     - uses: JhipsterXamarin/JhipsterXamarin@UT
      - name: test-login
+       uses: JhipsterXamarin/JhipsterXamarin/UnitTestJhispterXamarin/@UT
