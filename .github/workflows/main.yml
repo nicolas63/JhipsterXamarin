@@ -18,10 +18,10 @@ jobs:
    runs-on: macos-latest
    steps:
      - name: build App Android 
-       uses: nicolas63/JhipsterXamarinJhipsterXamarin@UT
+       uses: nicolas63/JhipsterXamarin/JhipsterXamarin@UT
  test:
    name: Test app
    runs-on: macos-latest
    steps:
      - name: test-login
-       uses: nicolas63/JhipsterXamarinJhipsterXamarin/JhipsterXamarin/UnitTestJhispterXamarin/@UT
+       uses: nicolas63/JhipsterXamarin/JhipsterXamarin/UnitTestJhispterXamarin/@UT
