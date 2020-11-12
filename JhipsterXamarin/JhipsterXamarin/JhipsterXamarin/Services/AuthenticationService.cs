@@ -35,6 +35,7 @@ namespace JhipsterXamarin.Services
             }
             return IsAuthenticated;
         }
+
         public async Task<bool> SignIn(JwtToken jwtToken)
         {
             await SetUserAndAuthorizationHeader(jwtToken);
