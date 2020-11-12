@@ -8,7 +8,7 @@ using Xamarin.Essentials;
 
 namespace JhipsterXamarin.Droid
 {
-    [Activity(Label = "JhipsterXamarin", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true,
+    [Activity(Label = "JhipsterXamarin", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = false,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode |
                                ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : MvxFormsAppCompatActivity<MvxFormsAndroidSetup<App, FormsApp>, App, FormsApp>

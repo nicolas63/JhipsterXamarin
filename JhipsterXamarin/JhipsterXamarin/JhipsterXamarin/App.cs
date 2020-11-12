@@ -1,4 +1,5 @@
-﻿using Akavache;
+﻿using System;
+using Akavache;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using JhipsterXamarin.ViewModels;
@@ -7,6 +8,8 @@ using MvvmCross.ViewModels;
 using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Logging;
+using MvvmCross.Logging.LogProviders;
 
 namespace JhipsterXamarin
 {
@@ -29,7 +32,10 @@ namespace JhipsterXamarin
                 var token = Task.Run(async () => await BlobCache.Secure.GetObject<JwtToken>("token")).Result;
                 success = Task.Run(async () => await authenticationService.SignIn(token)).Result;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Logs.Instance.ErrorException("Failed to fetch token", ex);
+            }
 
             if (success) RegisterAppStart<HomeViewModel>();
             else RegisterAppStart<LoginViewModel>();
