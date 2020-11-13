@@ -1,30 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <views:MvxContentPage xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
-                      x:TypeArguments="viewModels:LoginViewModel"
+                      x:TypeArguments="viewModels:RegisterViewModel"
                       xmlns:viewModels="clr-namespace:JhipsterXamarin.ViewModels;assembly=JhipsterXamarin"
                       xmlns="http://xamarin.com/schemas/2014/forms"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                      x:Class="JhipsterXamarin.Views.LoginView">
+                      x:Class="JhipsterXamarin.Views.RegisterView">
     <ContentPage.Content>
         <StackLayout>
             <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
-                <Label Text="Connection" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
+                <Label Text="Registration" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
             </Frame>
             <StackLayout Margin="10">
                 <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
+                <Entry Placeholder="Email" x:Name="EmailEntry" Text="{Binding Email}" />
                 <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
-
+                <Entry IsPassword="True" Placeholder="Confirm your password" x:Name="ConfirmPasswordEntry" Text="{Binding ConfirmPassword}" />
                 <StackLayout Orientation="Horizontal">
                     <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me" />
                     <CheckBox IsChecked="{Binding RememberMe}" />
                 </StackLayout>
-                <Button Text="Sign In" Command="{Binding SignIn}" IsEnabled="{Binding Active}" />
-                <Label Text="Sign Up" HorizontalOptions="CenterAndExpand" TextDecorations="Underline">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SignUp}"/>
-                    </Label.GestureRecognizers>
-                </Label>
+                <Button Text="Sign Up" Command="{Binding SignUp}" IsEnabled="{Binding Active}" />
 
             </StackLayout>
         </StackLayout>

@@ -1,24 +1,27 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using Xamarin.Essentials;
 
 namespace JhipsterXamarin.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class RegisterViewModel : BaseViewModel
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IMvxNavigationService _navigationService;
+        private readonly IRegisterService _registerService;
 
         private bool _active;
         private bool _rememberMe;
         private string _password;
         private string _username;
+        private string _email;
 
-        public IMvxCommand SignIn { get; }
-        public IMvxCommand SignUp { get;  }
+        public IMvxCommand SignUp { get; }
 
         public bool Active
         {
@@ -52,6 +55,17 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                _email = value;
+                RaisePropertyChanged(() => Password);
+                ReloadActive();
+            }
+        }
+
         public bool RememberMe
         {
             get => _rememberMe;
@@ -62,27 +76,29 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public LoginViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
+        public RegisterViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService, IRegisterService registerService)
         {
             _navigationService = navigationService;
             _authenticationService = authenticationService;
-
-            SignIn = new MvxCommand(async () =>
-            {
-                Active = false;
-                var success = await SignInConnection();
-                
-                if (success)
-                {
-                    await _navigationService.Navigate<HomeViewModel>();
-                    await _navigationService.Close(this);
-                }
-                Active = true;
-            });
+            _registerService = registerService;
 
             SignUp = new MvxCommand(async () =>
             {
-                await _navigationService.Navigate<RegisterViewModel>();
+                Active = false;
+                var result = await _registerService.Save(new UserSaveModel
+                {
+                    Password = Password,
+                    Login = Username,
+                    Email = Email,
+                    LangKey = "en"
+                });
+                
+                if (result.IsSuccessStatusCode)
+                {
+                    var success = await SignInConnection();
+                    if (success) await _navigationService.Navigate<HomeViewModel>();
+                }
+                Active = true;
             });
         }
 
@@ -91,7 +107,11 @@ namespace JhipsterXamarin.ViewModels
             if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Username))
                 Active = false;
             else
-                Active = Password.Length > 3;
+            {
+                var emailSplit = Email.Split('@');
+                Active = Password.Length > 3 && Email.Length > 4 && emailSplit.Length == 2 &&
+                         emailSplit.All(val => val.Length > 0);
+            }
         }
 
         public Task<bool> SignInConnection()
