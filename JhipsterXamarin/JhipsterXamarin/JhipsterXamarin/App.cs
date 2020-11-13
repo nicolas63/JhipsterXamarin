@@ -9,7 +9,6 @@ using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Logging;
-using MvvmCross.Logging.LogProviders;
 
 namespace JhipsterXamarin
 {
@@ -18,12 +17,14 @@ namespace JhipsterXamarin
         public override void Initialize()
         {
             Akavache.Registrations.Start("JhipsterXamarin");
+            IMvxLog log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
 
             var httpClient = new HttpClient();
             var authenticationService = new AuthenticationService(httpClient);
             Mvx.IoCProvider.RegisterSingleton(httpClient);
             Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
             Mvx.IoCProvider.RegisterType<IMyEntityService, MyEntityService>();
+            Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
 
             bool success = false;
 
@@ -34,7 +35,7 @@ namespace JhipsterXamarin
             }
             catch (Exception ex)
             {
-                Logs.Instance.ErrorException("Failed to fetch token", ex);
+                log.ErrorException("Failed to fetch token and auto-login.", ex);
             }
 
             if (success) RegisterAppStart<HomeViewModel>();
