@@ -35,12 +35,14 @@ namespace JhipsterXamarin.Services
             return IsAuthenticated;
         }
 
-        public void SignOut()
+        public string SignOut()
         {
-            _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
-            JwtToken = null;
-            IsAuthenticated = false;
-            CurrentUser = null;
+            string mess = null;
+                _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
+                JwtToken = null;
+                IsAuthenticated = false;
+                CurrentUser = null;
+            return mess;
         }
 
         private async Task SetUserAndAuthorizationHeader(JwtToken jwtToken)
