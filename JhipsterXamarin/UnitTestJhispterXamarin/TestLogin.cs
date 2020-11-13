@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using MvvmCross.Navigation;
 using MvvmCross.Tests;
+using FluentAssertions;
+
 
 namespace UnitTestJhispterXamarin
 {
@@ -14,7 +16,7 @@ namespace UnitTestJhispterXamarin
         LoginViewModel loginViewModel;
         LoginModel loginModel = new LoginModel();
 
-        [TestMethod]
+        [TestInitialize]
         public void TestViewModel()
         {
             initializeAll();
@@ -46,8 +48,9 @@ namespace UnitTestJhispterXamarin
             loginViewModel.Username = "admin";
             loginViewModel.Password = "admin";
             loginViewModel.RememberMe = false;
-
-            Assert.AreEqual(loginViewModel.GetAuthenticationService().SignIn(loginModel).ToString(), loginViewModel.SignInConnection().ToString(), "Test failed : login error user : admin  | password : admin");
+            loginViewModel.GetAuthenticationService().SignIn(loginModel).ToString()
+                .Should().Be(loginViewModel.SignInConnection().ToString(), "Test failed because of a bad move to login the admin");
+ 
         }
         [TestMethod]
         public void TestSignOutAdmin()
@@ -57,8 +60,7 @@ namespace UnitTestJhispterXamarin
             loginModel.Password = "admin";
             loginModel.RememberMe = false;
             loginViewModel.GetAuthenticationService().SignIn(loginModel);
-            var result = loginViewModel.GetAuthenticationService().SignOut();
-            Assert.AreEqual(null,result , "Test failed : logout error");
+            loginViewModel.GetAuthenticationService().SignOut().Should().BeNull("Test failed because of a bad move to logout the admin");
         }
     }
 }
