@@ -12,16 +12,25 @@ jobs:
         xamarin-ios-version: 13 # specify version in '<major>' format
         xamarin-mac-version: latest # specify 'latest' keyword to pick up the latest available version
         xamarin-android-version: 10.1.3.7 # specify full version; it is not recomended option because your pipeline can be broken suddenly in future
-        xcode-version: 11.x # set the latest available Xcode 11
- build_App :
-   name:  Building Xamarin App
+        xcode-version: 11.x # set the latest available Xcode 11    
+ Android:
+    name : Setup App on Android
+    runs-on: macos-latest
+    steps:
+    - uses: JhipsterXamarin/JhipsterXamarin@UT
+    - name: Android
+      run: |
+        cd Blank
+        nuget restore
+        cd Blank.Android
+        msbuild JhipsterXamarin.Android.csproj /verbosity:normal /t:Rebuild /p:Configuration=Debug
+ iOS:
+   name : Setup App on iOS
    runs-on: macos-latest
    steps:
-     - name: build App Android 
-       uses: nicolas63/JhipsterXamarin/JhipsterXamarin@UT
- test:
-   name: Test app
-   runs-on: macos-latest
-   steps:
-     - name: test-login
-       uses: nicolas63/JhipsterXamarin/JhipsterXamarin/UnitTestJhispterXamarin/@UT
+   - uses: JhipsterXamarin/JhipsterXamarin@UT
+   - name: iOS
+     run: |
+       cd Blank
+       nuget restore
+       msbuild JhipsterXamarin.iOS/Blank.iOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Debug
