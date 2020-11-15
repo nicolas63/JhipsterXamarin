@@ -17,20 +17,21 @@ jobs:
     name : Setup App on Android
     runs-on: macos-latest
     steps:
-    - uses: nicolas63/JhipsterXamarin@UT
+    - uses: actions/checkout@v1
     - name: Android
       run: |
-        cd Blank
+        cd JhipsterXamarin
         nuget restore
-        cd Blank.Android
+        cd JhipsterXamarin.Android
         msbuild JhipsterXamarin.Android.csproj /verbosity:normal /t:Rebuild /p:Configuration=Debug
  iOS:
    name : Setup App on iOS
    runs-on: macos-latest
    steps:
-   - uses: nicolas63/JhipsterXamarin@UT
+   - uses: actions/checkout@v1
    - name: iOS
      run: |
-       cd Blank
+       cd JhipsterXamarin
        nuget restore
+       cd JhipsterXamarin.iOS
        msbuild JhipsterXamarin.iOS/Blank.iOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Debug
