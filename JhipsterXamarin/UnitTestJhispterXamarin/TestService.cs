@@ -32,7 +32,7 @@ namespace UnitTestJhispterXamarin
         {
             var mockAuthService = new Mock<IAuthenticationService>();
             var mockNavService = new Mock<IMvxNavigationService>();
-            myEntityService = new MyEntityService(mockAuthService.Object._httpClient);
+            myEntityService = new MyEntityService<UserModel>(mockAuthService.Object._httpClient, mockAuthService.Object);
             myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService);
 
             Ioc.RegisterSingleton<IAuthenticationService>(mockAuthService.Object);
