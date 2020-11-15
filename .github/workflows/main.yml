@@ -34,4 +34,4 @@ jobs:
        cd JhipsterXamarin
        nuget restore
        cd JhipsterXamarin/JhipsterXamarin.iOS
-       msbuild JhipsterXamarin.iOS/JhipsterXamarin.iOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Debug
+       msbuild JhipsterXamarin.iOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Debug
