@@ -22,7 +22,7 @@ jobs:
       run: |
         cd JhipsterXamarin
         nuget restore
-        cd JhipsterXamarin.Android
+        cd JhipsterXamarin/JhipsterXamarin.Android
         msbuild JhipsterXamarin.Android.csproj /verbosity:normal /t:Rebuild /p:Configuration=Debug
  iOS:
    name : Setup App on iOS
@@ -33,5 +33,5 @@ jobs:
      run: |
        cd JhipsterXamarin
        nuget restore
-       cd JhipsterXamarin.iOS
+       cd JhipsterXamarin/JhipsterXamarin.iOS
        msbuild JhipsterXamarin.iOS/Blank.iOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Debug
