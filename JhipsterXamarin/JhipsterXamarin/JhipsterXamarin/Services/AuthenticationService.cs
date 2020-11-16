@@ -11,7 +11,7 @@ namespace JhipsterXamarin.Services
         private const string AuthenticationUrl = "api/authenticate";
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";
-        public HttpClient _httpClient { get; set; }
+        private readonly HttpClient _httpClient; 
 
         public bool IsAuthenticated { get; set; }
         public UserModel CurrentUser { get; set; }
