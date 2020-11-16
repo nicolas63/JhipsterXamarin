@@ -10,23 +10,13 @@ namespace JhipsterXamarin.ViewModels
     public class LoginViewModel : MvxViewModel
     {
         private readonly IAuthenticationService _authenticationService;
-
-        public IAuthenticationService GetAuthenticationService()
-        {
-            return _authenticationService;
-        }
         private readonly IMvxNavigationService _navigationService;
 
-        public IMvxNavigationService GetMvxNavigationService()
-        {
-            return _navigationService;
-        }
         private bool _active;
         private bool _rememberMe;
         private string _password;
         private string _username;
 
-        private readonly LoginModel _model;
         public IMvxCommand SignIn { get; }
 
         public bool Active
@@ -75,7 +65,7 @@ namespace JhipsterXamarin.ViewModels
         {
             _navigationService = navigationService;
             _authenticationService = authenticationService;
-            _model = new LoginModel();
+
             SignIn = new MvxCommand(async () =>
             {
                 if (!await SignInConnection()) await _navigationService.Navigate<MyEntityViewModel>();
@@ -92,10 +82,13 @@ namespace JhipsterXamarin.ViewModels
 
         public Task<bool> SignInConnection()
         {
-            _model.Username = Username;
-            _model.Password = Password;
-            _model.RememberMe = RememberMe;
-            return _authenticationService.SignIn(_model);
+            var model = new LoginModel
+            {
+                Username = Username,
+                Password = Password,
+                RememberMe = RememberMe
+            };
+            return _authenticationService.SignIn(model);
         }
 
         public override async Task Initialize()
