@@ -13,22 +13,13 @@ namespace UnitTestJhispterXamarin
     [TestClass]
     public class TestLogin : MvxIoCSupportingTest
     {
-        LoginViewModel loginViewModel;
-        LoginModel loginModel = new LoginModel();
+         LoginViewModel loginViewModel;
+         LoginModel loginModel = new LoginModel();
 
         [TestInitialize]
-        public void TestViewModel()
-        {
-            initializeAll();
-        }
-        public void initializeAll()
+        public void Initialize()
         {
             base.Setup(); // from MvxIoCSupportingTest
-            AdditionalSetup();
-            loginViewModel.Initialize();
-        }
-        protected override void AdditionalSetup()
-        {
             var mockAuthService = new Mock<IAuthenticationService>();
             var mockNavLoginService = new Mock<IMvxNavigationService>();
             loginViewModel = new LoginViewModel(mockNavLoginService.Object, mockAuthService.Object);
@@ -39,8 +30,7 @@ namespace UnitTestJhispterXamarin
         [TestMethod]
         public void TestSignInAdmin()
         {
-            initializeAll();
-
+            //Arrange
             loginModel.Username = "admin";
             loginModel.Password = "admin";
             loginModel.RememberMe = false;
@@ -48,19 +38,23 @@ namespace UnitTestJhispterXamarin
             loginViewModel.Username = "admin";
             loginViewModel.Password = "admin";
             loginViewModel.RememberMe = false;
+            //Act
+            var result = loginViewModel.SignInConnection().ToString();
+            //Assert
             loginViewModel.GetAuthenticationService().SignIn(loginModel).ToString()
-                .Should().Be(loginViewModel.SignInConnection().ToString(), "Test failed because of a bad move to login the admin");
- 
+                .Should().Be(result, "Test failed because of a bad move to login the admin");
         }
         [TestMethod]
         public void TestSignOutAdmin()
         {
-            initializeAll();
+            //Arrange
             loginModel.Username = "admin";
             loginModel.Password = "admin";
             loginModel.RememberMe = false;
+            //Act
             loginViewModel.GetAuthenticationService().SignIn(loginModel);
-            loginViewModel.GetAuthenticationService().SignOut().Should().BeNull("Test failed because of a bad move to logout the admin");
+            //Assert
+            loginViewModel.GetAuthenticationService().SignOut().Should().BeFalse("Test failed because of a bad move to logout the admin");
         }
     }
 }
