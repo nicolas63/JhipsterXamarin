@@ -13,57 +13,54 @@ namespace UnitTestJhispterXamarin
     [TestClass]
     public class TestService : MvxIoCSupportingTest
     {
-        IMyEntityService myEntityService;
+        Mock<IMyEntityService> myEntityService;
         MyEntityViewModel myEntityViewModel;
         MyEntityModelSimple myFirstEntityModelSimple = new MyEntityModel();
 
         [TestInitialize]
-        public void TestViewModel()
-        {
-            initializeAll();
-        }
-        public void initializeAll()
+        public void Initialize()
         {
             base.Setup(); // from MvxIoCSupportingTest
+
+            myEntityService = new Mock<IMyEntityService>();
+            var mockNavService = new Mock<IMvxNavigationService>();
+            myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService.Object);
+
+            Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);
+            Ioc.RegisterSingleton<IMyEntityService>(myEntityService.Object);        
+
             AdditionalSetup();
-            InitializeMyEntityViewModel();
         }
         protected override void AdditionalSetup()
         {
-            var mockAuthService = new Mock<IAuthenticationService>();
-            var mockNavService = new Mock<IMvxNavigationService>();
-            myEntityService = new MyEntityService<UserModel>(mockAuthService.Object._httpClient, mockAuthService.Object);
-            myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService);
-
-            Ioc.RegisterSingleton<IAuthenticationService>(mockAuthService.Object);
-            Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);            
-        }
-
-        public void InitializeMyEntityViewModel()
-        {
             myFirstEntityModelSimple.Name = "the first entity";
             myFirstEntityModelSimple.Age = 1;
-            myEntityService.CreateEntity("the second entity", 2);
-            myEntityService.CreateEntity("the third entity", 3);
+            myEntityService.Setup(foo => foo.CreateEntity(myFirstEntityModelSimple.Name, myFirstEntityModelSimple.Age));
+            myEntityService.Setup(foo => foo.CreateEntity("the second entity", 2));
+            myEntityService.Setup(foo => foo.CreateEntity("the third entity", 3));
+            myEntityService.Setup(foo => foo.CreateEntity("the third entity", 3));
             myEntityViewModel.Initialize();
         }
 
         [TestMethod]
-        public void TestUpdate()
+        public void Should_UpdateTheFirstEntity_When_NameOfFirstEntityChange()
         {
-            initializeAll();
+            //Arrange
             string expected = "the first entity updated";
             myFirstEntityModelSimple.Name = expected;
-            myEntityService.UpdateEntity((MyEntityModel)myFirstEntityModelSimple);
+            //Act
+            myEntityService.Verify(foo => foo.UpdateEntity((MyEntityModel)myFirstEntityModelSimple));
+            //Assert
             myEntityViewModel.CurrentElement.Name
                 .Should().Be(expected, "Test failed: We wanted : " + expected + " We have :  " + myEntityViewModel.CurrentElement.Name);
-
         }
+
         [TestMethod]
-        public void TestDelete()
+        public void Should_DeleteTheFirstEntity_When_DeleteButtonClicked()
         {
-            initializeAll();
-            myEntityService.DeleteEntity((MyEntityModel)myFirstEntityModelSimple);
+            //Act
+            myEntityService.Verify(foo => foo.DeleteEntity((MyEntityModel)myFirstEntityModelSimple)); 
+            //Assert
             myEntityViewModel.ListElement.Count
                 .Should().Be(2, "Test Failed : We wanted : " + 2 + " We have :  " + myEntityViewModel.ListElement.Count);
         }
