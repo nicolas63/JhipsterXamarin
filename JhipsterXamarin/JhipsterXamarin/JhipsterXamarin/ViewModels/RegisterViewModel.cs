@@ -22,6 +22,7 @@ namespace JhipsterXamarin.ViewModels
         private string _email;
 
         public IMvxCommand SignUp { get; }
+        public IMvxCommand GoBack { get;  }
 
         public bool Active
         {
@@ -99,6 +100,10 @@ namespace JhipsterXamarin.ViewModels
                     if (success) await _navigationService.Navigate<HomeViewModel>();
                 }
                 Active = true;
+            });
+            GoBack = new MvxCommand(() =>
+            {
+                _navigationService.Navigate<LoginViewModel>();
             });
         }
 

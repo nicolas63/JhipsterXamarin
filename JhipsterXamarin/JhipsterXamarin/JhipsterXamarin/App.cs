@@ -42,9 +42,7 @@ namespace JhipsterXamarin
                 log.ErrorException("Failed to fetch token and auto-login.", ex);
             }
 
-            if (success) RegisterAppStart<HomeViewModel>();
-            else RegisterAppStart<LoginViewModel>();
-
+            RegisterAppStart<HomeViewModel>();
         }
     }
 }

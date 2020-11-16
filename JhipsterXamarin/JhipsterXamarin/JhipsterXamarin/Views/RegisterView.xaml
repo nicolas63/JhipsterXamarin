@@ -21,7 +21,19 @@
                     <CheckBox IsChecked="{Binding RememberMe}" />
                 </StackLayout>
                 <Button Text="Sign Up" Command="{Binding SignUp}" IsEnabled="{Binding Active}" />
-
+                <StackLayout BackgroundColor="Orange">
+                    <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="0">
+                        <Label Text="If you want to "/>
+                        <Label Text="sign in" FontAttributes="Bold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding GoBack}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label Text=", you can try the default accounts:"></Label>
+                    </StackLayout>
+                    <Label Text="- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)"></Label>
+                    <Label Text="- User (login=&quot;user&quot; and password=&quot;user&quot;)."></Label>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

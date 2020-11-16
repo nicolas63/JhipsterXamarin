@@ -21,7 +21,7 @@ namespace JhipsterXamarin.Views
             if (_firstTime)
             {
                 ViewModel.ShowMenuViewModelCommand.Execute(null);
-                ViewModel.ShowEntitiesViewModelCommand.Execute(null);
+                ViewModel.ShowWelcomeViewModelCommand.Execute(null);
 
                 _firstTime = false;
             }
