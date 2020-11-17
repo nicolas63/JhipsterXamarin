@@ -19,7 +19,8 @@ namespace JhipsterXamarin.ViewModels
         private string _username;
 
         public IMvxCommand SignIn { get; }
-        public IMvxCommand SignUp { get;  }
+        public IMvxCommand SignUp { get; }
+        public IMvxCommand ChangeStateCommand { get; }
 
         public bool Active
         {
@@ -99,6 +100,11 @@ namespace JhipsterXamarin.ViewModels
             SignUp = new MvxCommand(async () =>
             {
                 await _navigationService.Navigate<RegisterViewModel>();
+            });
+
+            ChangeStateCommand = new MvxCommand(() =>
+            {
+                RememberMe = !RememberMe;
             });
         }
 

@@ -23,6 +23,7 @@ namespace JhipsterXamarin.ViewModels
 
         public IMvxCommand SignUp { get; }
         public IMvxCommand GoBack { get;  }
+        public IMvxCommand ChangeStateCommand { get; }
 
         public bool Active
         {
@@ -101,9 +102,15 @@ namespace JhipsterXamarin.ViewModels
                 }
                 Active = true;
             });
+
             GoBack = new MvxCommand(() =>
             {
                 _navigationService.Navigate<LoginViewModel>();
+            });
+
+            ChangeStateCommand = new MvxCommand(() =>
+            {
+                RememberMe = !RememberMe;
             });
         }
 

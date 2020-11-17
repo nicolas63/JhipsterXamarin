@@ -17,8 +17,12 @@
                 <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
                 <Entry IsPassword="True" Placeholder="Confirm your password" x:Name="ConfirmPasswordEntry" Text="{Binding ConfirmPassword}" />
                 <StackLayout Orientation="Horizontal">
-                    <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me" />
-                    <CheckBox IsChecked="{Binding RememberMe}" />
+                    <CheckBox x:Name="checkBox" IsChecked="{Binding RememberMe}" />
+                    <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeStateCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                 </StackLayout>
                 <Button Text="Sign Up" Command="{Binding SignUp}" IsEnabled="{Binding Active}" />
                 <StackLayout BackgroundColor="Orange">

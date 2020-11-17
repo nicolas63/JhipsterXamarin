@@ -26,16 +26,31 @@
                 <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
 
                 <StackLayout Orientation="Horizontal">
-                    <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me" />
-                    <CheckBox IsChecked="{Binding RememberMe}" />
+                    <CheckBox x:Name="checkBox" IsChecked="{Binding RememberMe}" />
+                    <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChangeStateCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                 </StackLayout>
                 <Button Text="Sign In" Command="{Binding SignIn}" IsEnabled="{Binding Active}" />
-                <Label Text="Sign Up" HorizontalOptions="CenterAndExpand" TextDecorations="Underline">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding SignUp}"/>
-                    </Label.GestureRecognizers>
-                </Label>
-
+                <StackLayout IsVisible="{Binding Failed}">
+                    <StackLayout BackgroundColor="LightYellow" Padding="15">
+                        <Label Text="Did you forget your password?" FontAttributes="Bold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SignUp}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                    <StackLayout BackgroundColor="LightYellow" Padding="15">
+                        <Label Text="You don't have an account yet?"/>
+                        <Label Text="Register a new account" FontAttributes="Bold">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SignUp}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>
