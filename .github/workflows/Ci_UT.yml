@@ -1,10 +1,7 @@
 # This is a basic workflow to help you get started with Actions
 
 name: Ci_UT
-on:
- push:
-  branches:
-   - releases/*
+on: [push, pull_request]
 jobs:    
  build:
    name: Setup Xamarin and Mono versions
