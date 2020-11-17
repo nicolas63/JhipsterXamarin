@@ -53,8 +53,9 @@ namespace UnitTestJhispterXamarin
             loginModel.RememberMe = false;
             //Act
             loginViewModel.GetAuthenticationService().SignIn(loginModel);
+            loginViewModel.GetAuthenticationService().SignOut();
             //Assert
-            loginViewModel.GetAuthenticationService().SignOut().Should().BeFalse("Test failed because of a bad move to logout the admin");
+            loginViewModel.GetAuthenticationService().IsAuthenticated.Should().BeFalse("Test failed because of a bad move to logout the admin");
         }
     }
 }
