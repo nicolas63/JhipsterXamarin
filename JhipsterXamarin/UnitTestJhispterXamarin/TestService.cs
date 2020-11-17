@@ -6,7 +6,7 @@ using Moq;
 using MvvmCross.Navigation;
 using MvvmCross.Tests;
 using FluentAssertions;
-
+using System.Threading.Tasks;
 
 namespace UnitTestJhispterXamarin
 {
@@ -18,18 +18,15 @@ namespace UnitTestJhispterXamarin
         MyEntityModelSimple myFirstEntityModelSimple = new MyEntityModel();
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
-            base.Setup(); // from MvxIoCSupportingTest
-
             myEntityService = new Mock<IMyEntityService>();
             var mockNavService = new Mock<IMvxNavigationService>();
-            myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService.Object);
-
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);
-            Ioc.RegisterSingleton<IMyEntityService>(myEntityService.Object);        
-
-            AdditionalSetup();
+            Ioc.RegisterSingleton<IMyEntityService>(myEntityService.Object);
+            base.Setup(); // from MvxIoCSupportingTest 
+            myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService.Object);
+            await myEntityViewModel.Initialize();
         }
         protected override void AdditionalSetup()
         {
@@ -39,7 +36,6 @@ namespace UnitTestJhispterXamarin
             myEntityService.Setup(foo => foo.CreateEntity("the second entity", 2));
             myEntityService.Setup(foo => foo.CreateEntity("the third entity", 3));
             myEntityService.Setup(foo => foo.CreateEntity("the third entity", 3));
-            myEntityViewModel.Initialize();
         }
 
         [TestMethod]
