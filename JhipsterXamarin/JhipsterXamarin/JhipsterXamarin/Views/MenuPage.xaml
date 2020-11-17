@@ -40,12 +40,6 @@
                 Padding="0"
                 HorizontalOptions="FillAndExpand" 
                 VerticalOptions="StartAndExpand">
-                <Image
-                    HorizontalOptions="FillAndExpand" 
-                    VerticalOptions="FillAndExpand"
-                    Aspect="AspectFill"
-                    HeightRequest="130" 
-                    Source="{x:OnPlatform Android=menu_header_background, iOS=menu_header_background}" />
                 <StackLayout
                     Orientation="Horizontal"
                     VerticalOptions="End"

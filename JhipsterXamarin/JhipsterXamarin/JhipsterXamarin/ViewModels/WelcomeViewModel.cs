@@ -12,6 +12,7 @@ namespace JhipsterXamarin.ViewModels
     public class WelcomeViewModel : BaseViewModel
     {
         private readonly IMvxNavigationService _navigationService;
+        private readonly IAuthenticationService _authenticationService;
         public IMvxCommand OpenHomepage { get; }
         public IMvxCommand OpenStack { get; }
         public IMvxCommand OpenBugTracker { get; }
@@ -20,10 +21,15 @@ namespace JhipsterXamarin.ViewModels
         public IMvxCommand OpenGitHub { get; }
         public IMvxCommand SignIn { get; }
         public IMvxCommand SignUp { get; }
+        public bool IsConnected { get => _authenticationService.IsAuthenticated; }
+        public bool IsNotConnected { get => !_authenticationService.IsAuthenticated; }
+        public string Username { get => (IsNotConnected) ? null : _authenticationService.CurrentUser.Login; }
 
-        public WelcomeViewModel(IMvxNavigationService navigationService)
+        public WelcomeViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
         {
             _navigationService = navigationService;
+            _authenticationService = authenticationService;
+
             OpenHomepage = new MvxCommand(() =>
             {
                 Launcher.OpenAsync("https://www.jhipster.tech/");

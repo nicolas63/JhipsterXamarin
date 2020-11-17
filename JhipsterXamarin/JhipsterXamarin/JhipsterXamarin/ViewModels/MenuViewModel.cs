@@ -29,6 +29,7 @@ namespace JhipsterXamarin.ViewModels
                 _authenticationService.SignOut();
                 RaisePropertyChanged(() => IsNotConnected);
                 RaisePropertyChanged(() => IsConnected);
+                _navigationService.Navigate<WelcomeViewModel>();
             });            
         }
     }

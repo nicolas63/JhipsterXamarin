@@ -11,28 +11,35 @@
             <StackLayout Margin="10" VerticalOptions="StartAndExpand">
                 <Label FontSize="Title" Text="Welcome, Java Hipster!"/>
                 <Label Text="This is your homepage"/>
-                <StackLayout BackgroundColor="Orange" Padding="15">
-                    <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="0">
-                        <Label Text="If you want to "/>
-                        <Label Text="sign in" FontAttributes="Bold">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding SignIn}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label Text=", you can try the default accounts:"></Label>
+                <StackLayout IsVisible="{Binding IsNotConnected}">
+                    <StackLayout BackgroundColor="Orange" Padding="15">
+                        <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="0">
+                            <Label Text="If you want to "/>
+                            <Label Text="sign in" FontAttributes="Bold">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SignIn}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Text=", you can try the default accounts:"></Label>
+                        </StackLayout>
+                        <Label Text="- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)"></Label>
+                        <Label Text="- User (login=&quot;user&quot; and password=&quot;user&quot;)."></Label>
                     </StackLayout>
-                    <Label Text="- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)"></Label>
-                    <Label Text="- User (login=&quot;user&quot; and password=&quot;user&quot;)."></Label>
+                    <StackLayout BackgroundColor="Orange" Padding="15">
+                        <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="0">
+                            <Label Text="You don't have an account yet? "/>
+                            <Label Text="Register a new account" FontAttributes="Bold">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SignUp}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+                    </StackLayout>
                 </StackLayout>
-                <StackLayout BackgroundColor="Orange" Padding="15">
-                    <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="0">
-                        <Label Text="If you want to "/>
-                        <Label Text="Register a new account" FontAttributes="Bold">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding SignUp}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                    </StackLayout>
+                <StackLayout IsVisible="{Binding IsConnected}" BackgroundColor="LightGreen" Grid.Row="1" Orientation="Horizontal" Spacing="0" Padding="15">
+                    <Label Text="You are logged in as user &quot;"/>
+                    <Label Text="{Binding Username}"/>
+                    <Label Text="&quot;"/>
                 </StackLayout>
                 <Label Text="If you have any question on JHipster:"/>
                 <StackLayout Padding="10">
