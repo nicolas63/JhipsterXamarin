@@ -14,6 +14,7 @@ namespace JhipsterXamarin.ViewModels
 
         private bool _active;
         private bool _rememberMe;
+        private bool _success;
         private string _password;
         private string _username;
 
@@ -62,17 +63,32 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
+        public bool Success
+        {
+            get => _success;
+            set
+            {
+                _success = value;
+                RaisePropertyChanged(() => Success);
+                RaisePropertyChanged(() => Failed);
+            }
+        }
+
+        public bool Failed { get => !_success; }
+
         public LoginViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
         {
             _navigationService = navigationService;
             _authenticationService = authenticationService;
 
+            Success = true;
+
             SignIn = new MvxCommand(async () =>
             {
                 Active = false;
-                var success = await SignInConnection();
+                Success = await SignInConnection();
                 
-                if (success)
+                if (Success)
                 {
                     await _navigationService.Navigate<HomeViewModel>();
                     await _navigationService.Close(this);

@@ -13,34 +13,49 @@
                 <Label Text="This is your homepage"/>
                 <StackLayout IsVisible="{Binding IsNotConnected}">
                     <StackLayout BackgroundColor="Orange" Padding="15">
-                        <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="0">
-                            <Label Text="If you want to "/>
-                            <Label Text="sign in" FontAttributes="Bold">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding SignIn}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label Text=", you can try the default accounts:"></Label>
-                        </StackLayout>
+                        <Label LineBreakMode="WordWrap">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="If you want to "/>
+                                    <Span Text="sign in" FontAttributes="Bold">
+                                        <Span.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding SignIn}"/>
+                                        </Span.GestureRecognizers>
+                                    </Span>
+                                    <Span Text=", you can try the default accounts:"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                         <Label Text="- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)"></Label>
                         <Label Text="- User (login=&quot;user&quot; and password=&quot;user&quot;)."></Label>
                     </StackLayout>
                     <StackLayout BackgroundColor="Orange" Padding="15">
-                        <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="0">
-                            <Label Text="You don't have an account yet? "/>
-                            <Label Text="Register a new account" FontAttributes="Bold">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding SignUp}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
-                        </StackLayout>
+                        <Label LineBreakMode="WordWrap">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="You don't have an account yet? "/>
+                                    <Span Text="Register a new account" FontAttributes="Bold">
+                                        <Span.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding SignUp}"/>
+                                        </Span.GestureRecognizers>
+                                    </Span>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
                     </StackLayout>
                 </StackLayout>
-                <StackLayout IsVisible="{Binding IsConnected}" BackgroundColor="LightGreen" Grid.Row="1" Orientation="Horizontal" Spacing="0" Padding="15">
-                    <Label Text="You are logged in as user &quot;"/>
-                    <Label Text="{Binding Username}"/>
-                    <Label Text="&quot;"/>
+                <StackLayout IsVisible="{Binding IsConnected}" BackgroundColor="LightGreen" Padding="15">
+                    <Label LineBreakMode="WordWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="You are logged in as user &quot;"/>
+                                <Span Text="{Binding Username}"/>
+                                <Span Text="&quot;"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
                 </StackLayout>
+
                 <Label Text="If you have any question on JHipster:"/>
                 <StackLayout Padding="10">
                     <Label Text="&#x2022; JHipster homepage" FontAttributes="Bold">
@@ -69,14 +84,18 @@
                         </Label.GestureRecognizers>
                     </Label>
                 </StackLayout>
-                <StackLayout Grid.Row="1" Orientation="Horizontal" Spacing="0">
-                    <Label Text="If you like JHipster, don't forget to give us a star on "></Label>
-                    <Label Text="GitHub!" FontAttributes="Bold">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding OpenGitHub}"/>
-                        </Label.GestureRecognizers>
-                    </Label>
-                </StackLayout>
+                <Label LineBreakMode="WordWrap">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="If you like JHipster, don't forget to give us a star on "/>
+                            <Span Text="GitHub!" FontAttributes="Bold">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding OpenGitHub}"/>
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </StackLayout>
             <StackLayout VerticalOptions="EndAndExpand">
                 <Label Text="This is your footer"></Label>

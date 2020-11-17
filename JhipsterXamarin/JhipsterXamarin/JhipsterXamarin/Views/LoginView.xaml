@@ -11,7 +11,17 @@
             <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
                 <Label Text="Connection" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
             </Frame>
-            <StackLayout Margin="10">
+            <StackLayout Padding="10">
+                <StackLayout IsVisible="{Binding Failed}" Padding="10" BackgroundColor="IndianRed">
+                    <Label LineBreakMode="WordWrap">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Failed to sign in! " FontSize="15" FontAttributes="Bold"/>
+                                <Span Text="Please check your credentials and try again." />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
                 <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
                 <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
 
