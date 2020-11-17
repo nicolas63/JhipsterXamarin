@@ -17,9 +17,12 @@ namespace JhipsterXamarin.ViewModels
 
         private bool _active;
         private bool _rememberMe;
+        private bool _error;
+       
         private string _password;
         private string _username;
         private string _email;
+        private string _confirmPassword;
 
         public IMvxCommand SignUp { get; }
         public IMvxCommand GoBack { get;  }
@@ -78,11 +81,34 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
+        public bool Error
+        {
+            get => _error;
+            set
+            {
+                _error = value;
+                RaisePropertyChanged(() => Error);
+            }
+        }
+
+        public string ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                _confirmPassword = value;
+                RaisePropertyChanged(() => ConfirmPassword);
+                ReloadActive();
+            }
+        }
+
         public RegisterViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService, IRegisterService registerService)
         {
             _navigationService = navigationService;
             _authenticationService = authenticationService;
             _registerService = registerService;
+
+            Error = false;
 
             SignUp = new MvxCommand(async () =>
             {
@@ -94,11 +120,13 @@ namespace JhipsterXamarin.ViewModels
                     Email = Email,
                     LangKey = "en"
                 });
-                
-                if (result.IsSuccessStatusCode)
+
+                Error = !result.IsSuccessStatusCode;
+
+                if (!Error)
                 {
-                    var success = await SignInConnection();
-                    if (success) await _navigationService.Navigate<HomeViewModel>();
+                    Error = !await SignInConnection();
+                    if (!Error) await _navigationService.Navigate<HomeViewModel>();
                 }
                 Active = true;
             });
@@ -121,7 +149,7 @@ namespace JhipsterXamarin.ViewModels
             else
             {
                 var emailSplit = Email.Split('@');
-                Active = Password.Length > 3 && Email.Length > 4 && emailSplit.Length == 2 &&
+                Active = Password.Length > 3 && (ConfirmPassword == Password) && Email.Length > 4 && emailSplit.Length == 2 &&
                          emailSplit.All(val => val.Length > 0);
             }
         }
