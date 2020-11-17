@@ -18,14 +18,17 @@ jobs:
         xamarin-mac-version: latest # specify 'latest' keyword to pick up the latest available version
         xamarin-android-version: 10.1.3.7 # specify full version; it is not recomended option because your pipeline can be broken suddenly in future
         xcode-version: 11.x # set the latest available Xcode 11  
- Android:
+ UT:
     name : Setup UT
     runs-on: windows-latest
     steps:
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1
     - uses: actions/checkout@v1
     - name: UT 
       run: |
         cd JhipsterXamarin
         nuget restore
+        run: /Common7/IDE/MSTest.exe
         cd JhispterXamarin/UnitTestJhispterXamarin@UT
         msbuild UnitTestJhispterXamarin.csproj /verbosity:normal /t:Rebuild /p:Configuration=Debug
