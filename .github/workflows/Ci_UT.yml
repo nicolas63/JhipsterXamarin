@@ -25,5 +25,5 @@ jobs:
       run: |
         cd JhipsterXamarin
         nuget restore
-        cd UnitTestJhispterXamarin
+        cd JhispterXamarin/UnitTestJhispterXamarin
         msbuild UnitTestJhispterXamarin.csproj /verbosity:normal /t:Rebuild /p:Configuration=Debug
