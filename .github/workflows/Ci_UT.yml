@@ -1,8 +1,10 @@
 # This is a basic workflow to help you get started with Actions
 
 name: Ci_UT
-on: [push, pull_request]
-
+on:
+ push:
+  branches:
+   - releases/*
 jobs:    
  build:
    name: Setup Xamarin and Mono versions
@@ -21,7 +23,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
-    - name: UT
+    - name: UT 
       run: |
         cd JhipsterXamarin
         nuget restore
