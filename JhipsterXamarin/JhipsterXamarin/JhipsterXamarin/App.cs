@@ -30,12 +30,10 @@ namespace JhipsterXamarin
             Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
             Mvx.IoCProvider.RegisterSingleton(httpClient);
 
-            bool success = false;
-
             try
             {
                 var token = Task.Run(async () => await BlobCache.Secure.GetObject<JwtToken>("token")).Result;
-                success = Task.Run(async () => await authenticationService.SignIn(token)).Result;
+                Task.Run(async () => await authenticationService.SignIn(token));
             }
             catch (Exception ex)
             {
