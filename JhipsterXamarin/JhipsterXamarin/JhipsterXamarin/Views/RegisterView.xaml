@@ -12,7 +12,23 @@
                 <Label Text="Registration" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
             </Frame>
             <StackLayout Margin="10">
+                <Label IsVisible="{Binding Success}" LineBreakMode="WordWrap" BackgroundColor="LightGreen" Padding="15">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Registration saved! " FontAttributes="Bold" />
+                            <Span Text="Please check your email for confirmation." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
                 <Label IsVisible="{Binding Error}" LineBreakMode="WordWrap" BackgroundColor="IndianRed" Padding="15">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Registration failed! " FontAttributes="Bold" />
+                            <Span Text="Please try again later." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <Label IsVisible="{Binding ErrorLogin}" LineBreakMode="WordWrap" BackgroundColor="IndianRed" Padding="15">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Login name already registered! " FontAttributes="Bold" />
@@ -20,19 +36,29 @@
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
-                <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
-                <Entry Placeholder="Email" x:Name="EmailEntry" Text="{Binding Email}" />
-                <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
-                <Entry IsPassword="True" Placeholder="Confirm your password" x:Name="ConfirmPasswordEntry" Text="{Binding ConfirmPassword}" />
-                <StackLayout Orientation="Horizontal">
-                    <CheckBox x:Name="checkBox" IsChecked="{Binding RememberMe}" />
-                    <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ChangeStateCommand}" />
-                        </Label.GestureRecognizers>
-                    </Label>
+                <Label IsVisible="{Binding ErrorMail}" LineBreakMode="WordWrap" BackgroundColor="IndianRed" Padding="15">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Email is already in use! " FontAttributes="Bold" />
+                            <Span Text="Please choose another one." />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                <StackLayout IsVisible="{Binding NotSuccess}">
+                    <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
+                    <Entry Placeholder="Email" x:Name="EmailEntry" Text="{Binding Email}" />
+                    <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
+                    <Entry IsPassword="True" Placeholder="Confirm your password" x:Name="ConfirmPasswordEntry" Text="{Binding ConfirmPassword}" />
+                    <StackLayout Orientation="Horizontal">
+                        <CheckBox x:Name="checkBox" IsChecked="{Binding RememberMe}" />
+                        <Label FontSize="15" VerticalTextAlignment="Center" Text="Remember me">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChangeStateCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                    <Button Text="Sign Up" Command="{Binding SignUp}" IsEnabled="{Binding Active}" />
                 </StackLayout>
-                <Button Text="Sign Up" Command="{Binding SignUp}" IsEnabled="{Binding Active}" />
                 <StackLayout BackgroundColor="Orange">
                     <Label LineBreakMode="WordWrap">
                         <Label.FormattedText>

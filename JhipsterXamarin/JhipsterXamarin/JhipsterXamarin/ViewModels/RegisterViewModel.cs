@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using SharedModel.Constants;
 using Xamarin.Essentials;
 
 namespace JhipsterXamarin.ViewModels
@@ -18,7 +20,11 @@ namespace JhipsterXamarin.ViewModels
         private bool _active;
         private bool _rememberMe;
         private bool _error;
-       
+        private bool _errorMail;
+        private bool _errorLogin;
+        private bool _success;
+
+
         private string _password;
         private string _username;
         private string _email;
@@ -102,6 +108,42 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
+        public bool ErrorMail
+        {
+            get => _errorMail;
+            set
+            {
+                _errorMail = value;
+                RaisePropertyChanged(() => ErrorMail);
+            }
+        }
+
+        public bool ErrorLogin
+        {
+            get => _errorLogin;
+            set
+            {
+                _errorLogin = value;
+                RaisePropertyChanged(() => ErrorLogin);
+            }
+        }
+
+        public bool Success
+        {
+            get => _success;
+            set
+            {
+                _success = value;
+                RaisePropertyChanged(() => Success);
+                RaisePropertyChanged(() => NotSuccess);
+            }
+        }
+
+        public bool NotSuccess
+        {
+            get => !Success;
+        }
+
         public RegisterViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService, IRegisterService registerService)
         {
             _navigationService = navigationService;
@@ -113,7 +155,7 @@ namespace JhipsterXamarin.ViewModels
             SignUp = new MvxCommand(async () =>
             {
                 Active = false;
-                var result = await _registerService.Save(new UserSaveModel
+                var resultError = await _registerService.Save(new UserSaveModel
                 {
                     Password = Password,
                     Login = Username,
@@ -121,14 +163,11 @@ namespace JhipsterXamarin.ViewModels
                     LangKey = "en"
                 });
 
-                Error = !result.IsSuccessStatusCode;
+                Error = resultError == ErrorConst.ProblemBaseUrl;
+                ErrorLogin = resultError == ErrorConst.LoginAlreadyUsedType;
+                ErrorMail = resultError == ErrorConst.EmailAlreadyUsedType;
 
-                if (!Error)
-                {
-                    Error = !await SignInConnection();
-                    if (!Error) await _navigationService.Navigate<HomeViewModel>();
-                }
-                Active = true;
+                Success = (!new List<bool>() { Error, ErrorLogin, ErrorMail }.Contains(true));
             });
 
             GoBack = new MvxCommand(() =>

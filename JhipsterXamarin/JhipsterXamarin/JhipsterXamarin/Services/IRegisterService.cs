@@ -9,6 +9,6 @@ namespace JhipsterXamarin.Services
 {
     public interface IRegisterService
     {
-        Task<HttpResponseMessage> Save(UserSaveModel registerModel);
+        Task<string> Save(UserSaveModel registerModel);
     }
 }
