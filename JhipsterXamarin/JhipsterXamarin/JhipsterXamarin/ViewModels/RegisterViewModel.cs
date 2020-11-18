@@ -141,7 +141,7 @@ namespace JhipsterXamarin.ViewModels
 
         public bool NotSuccess
         {
-            get => !Success;
+            get => !_success;
         }
 
         public RegisterViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService, IRegisterService registerService)

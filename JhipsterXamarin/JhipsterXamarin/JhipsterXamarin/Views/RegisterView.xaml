@@ -11,7 +11,7 @@
             <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
                 <Label Text="Registration" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
             </Frame>
-            <StackLayout Margin="10">
+            <StackLayout Padding="10">
                 <Label IsVisible="{Binding Success}" LineBreakMode="WordWrap" BackgroundColor="LightGreen" Padding="15">
                     <Label.FormattedText>
                         <FormattedString>
