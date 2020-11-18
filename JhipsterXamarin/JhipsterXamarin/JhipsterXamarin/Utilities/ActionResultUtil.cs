@@ -15,7 +15,6 @@ namespace JhipsterXamarin.Utilities
             return new NotFoundResult();
         }
 
-
         public static ActionResult WrapOrNotFound(object value)
         {
             return value != null ? (ActionResult)new OkObjectResult(value) : new NotFoundResult();
