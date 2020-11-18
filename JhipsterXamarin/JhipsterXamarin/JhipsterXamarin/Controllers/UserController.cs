@@ -14,7 +14,7 @@ using JhipsterXamarin.Constants;
 namespace JhipsterXamarin.Controllers
 {
     [Microsoft.AspNetCore.Authorization.Authorize]
-    [System.Web.Mvc.Route("api")]
+    [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -33,7 +33,6 @@ namespace JhipsterXamarin.Controllers
         }
 
         [HttpPost("users")]
-        
         public async Task<ActionResult<UserModel>> AddUser([FromBody] UserModel user)
         {
             _log.LogDebug($"REST request to save User : {user}");
@@ -44,14 +43,12 @@ namespace JhipsterXamarin.Controllers
             if (await _userManager.FindByNameAsync(user.Login.ToLowerInvariant()) != null)
                 throw new LoginAlreadyUsedException();
 
-            // var newUser = await _userService.Add(_mapper.Map<UserModel>(userDto));
             await _userService.Add(user);
-            return CreatedAtAction(nameof(GetUser), new { login = user.Login }, user);
-                //.WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", user.Login));
+            return CreatedAtAction(nameof(GetUser), new { login = user.Login }, user)
+                .WithHeaders(HeaderUtil.CreateEntityCreationAlert("userManagement.created", user.Login));
         }
 
         [HttpPut("users")]
-        
         public async Task<IActionResult> UpdateUser([FromBody] UserModel user)
         {
             _log.LogDebug($"REST request to update User : {user}");
@@ -59,10 +56,9 @@ namespace JhipsterXamarin.Controllers
 
             if (existingUser != null && !existingUser.Id.Equals(user.Id)) throw new LoginAlreadyUsedException();
 
-            //var updatedUser = await _userService.Update(_mapper.Map<UserModel>(userDto));
             await _userService.Update(user);
-            return ActionResultUtil.WrapOrNotFound(user);
-                //.WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", user.Login));
+            return ActionResultUtil.WrapOrNotFound(user)
+                .WithHeaders(HeaderUtil.CreateAlert("userManagement.updated", user.Login));
         }
 
         [HttpGet("users")]
@@ -71,19 +67,6 @@ namespace JhipsterXamarin.Controllers
             _log.LogDebug("REST request to get a page of Users");
             return await _userService.GetAll();
         }
-        /*
-        public async Task<ActionResult<IEnumerable<UserModel>>> GetAllUsers(IPageable pageable)
-        {
-            _log.LogDebug("REST request to get a page of Users");
-            var page = await _userManager.Users
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .UsePageableAsync(pageable);
-            var userDtos = page.Content.Select(user => _mapper.Map<UserDto>(user));
-            var headers = page.GeneratePaginationHttpHeaders();
-            return Ok(userDtos).WithHeaders(headers);
-        }
-        */
 
         [HttpGet("users/authorities")]
         [Microsoft.AspNetCore.Authorization.Authorize(Roles = RolesConstants.ADMIN)]
@@ -93,7 +76,6 @@ namespace JhipsterXamarin.Controllers
         }
 
         [HttpGet("users/{login}")]
-
         public async Task<IActionResult> GetUser([FromRoute] string login)
         {
             _log.LogDebug($"REST request to get User : {login}");
@@ -101,19 +83,7 @@ namespace JhipsterXamarin.Controllers
             var result = await _userService.Get(login);
             return ActionResultUtil.WrapOrNotFound(result);
         }
-        /*
-        public async Task<IActionResult> GetUser([FromRoute] string login)
-        {
-            _log.LogDebug($"REST request to get User : {login}");
-            var result = await _userManager.Users
-                .Where(user => user.Login == login)
-                .Include(it => it.UserRoles)
-                .ThenInclude(r => r.Role)
-                .SingleOrDefaultAsync();
-            var userDto = _mapper.Map<UserDto>(result);
-            return ActionResultUtil.WrapOrNotFound(userDto);
-        }
-        */
+
         [HttpDelete("users/{login}")]
         [Microsoft.AspNetCore.Authorization.Authorize(Roles = RolesConstants.ADMIN)]
         public async Task<IActionResult> DeleteUser([FromRoute] string login)
