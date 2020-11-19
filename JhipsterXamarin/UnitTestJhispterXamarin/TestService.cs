@@ -28,7 +28,8 @@ namespace UnitTestJhispterXamarin
 
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);
             Ioc.RegisterSingleton<IMyEntityService>(myEntityService.Object);
-
+            Task<List<MyEntityModel>> listService = myEntityService.Object.GetEntities();
+            var countListService = listService.Result.Count;
             myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService.Object);
 
             await myEntityViewModel.Initialize();
@@ -40,9 +41,13 @@ namespace UnitTestJhispterXamarin
             myFirstEntityModelSimple.Name = "the first entity";
             myFirstEntityModelSimple.Age = 1;
 
-            myEntityService.Setup(foo => foo.CreateEntity(myFirstEntityModelSimple.Name, myFirstEntityModelSimple.Age));
+            myEntityService.Object.CreateEntity(myFirstEntityModelSimple.Name, myFirstEntityModelSimple.Age);
+            myEntityService.Object.CreateEntity("the second entity", 2);
+            myEntityService.Object.CreateEntity("the third entity", 3);
+            /*
             myEntityService.SetupAdd(foo => foo.CreateEntity("the second entity", 2));
             myEntityService.SetupAdd(foo => foo.CreateEntity("the third entity", 3));
+            */
         }
 
         [TestMethod]
