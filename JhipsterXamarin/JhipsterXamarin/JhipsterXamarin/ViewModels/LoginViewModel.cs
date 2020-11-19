@@ -87,14 +87,8 @@ namespace JhipsterXamarin.ViewModels
             SignIn = new MvxCommand(async () =>
             {
                 Active = false;
-                Success = await SignInConnection();
-                
-                if (Success)
-                {
-                    await _navigationService.Navigate<HomeViewModel>();
-                    await _navigationService.Close(this);
-                }
-                Active = true;
+                Success = await SignInConnection();               
+                if (Success) await _navigationService.Navigate<HomeViewModel>();
             });
 
             SignUp = new MvxCommand(async () =>
@@ -110,10 +104,7 @@ namespace JhipsterXamarin.ViewModels
 
         public void ReloadActive()
         {
-            if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Username))
-                Active = false;
-            else
-                Active = Password.Length > 3;
+            Active = !string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(Username) && Password.Length > 3;
         }
 
         public Task<bool> SignInConnection()

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using JhipsterBlazor.Models;
 using JhipsterXamarin.Models;
+using MvvmCross.Logging;
 using SharedModel.Constants;
 
 namespace JhipsterXamarin.Services
@@ -15,11 +16,12 @@ namespace JhipsterXamarin.Services
     {
         private const string RegisterUrl = "/api/register";
         private readonly HttpClient _httpClient;
+        private readonly IMvxLog _log;
 
-        public RegisterService(HttpClient httpClient)
+        public RegisterService(HttpClient httpClient, IMvxLog log)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(Configuration.BaseUri);
+            _log = log;
         }
 
         public async Task<string> Save(UserSaveModel registerModel)
@@ -39,8 +41,9 @@ namespace JhipsterXamarin.Services
                 var res = await result.Content.ReadFromJsonAsync<RegisterResultRequest>();
                 return res.Type;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _log.ErrorException("Failed to parse JSON from error", ex);
                 return ErrorConst.ProblemBaseUrl;
             }
         }

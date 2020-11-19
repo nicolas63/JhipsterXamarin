@@ -17,11 +17,13 @@ namespace JhipsterXamarin
         public override void Initialize()
         {
             Akavache.Registrations.Start("JhipsterXamarin");
-            IMvxLog log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
+            var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
 
             var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(Configuration.BaseUri);
+
             var authenticationService = new AuthenticationService(httpClient);
-            var registerService = new RegisterService(httpClient);
+            var registerService = new RegisterService(httpClient, log);
             var myEntityService = new MyEntityService(httpClient);
 
             Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);

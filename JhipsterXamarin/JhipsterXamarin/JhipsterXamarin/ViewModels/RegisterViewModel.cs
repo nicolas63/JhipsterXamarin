@@ -23,8 +23,6 @@ namespace JhipsterXamarin.ViewModels
         private bool _errorMail;
         private bool _errorLogin;
         private bool _success;
-
-
         private string _password;
         private string _username;
         private string _email;
@@ -154,20 +152,7 @@ namespace JhipsterXamarin.ViewModels
 
             SignUp = new MvxCommand(async () =>
             {
-                Active = false;
-                var resultError = await _registerService.Save(new UserSaveModel
-                {
-                    Password = Password,
-                    Login = Username,
-                    Email = Email,
-                    LangKey = "en"
-                });
-
-                Error = resultError == ErrorConst.ProblemBaseUrl;
-                ErrorLogin = resultError == ErrorConst.LoginAlreadyUsedType;
-                ErrorMail = resultError == ErrorConst.EmailAlreadyUsedType;
-
-                Success = (!new List<bool>() { Error, ErrorLogin, ErrorMail }.Contains(true));
+                await HandleSignUp();
             });
 
             GoBack = new MvxCommand(() =>
@@ -181,32 +166,39 @@ namespace JhipsterXamarin.ViewModels
             });
         }
 
+        public async Task HandleSignUp()
+        {
+            Active = false;
+            var resultError = await _registerService.Save(new UserSaveModel
+            {
+                Password = Password,
+                Login = Username,
+                Email = Email,
+                LangKey = "en"
+            });
+
+            Error = resultError == ErrorConst.ProblemBaseUrl;
+            ErrorLogin = resultError == ErrorConst.LoginAlreadyUsedType;
+            ErrorMail = resultError == ErrorConst.EmailAlreadyUsedType;
+
+            Success = (!new List<bool>() { Error, ErrorLogin, ErrorMail }.Contains(true));
+        }
+
         public void ReloadActive()
         {
-            if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Username))
-                Active = false;
-            else
-            {
-                var emailSplit = Email.Split('@');
-                Active = Password.Length > 3 && (ConfirmPassword == Password) && Email.Length > 4 && emailSplit.Length == 2 &&
-                         emailSplit.All(val => val.Length > 0);
-            }
+            Active = CheckActive();
         }
 
-        public Task<bool> SignInConnection()
+        private bool CheckActive()
         {
-            var model = new LoginModel
-            {
-                Username = Username,
-                Password = Password,
-                RememberMe = RememberMe
-            };
-            return _authenticationService.SignIn(model);
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
+            var fields = new List<string> { Password, ConfirmPassword, Username, Email };
+            if (fields.Any(field => string.IsNullOrEmpty(field))) return false; 
+            if (Password.Length < 4) return false;
+            if (ConfirmPassword != Password) return false;
+            if (Email.Length < 5) return false;
+            if (Email.Split('@').Length != 2) return false;
+            if (!Email.Split('@').All(val => val.Length > 0)) return false;
+            return true;
         }
     }
 }
