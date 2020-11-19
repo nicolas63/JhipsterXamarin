@@ -12,7 +12,12 @@
                 <Label Text="Connection" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
             </Frame>
             <StackLayout Padding="10">
-                <StackLayout IsVisible="{Binding Failed}" Padding="10" BackgroundColor="IndianRed">
+                <StackLayout Padding="10" BackgroundColor="IndianRed">
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding Success}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
                     <Label LineBreakMode="WordWrap">
                         <Label.FormattedText>
                             <FormattedString>
@@ -34,7 +39,12 @@
                     </Label>
                 </StackLayout>
                 <Button Text="Sign In" Command="{Binding SignIn}" IsEnabled="{Binding Active}" />
-                <StackLayout IsVisible="{Binding Failed}">
+                <StackLayout>
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding Success}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
                     <StackLayout BackgroundColor="LightYellow" Padding="15">
                         <Label Text="Did you forget your password?" FontAttributes="Bold">
                             <Label.GestureRecognizers>

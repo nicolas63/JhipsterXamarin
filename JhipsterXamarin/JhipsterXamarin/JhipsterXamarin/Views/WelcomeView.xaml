@@ -11,7 +11,12 @@
             <StackLayout Padding="10" VerticalOptions="StartAndExpand">
                 <Label FontSize="Title" Text="Welcome, Java Hipster!"/>
                 <Label Text="This is your homepage"/>
-                <StackLayout IsVisible="{Binding IsNotConnected}">
+                <StackLayout>
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding IsConnected}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
                     <StackLayout BackgroundColor="Orange" Padding="15">
                         <Label LineBreakMode="WordWrap">
                             <Label.FormattedText>

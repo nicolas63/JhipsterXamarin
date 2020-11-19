@@ -18,8 +18,7 @@ namespace JhipsterXamarin.ViewModels
         private readonly IRegisterService _registerService;
 
         private bool _active;
-        private bool _rememberMe;
-        private bool _error;
+        private bool _rememberMe;       
         private bool _errorMail;
         private bool _errorLogin;
         private bool _success;
@@ -27,10 +26,11 @@ namespace JhipsterXamarin.ViewModels
         private string _username;
         private string _email;
         private string _confirmPassword;
+        private bool _error = false;
 
-        public IMvxCommand SignUp { get; }
-        public IMvxCommand GoBack { get;  }
-        public IMvxCommand ChangeStateCommand { get; }
+        public IMvxCommand SignUp => new MvxAsyncCommand(HandleSignUp);
+        public IMvxCommand ChangeStateCommand => new MvxCommand(InvertCheckBox);
+        public IMvxCommand GoBack => new MvxCommand(GoBackClicked);
 
         public bool Active
         {
@@ -147,26 +147,19 @@ namespace JhipsterXamarin.ViewModels
             _navigationService = navigationService;
             _authenticationService = authenticationService;
             _registerService = registerService;
-
-            Error = false;
-
-            SignUp = new MvxCommand(async () =>
-            {
-                await HandleSignUp();
-            });
-
-            GoBack = new MvxCommand(() =>
-            {
-                _navigationService.Navigate<LoginViewModel>();
-            });
-
-            ChangeStateCommand = new MvxCommand(() =>
-            {
-                RememberMe = !RememberMe;
-            });
         }
 
-        public async Task HandleSignUp()
+        private void GoBackClicked()
+        {
+            _navigationService.Navigate<LoginViewModel>();
+        }
+
+        private void InvertCheckBox()
+        {
+            RememberMe = !RememberMe;
+        }
+
+        private async Task HandleSignUp()
         {
             Active = false;
             var resultError = await _registerService.Save(new UserSaveModel
@@ -184,7 +177,7 @@ namespace JhipsterXamarin.ViewModels
             Success = (!new List<bool>() { Error, ErrorLogin, ErrorMail }.Contains(true));
         }
 
-        public void ReloadActive()
+        private void ReloadActive()
         {
             Active = CheckActive();
         }

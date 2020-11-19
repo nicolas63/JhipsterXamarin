@@ -25,7 +25,12 @@
                 Grid.Row="0" 
                 HorizontalOptions="EndAndExpand" 
                 VerticalOptions="StartAndExpand">
-                <StackLayout Orientation="Horizontal" IsVisible="{Binding IsNotConnected}">
+                <StackLayout Orientation="Horizontal">
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding IsConnected}" Value="True">
+                            <Setter Property="IsVisible" Value="False"/>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
                     <Button Text="Sign In" Clicked="ToggleClicked" Command="{Binding SignIn}"/>
                     <Button Text="Sign Up" Clicked="ToggleClicked" Command="{Binding SignUp}"/>
                 </StackLayout>

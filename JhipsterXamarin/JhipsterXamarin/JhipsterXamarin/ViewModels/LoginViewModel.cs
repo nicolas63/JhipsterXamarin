@@ -14,13 +14,13 @@ namespace JhipsterXamarin.ViewModels
 
         private bool _active;
         private bool _rememberMe;
-        private bool _success;
         private string _password;
         private string _username;
+        private bool _success = true;
 
-        public IMvxCommand SignIn { get; }
-        public IMvxCommand SignUp { get; }
-        public IMvxCommand ChangeStateCommand { get; }
+        public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
+        public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
+        public IMvxCommand ChangeStateCommand => new MvxCommand(InvertCheckBox);
 
         public bool Active
         {
@@ -71,35 +71,30 @@ namespace JhipsterXamarin.ViewModels
             {
                 _success = value;
                 RaisePropertyChanged(() => Success);
-                RaisePropertyChanged(() => Failed);
             }
         }
-
-        public bool Failed { get => !_success; }
 
         public LoginViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
         {
             _navigationService = navigationService;
             _authenticationService = authenticationService;
+        }
 
-            Success = true;
+        private void InvertCheckBox()
+        {
+            RememberMe = !RememberMe;
+        }
 
-            SignIn = new MvxCommand(async () =>
-            {
-                Active = false;
-                Success = await SignInConnection();               
-                if (Success) await _navigationService.Navigate<HomeViewModel>();
-            });
+        private async Task SignUpClicked()
+        {
+            await _navigationService.Navigate<RegisterViewModel>();
+        }
 
-            SignUp = new MvxCommand(async () =>
-            {
-                await _navigationService.Navigate<RegisterViewModel>();
-            });
-
-            ChangeStateCommand = new MvxCommand(() =>
-            {
-                RememberMe = !RememberMe;
-            });
+        private async Task SignInClicked()
+        {
+            Active = false;
+            Success = await SignInConnection();
+            if (Success) await _navigationService.Navigate<HomeViewModel>();
         }
 
         public void ReloadActive()
@@ -116,11 +111,6 @@ namespace JhipsterXamarin.ViewModels
                 RememberMe = RememberMe
             };
             return _authenticationService.SignIn(model);
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
         }
     }
 }
