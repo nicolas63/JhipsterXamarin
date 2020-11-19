@@ -12,7 +12,7 @@ namespace JhipsterXamarin.Services
         private readonly string ListUser = "/api/users";
         private readonly HttpClient _httpClient;
 
-        public MyEntityService(HttpClient httpClient, IAuthenticationService authenticationService)
+        public MyEntityService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

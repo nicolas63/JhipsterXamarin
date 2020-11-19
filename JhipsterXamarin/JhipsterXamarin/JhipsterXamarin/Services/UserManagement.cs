@@ -12,6 +12,7 @@ namespace JhipsterXamarin.Services
 
         private IAuthenticationService AuthenticationService;
 
+        private UserModel CurrentUser { get; set; }
         protected  async Task OnInitializedAsync()
         {
             UserModels = await UserService.GetAll();
@@ -21,8 +22,31 @@ namespace JhipsterXamarin.Services
         {
             user.Activated = activated;
             await UserService.Update(user);
+            CurrentUser = user; 
         }
 
+        private async Task AddUser(UserModel _user)
+        {
+            if (!UserModels.Contains(UserModels.First(user => user.Login.Equals(_user.Login))))
+            {
+                await UserService.Add(_user);
+                UserModels.Add(_user);
+                UserModels = await UserService.GetAll();
+            }
+        }
+        private async Task UpdateUser(UserModel user)
+        {
+            foreach (UserModel userModel in UserModels)
+            {
+                if (userModel == user)
+                {
+                    await UserService.Update(user);
+                    UserModels.Remove(UserModels.First(user => user.Login.Equals(userModel.Login)));
+                    UserModels.Add(user);
+                    UserModels = await UserService.GetAll();
+                }
+            }
+        }
         private async Task DeleteUser(string login)
         {
             foreach (UserModel userModel in UserModels)
@@ -31,6 +55,7 @@ namespace JhipsterXamarin.Services
                 {
                     await UserService.Delete(login);
                     UserModels.Remove(UserModels.First(user => user.Login.Equals(login)));
+                    UserModels = await UserService.GetAll();
                 }
             }
         }

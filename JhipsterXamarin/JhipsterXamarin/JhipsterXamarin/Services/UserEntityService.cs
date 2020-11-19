@@ -12,6 +12,7 @@ namespace JhipsterXamarin.Services
         private const string AuthorizationHeader = "Authorization";
 
         protected readonly HttpClient _httpClient;
+        private IAuthenticationService authenticationService;
 
         protected JwtToken JwtToken { get; set; }
         protected string BaseUrl { get; }
@@ -26,6 +27,12 @@ namespace JhipsterXamarin.Services
                 _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {JwtToken.IdToken}");
             }
             BaseUrl = baseUrl;
+        }
+
+        public UserEntityService(HttpClient httpClient, IAuthenticationService authenticationService)
+        {
+            this._httpClient = httpClient;
+            this.authenticationService = authenticationService;
         }
 
         public virtual async Task<IList<T>> GetAll()
