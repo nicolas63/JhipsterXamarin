@@ -34,7 +34,7 @@ namespace JhipsterXamarin.Services
 
         private async Task<string> ProcessError(HttpResponseMessage result)
         {
-            if (result.StatusCode != HttpStatusCode.BadRequest) return ErrorConst.ProblemBaseUrl;
+            if (result.StatusCode != HttpStatusCode.BadRequest) return ErrorConst.UnknownErrorType;
 
             try
             {
@@ -44,7 +44,7 @@ namespace JhipsterXamarin.Services
             catch (Exception ex)
             {
                 _log.ErrorException("Failed to parse JSON from error", ex);
-                return ErrorConst.ProblemBaseUrl;
+                return ErrorConst.UnknownErrorType;
             }
         }
     }

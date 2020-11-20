@@ -170,7 +170,7 @@ namespace JhipsterXamarin.ViewModels
                 LangKey = "en"
             });
 
-            Error = resultError == ErrorConst.ProblemBaseUrl;
+            Error = resultError == ErrorConst.UnknownErrorType;
             ErrorLogin = resultError == ErrorConst.LoginAlreadyUsedType;
             ErrorMail = resultError == ErrorConst.EmailAlreadyUsedType;
 
