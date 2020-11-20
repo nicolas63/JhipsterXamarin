@@ -45,8 +45,14 @@ namespace JhipsterXamarin.Services
             return await _httpClient.GetFromJsonAsync<T>($"{BaseUrl}/{id}");
         }
 
-        public virtual async Task Add(T model)
+        public virtual async Task Add(string login, string firstName, string lastName,string current)
         {
+            var model = new UserModel();
+            model.Login = login;
+            model.FirstName = firstName;
+            model.LastName = lastName;
+            model.LastModifiedDate = DateTime.Now;
+            model.LastModifiedBy = current;
             await _httpClient.PostAsJsonAsync(BaseUrl, model);
         }
         public virtual async Task Update(T model)

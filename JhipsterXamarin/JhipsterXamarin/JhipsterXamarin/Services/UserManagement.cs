@@ -29,7 +29,7 @@ namespace JhipsterXamarin.Services
         {
             if (!UserModels.Contains(UserModels.First(user => user.Login.Equals(_user.Login))))
             {
-                await UserService.Add(_user);
+                await UserService.Add(_user.Login, _user.FirstName, _user.LastName, CurrentUser.FirstName + " | " + CurrentUser.LastName);
                 UserModels.Add(_user);
                 UserModels = await UserService.GetAll();
             }

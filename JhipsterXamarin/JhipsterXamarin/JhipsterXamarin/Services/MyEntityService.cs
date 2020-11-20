@@ -6,10 +6,9 @@ using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
 {
-    public class MyEntityService<T> : IMyEntityService
+    public class MyEntityService : IMyEntityService
     {
         private const string ListEntitiesUrl = "api/myentities";
-        private readonly string ListUser = "/api/users";
         private readonly HttpClient _httpClient;
 
         public MyEntityService(HttpClient httpClient)
