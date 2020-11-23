@@ -12,13 +12,15 @@ using System.Collections.Generic;
 namespace UnitTestJhispterXamarin
 {
     [TestClass]
-    public class TestMyEntityViewModel : MvxIoCSupportingTest
+    public class MyEntityViewModelTest : MvxIoCSupportingTest
     {
-        Mock<IMyEntityService> myEntityService;
-        MyEntityViewModel myEntityViewModel;
-        MyEntityModelSimple myFirstEntityModelSimple = new MyEntityModel();
-        MyEntityModelSimple mySecondEntityModelSimple = new MyEntityModel();
-        List<MyEntityModel> myEntities;
+        private Mock<IMyEntityService> myEntityService;
+        private List<MyEntityModel> myEntities;
+        private MyEntityViewModel myEntityViewModel;        
+
+        private readonly MyEntityModelSimple myFirstEntityModelSimple = new MyEntityModel();
+        private readonly MyEntityModelSimple mySecondEntityModelSimple = new MyEntityModel();
+
         [TestInitialize]
         public async Task Initialize()
         {
@@ -29,21 +31,26 @@ namespace UnitTestJhispterXamarin
 
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);
             Ioc.RegisterSingleton<IMyEntityService>(myEntityService.Object);
+
             myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService.Object);
             await myEntityViewModel.Initialize();
+
             myEntityViewModel.ListElement = myEntities;
         }
         protected override void AdditionalSetup()
         {
             myFirstEntityModelSimple.Name = "the first entity";
             myFirstEntityModelSimple.Age = 1;
+
             mySecondEntityModelSimple.Name = "the second entity";
             mySecondEntityModelSimple.Age = 2;
+
             MyEntityModelSimple myThirdEntityModelSimple = new MyEntityModel();
             myThirdEntityModelSimple.Name = "the third entity";
             myThirdEntityModelSimple.Age = 3;
 
             myEntities = new List<MyEntityModel>();
+
             myEntities.Add((MyEntityModel)myFirstEntityModelSimple);
             myEntities.Add((MyEntityModel)mySecondEntityModelSimple);
             myEntities.Add((MyEntityModel)myThirdEntityModelSimple);
@@ -55,10 +62,12 @@ namespace UnitTestJhispterXamarin
             //Arrange
             string expected = "the first entity updated";
             myFirstEntityModelSimple.Name = expected;
+
             //Act
             var listElement = myEntityViewModel.ListElement;
             if (listElement.Contains((MyEntityModel)myFirstEntityModelSimple))
                 myEntityViewModel.CurrentElement = (MyEntityModel)myFirstEntityModelSimple;
+
             //Assert
             myEntityViewModel.CurrentElement.Name
                 .Should().Be(expected, "Test failed: We wanted : " + expected);
@@ -69,10 +78,12 @@ namespace UnitTestJhispterXamarin
         {
             //Arrange
             var listElement = myEntityViewModel.ListElement;
+
             //Act
             if (listElement.Contains((MyEntityModel)myFirstEntityModelSimple))
                 myEntityViewModel.ListElement.Remove((MyEntityModel)myFirstEntityModelSimple);
                 myEntityViewModel.CurrentElement = myEntityViewModel.ListElement[0];
+
             //Assert
             myEntityViewModel.ListElement.Count
                 .Should().Be(2, "Test Failed : We wanted : " + 2);
