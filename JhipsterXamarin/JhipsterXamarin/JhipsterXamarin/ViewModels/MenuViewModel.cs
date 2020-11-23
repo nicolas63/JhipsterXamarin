@@ -9,6 +9,7 @@ namespace JhipsterXamarin.ViewModels
     {
         private readonly IMvxNavigationService _navigationService;
         private readonly IAuthenticationService _authenticationService;
+
         public IMvxCommand ShowMyEntitiesCommand => new MvxAsyncCommand(ShowMyEntitiesCommandClicked);
         public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
         public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);

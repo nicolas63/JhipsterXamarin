@@ -13,6 +13,7 @@ namespace JhipsterXamarin.ViewModels
     {
         private readonly IMvxNavigationService _navigationService;
         private readonly IAuthenticationService _authenticationService;
+
         public IMvxCommand OpenHomepage => new MvxCommand(OpenHomepageClicked);
         public IMvxCommand OpenStack => new MvxCommand(OpenStackClicked);
         public IMvxCommand OpenBugTracker => new MvxCommand(OpenBugTrackerClicked);
