@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace JhipsterXamarin.Services
 {
-    public class UserEntityService<T> where T : class
+    public class UserEntityService <T>  where T : UserModel 
     {
         private const string AuthorizationHeader = "Authorization";
 
         protected readonly HttpClient _httpClient;
-        private IAuthenticationService authenticationService;
+        private IAuthenticationService _authenticationService;
 
         protected JwtToken JwtToken { get; set; }
         protected string BaseUrl { get; }
@@ -20,42 +20,35 @@ namespace JhipsterXamarin.Services
         public UserEntityService(HttpClient httpClient, IAuthenticationService authenticationService, string baseUrl)
         {
             _httpClient = httpClient;
+            _authenticationService = authenticationService;
+            BaseUrl = baseUrl;
+
             _httpClient.BaseAddress = new Uri(Configuration.BaseUri);
             JwtToken = authenticationService.JwtToken;
+
             if (JwtToken != null)
-            {
                 _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {JwtToken.IdToken}");
-            }
-            BaseUrl = baseUrl;
         }
 
-        public UserEntityService(HttpClient httpClient, IAuthenticationService authenticationService)
+
+        public virtual async Task<IList<UserModel>> GetAll()
         {
-            this._httpClient = httpClient;
-            this.authenticationService = authenticationService;
+            return await _httpClient.GetFromJsonAsync<IList<UserModel>>(BaseUrl);
         }
 
-        public virtual async Task<IList<T>> GetAll()
+        public virtual async Task<UserModel> Get(string id)
         {
-            return await _httpClient.GetFromJsonAsync<IList<T>>(BaseUrl);
+            return await _httpClient.GetFromJsonAsync<UserModel>($"{BaseUrl}/{id}");
         }
 
-        public virtual async Task<T> Get(string id)
+        public virtual async Task Add(UserModel _model)
         {
-            return await _httpClient.GetFromJsonAsync<T>($"{BaseUrl}/{id}");
-        }
-
-        public virtual async Task Add(string login, string firstName, string lastName,string current)
-        {
-            var model = new UserModel();
-            model.Login = login;
-            model.FirstName = firstName;
-            model.LastName = lastName;
+            var model = _model;
             model.LastModifiedDate = DateTime.Now;
-            model.LastModifiedBy = current;
+
             await _httpClient.PostAsJsonAsync(BaseUrl, model);
         }
-        public virtual async Task Update(T model)
+        public virtual async Task Update(UserModel model)
         {
             await _httpClient.PutAsJsonAsync(BaseUrl, model);
         }

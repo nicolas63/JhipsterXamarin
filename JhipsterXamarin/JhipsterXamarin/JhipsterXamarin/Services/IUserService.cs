@@ -10,7 +10,7 @@ namespace JhipsterXamarin.Services
 
         public Task<UserModel> Get(string id);
 
-        public Task Add(string login, string firstName, string lastName, string current);
+        public Task Add(UserModel model);
 
         Task Update(UserModel model);
 

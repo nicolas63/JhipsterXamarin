@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace JhipsterXamarin.Services
 {
-    public  class UserManagement
+    public class UserManagement
     {
         private IList<UserModel> UserModels { get; set; }
         private IUserService UserService { get; set; }
 
-        private IAuthenticationService AuthenticationService;
+        private readonly IAuthenticationService _authenticationService;
 
         private UserModel CurrentUser { get; set; }
         protected  async Task OnInitializedAsync()
@@ -29,7 +29,7 @@ namespace JhipsterXamarin.Services
         {
             if (!UserModels.Contains(UserModels.First(user => user.Login.Equals(_user.Login))))
             {
-                await UserService.Add(_user.Login, _user.FirstName, _user.LastName, CurrentUser.FirstName + " | " + CurrentUser.LastName);
+                await UserService.Add(_user);
                 UserModels.Add(_user);
                 UserModels = await UserService.GetAll();
             }
