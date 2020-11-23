@@ -10,10 +10,6 @@ namespace JhipsterXamarin.ViewModels
     public class LoginViewModel : MvxViewModel
     {
         private readonly IAuthenticationService _authenticationService;
-        public IAuthenticationService GetAuthenticationService()
-        {
-            return _authenticationService;
-        }
         private readonly IMvxNavigationService _navigationService;
 
         private bool _active;

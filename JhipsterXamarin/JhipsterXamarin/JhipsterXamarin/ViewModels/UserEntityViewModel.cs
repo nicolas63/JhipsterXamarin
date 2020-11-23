@@ -15,21 +15,27 @@ namespace JhipsterXamarin.ViewModels
 
         private UserModel _currentElement;
         private List<UserModel> _userModels;
-        private string _login;
-        private string _firstName;
-        private string _lastName;
 
         public IMvxCommand AddCommand { get; }
         public IMvxCommand RemoveCommand { get; }
         public IMvxCommand EditCommand { get; }
 
-        private UserModel CurrentUser { get; set; }
+        private UserModel _currentUser;
+        public UserModel GetCurrentUser()
+        {
+            return _currentUser;
+        }
+        public async Task SetCurrentUserAsync(UserModel model)
+        {
+            _currentUser = model;
+            await _userService.Update(_currentUser);
+        }
 
         private async Task ActiveUser(UserModel user, bool activated)
         {
             user.Activated = activated;
             await _userService.Update(user);
-            CurrentUser = user;
+            _currentUser = user;
         }
 
         public List<UserModel> UserModels
@@ -59,41 +65,42 @@ namespace JhipsterXamarin.ViewModels
 
         public string Login
         {
-            get => _login;
+            get => _currentElement.Login;
             set
             {
-                _login = value;
+                _currentElement.Login = value;
                 RaisePropertyChanged(() => Login);
             }
         }
         public string FirstName
         {
-            get => _firstName;
+            get => _currentElement.FirstName;
             set
             {
-                _firstName = value;
+                _currentElement.FirstName = value;
                 RaisePropertyChanged(() => FirstName);
             }
         }
 
         public string LastName
         {
-            get => _lastName;
+            get => _currentElement.LastName;
             set
             {
-                _lastName = value;
+                _currentElement.LastName = value;
                 RaisePropertyChanged(() => LastName);
             }
         }
 
         public UserEntityViewModel(IMvxNavigationService navigationService, UserEntityService<UserModel> userService)
         {
+            ActiveUser(_currentUser, true).Wait();
             _navigationService = navigationService;
             _userService = userService;
 
             AddCommand = new MvxCommand(async () =>
             {
-                await _userService.Add(Login,FirstName,LastName, CurrentUser.FirstName + " | " + CurrentUser.LastName);
+                await _userService.Add(CurrentElement);
                 await RefreshList();
             });
             RemoveCommand = new MvxCommand(async () =>
@@ -105,6 +112,7 @@ namespace JhipsterXamarin.ViewModels
             {
                 CurrentElement.FirstName = FirstName;
                 CurrentElement.LastName = LastName;
+
                 await _userService.Update(CurrentElement);
                 await RefreshList();
             });
