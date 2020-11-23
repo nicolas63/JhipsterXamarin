@@ -21,8 +21,7 @@ namespace JhipsterXamarin.Services
 
         public AuthenticationService(HttpClient httpClient)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(Configuration.BaseUri);
+            _httpClient = httpClient;           
         }
 
         public async Task<bool> SignIn(LoginModel loginModel)
