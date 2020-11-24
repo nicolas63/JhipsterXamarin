@@ -10,11 +10,11 @@ namespace JhipsterXamarin.ViewModels
 {
     public class UserEntityViewModel : MvxViewModel
     {
-        private readonly UserEntityService<UserModel> _userService;
+        private readonly IUserEntityService<UserModel> _userService;
         private readonly IMvxNavigationService _navigationService;
 
         private UserModel _currentElement;
-        private List<UserModel> _userModels;
+        private List<UserModel> _userModels = new List<UserModel>();
 
         public IMvxCommand AddCommand { get; }
         public IMvxCommand RemoveCommand { get; }
@@ -28,14 +28,15 @@ namespace JhipsterXamarin.ViewModels
         public async Task SetCurrentUserAsync(UserModel model)
         {
             _currentUser = model;
+            _userModels.Add(model);
             await _userService.Update(_currentUser);
         }
 
         private async Task ActiveUser(UserModel user, bool activated)
         {
-            user.Activated = activated;
-            await _userService.Update(user);
             _currentUser = user;
+            _currentUser.Activated = activated;
+            await _userService.Update(user);          
         }
 
         public List<UserModel> UserModels
@@ -92,9 +93,8 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public UserEntityViewModel(IMvxNavigationService navigationService, UserEntityService<UserModel> userService)
+        public UserEntityViewModel(IMvxNavigationService navigationService, IUserEntityService<UserModel> userService)
         {
-            ActiveUser(_currentUser, true).Wait();
             _navigationService = navigationService;
             _userService = userService;
 
