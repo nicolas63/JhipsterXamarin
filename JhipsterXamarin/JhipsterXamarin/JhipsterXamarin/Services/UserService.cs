@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JhipsterXamarin.Services
 {
-    public class UserService : UserEntityService<UserModel>, IUserService
+    public class UserService : UserEntityService, IUserService
     {
         public UserService(HttpClient httpClient, IAuthenticationService authenticationService, string baseUrl) : base(httpClient, authenticationService, baseUrl)
         {

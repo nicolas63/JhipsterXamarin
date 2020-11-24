@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace JhipsterXamarin.Services
 {
-    public class UserEntityService <T>  where T : UserModel 
+    public class UserEntityService : IUserEntityService<UserModel>
     {
         private const string AuthorizationHeader = "Authorization";
 
