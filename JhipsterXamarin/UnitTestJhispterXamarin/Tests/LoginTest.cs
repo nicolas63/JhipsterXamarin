@@ -28,8 +28,8 @@ namespace UnitTestJhispterXamarin
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavLoginService.Object);
         }
         [TestMethod]
-        public void TestSignInAdmin()
-        {
+        public void Should_SignInAdmin_When_LoginButtonClicked()
+        {   
             //Arrange
             loginViewModel.Username = "admin";
             loginViewModel.Password = "admin";

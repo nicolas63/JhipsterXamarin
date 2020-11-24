@@ -23,12 +23,12 @@ namespace UnitTestJhispterXamarin
         {
             base.Setup(); // from MvxIoCSupportingTest
 
-            var mockUserEntityService = new Mock<UserEntityService<UserModel>>();
+            var mockUserEntityService = new Mock<IUserEntityService<UserModel>>();
             var mockNavLoginService = new Mock<IMvxNavigationService>();
 
             userEntityViewModel = new UserEntityViewModel(mockNavLoginService.Object, mockUserEntityService.Object);
 
-            Ioc.RegisterSingleton<UserEntityService<UserModel>>(mockUserEntityService.Object);
+            Ioc.RegisterSingleton<IUserEntityService<UserModel>>(mockUserEntityService.Object);
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavLoginService.Object);
         }
 
@@ -48,7 +48,7 @@ namespace UnitTestJhispterXamarin
         }
 
         [TestMethod]
-        public void TestSetAdminAsync()
+        public void Should_SignInAdmin_When_AdminAlreadyConnectBefore()
         {
             //Arrange
             userEntityViewModel.SetCurrentUserAsync(admin).Wait();
@@ -61,7 +61,7 @@ namespace UnitTestJhispterXamarin
         }
 
         [TestMethod]
-        public void TestAddUsers()
+        public void Should_AddUsers_When_AddCommandMade()
         {
             //Arrange
             userEntityViewModel.SetCurrentUserAsync(admin).Wait();
@@ -73,10 +73,11 @@ namespace UnitTestJhispterXamarin
             var result = userEntityViewModel.UserModels.Count;
 
             //Assert
-            result.Should().Be(2,"Test failed because of a bad move to login the admin");
+            result.Should().Be(3,"Test failed because of a bad move to login the admin");
         }
 
-        public void TestRemoveUsers()
+        [TestMethod]
+        public void Should_AddUsers_When_DeleteCommandMade()
         {
             //Arrange
             userEntityViewModel.SetCurrentUserAsync(admin).Wait();
@@ -89,7 +90,7 @@ namespace UnitTestJhispterXamarin
             var result = userEntityViewModel.UserModels.Count;
 
             //Assert
-            result.Should().Be(1, "Test failed because of a bad move to login the admin");
+            result.Should().Be(2, "Test failed because of a bad move to login the admin");
         }
     }
 }
