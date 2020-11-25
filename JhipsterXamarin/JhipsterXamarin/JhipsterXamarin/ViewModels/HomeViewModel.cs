@@ -10,17 +10,23 @@ namespace JhipsterXamarin.ViewModels
     public class HomeViewModel : BaseViewModel
     {
         private readonly IMvxNavigationService _navigationService;
-        public IMvxAsyncCommand ShowEntitiesViewModelCommand { get; }
-        public IMvxAsyncCommand LoginViewModelCommand { get; }
-        public IMvxAsyncCommand ShowMenuViewModelCommand { get; }
+
+        public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(ShowMenuViewModelCommandClicked);
+        public IMvxAsyncCommand ShowWelcomeViewModelCommand => new MvxAsyncCommand(ShowWelcomeViewModelCommandClicked);
 
         public HomeViewModel(IMvxNavigationService navigationService)
         {
             _navigationService = navigationService;
+        }
 
-            ShowEntitiesViewModelCommand = new MvxAsyncCommand(async () => await _navigationService.Navigate<MyEntityViewModel>());
-            LoginViewModelCommand = new MvxAsyncCommand(async () => await _navigationService.Navigate<LoginViewModel>());
-            ShowMenuViewModelCommand = new MvxAsyncCommand(async () => await _navigationService.Navigate<MenuViewModel>());
+        private async Task ShowWelcomeViewModelCommandClicked()
+        {
+            await _navigationService.Navigate<WelcomeViewModel>();
+        }
+
+        private async Task ShowMenuViewModelCommandClicked()
+        {
+            await _navigationService.Navigate<MenuViewModel>();
         }
     }
 }
