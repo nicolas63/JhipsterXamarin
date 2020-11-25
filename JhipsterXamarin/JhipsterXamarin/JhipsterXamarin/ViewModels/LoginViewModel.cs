@@ -7,7 +7,7 @@ using MvvmCross.ViewModels;
 
 namespace JhipsterXamarin.ViewModels
 {
-    public class LoginViewModel : MvxViewModel
+    public class LoginViewModel : BaseViewModel
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IMvxNavigationService _navigationService;
@@ -68,7 +68,15 @@ namespace JhipsterXamarin.ViewModels
 
             SignIn = new MvxCommand(async () =>
             {
-                if (!await SignInConnection()) await _navigationService.Navigate<MyEntityViewModel>();
+                Active = false;
+                var success = await SignInConnection();
+                
+                if (success)
+                {
+                    await _navigationService.Navigate<HomeViewModel>();
+                    await _navigationService.Close(this);
+                }
+                Active = true;
             });
         }
 
