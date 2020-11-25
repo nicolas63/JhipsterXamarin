@@ -51,10 +51,10 @@ namespace UnitTestJhispterXamarin
         public void Should_SignInAdmin_When_AdminAlreadyConnectBefore()
         {
             //Arrange
-            userEntityViewModel.SetCurrentUserAsync(admin).Wait();
+            userEntityViewModel.CurrentUser = admin;
 
             //Act
-            var result = userEntityViewModel.GetCurrentUser().Login;
+            var result = userEntityViewModel.CurrentUser.Login;
 
             //Assert
             result.Should().NotBeNullOrEmpty("Test failed because of a bad move to login the admin");
@@ -64,7 +64,7 @@ namespace UnitTestJhispterXamarin
         public void Should_AddUsers_When_AddCommandMade()
         {
             //Arrange
-            userEntityViewModel.SetCurrentUserAsync(admin).Wait();
+            userEntityViewModel.CurrentUser = admin;
 
             //Act
             userEntityViewModel.UserModels.Add(paul);
@@ -77,10 +77,10 @@ namespace UnitTestJhispterXamarin
         }
 
         [TestMethod]
-        public void Should_AddUsers_When_DeleteCommandMade()
+        public void Should_DeleteUsers_When_DeleteCommandMade()
         {
             //Arrange
-            userEntityViewModel.SetCurrentUserAsync(admin).Wait();
+            userEntityViewModel.CurrentUser = admin;
 
             userEntityViewModel.UserModels.Add(paul);
             userEntityViewModel.UserModels.Add(john);
