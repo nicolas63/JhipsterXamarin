@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="akavache" Version="7.1.1" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="MvvmCross.Forms" Version="7.1.1" />
     <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.1141" />
@@ -19,6 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\UserEntityView.xaml.cs">
+      <DependentUpon>UserEntityView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MyEntityView.xaml.cs">
       <DependentUpon>MyEntityView.xaml</DependentUpon>
     </Compile>
