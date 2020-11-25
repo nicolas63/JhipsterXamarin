@@ -21,15 +21,16 @@ namespace JhipsterXamarin.ViewModels
         public IMvxCommand EditCommand { get; }
 
         private UserModel _currentUser;
-        public UserModel GetCurrentUser()
+
+        public UserModel CurrentUser
         {
-            return _currentUser;
-        }
-        public async Task SetCurrentUserAsync(UserModel model)
-        {
-            _currentUser = model;
-            _userModels.Add(model);
-            await _userService.Update(_currentUser);
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                _userModels.Add(_currentUser);
+                _userService.Update(_currentUser).Wait();
+            }
         }
 
         private async Task ActiveUser(UserModel user, bool activated)
