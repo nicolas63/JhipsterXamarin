@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <views:MvxContentPage xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
-                      x:TypeArguments="viewModels:MyEntityViewModel"
+                      x:TypeArguments="viewModels:UserEntityViewModel"
                       xmlns:viewModels="clr-namespace:JhipsterXamarin.ViewModels;assembly=JhipsterXamarin"
                       xmlns="http://xamarin.com/schemas/2014/forms"
                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                      x:Class="JhipsterXamarin.Views.MyEntityView">
+                      x:Class="JhipsterXamarin.Views.UserEntityView">
     <ContentPage.Content>
         <StackLayout>
             <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
@@ -18,18 +17,21 @@
                     <Button Text="Modifier" Command="{Binding EditCommand}" FontSize="16" />
                 </StackLayout>
 
-                <Entry Placeholder="Name" Text="{Binding Name}" />
+                <Entry Placeholder="Login" Text="{Binding Login}" />
 
-                <Entry Placeholder="Age" Keyboard="Numeric" Text="{Binding Age}" />
+                <Entry Placeholder="FirstName" Text="{Binding FirstName}" />
+
+                <Entry Placeholder="LastName" Keyboard="Numeric" Text="{Binding LastName}" />
 
                 <Label Text="Entities" HorizontalOptions="StartAndExpand" FontSize="Title" />
+
                 <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentElement}" x:Name="listView"
                           ItemsSource="{Binding ListElement}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding Name}" />
+                                    <Label Text="{Binding FirstName}" />
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>

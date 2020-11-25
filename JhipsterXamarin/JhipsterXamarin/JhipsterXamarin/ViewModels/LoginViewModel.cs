@@ -7,7 +7,7 @@ using MvvmCross.ViewModels;
 
 namespace JhipsterXamarin.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : MvxViewModel
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IMvxNavigationService _navigationService;
@@ -16,11 +16,8 @@ namespace JhipsterXamarin.ViewModels
         private bool _rememberMe;
         private string _password;
         private string _username;
-        private bool _success = true;
 
-        public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
-        public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
-        public IMvxCommand ChangeStateCommand => new MvxCommand(InvertCheckBox);
+        public IMvxCommand SignIn { get; }
 
         public bool Active
         {
@@ -64,42 +61,23 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public bool Success
-        {
-            get => _success;
-            set
-            {
-                _success = value;
-                RaisePropertyChanged(() => Success);
-            }
-        }
-
         public LoginViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
         {
             _navigationService = navigationService;
             _authenticationService = authenticationService;
-        }
 
-        private void InvertCheckBox()
-        {
-            RememberMe = !RememberMe;
-        }
-
-        private async Task SignUpClicked()
-        {
-            await _navigationService.Navigate<RegisterViewModel>();
-        }
-
-        private async Task SignInClicked()
-        {
-            Active = false;
-            Success = await SignInConnection();
-            if (Success) await _navigationService.Navigate<HomeViewModel>();
+            SignIn = new MvxCommand(async () =>
+            {
+                if (!await SignInConnection()) await _navigationService.Navigate<MyEntityViewModel>();
+            });
         }
 
         public void ReloadActive()
         {
-            Active = !string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(Username) && Password.Length > 3;
+            if (string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Username))
+                Active = false;
+            else
+                Active = Password.Length > 3;
         }
 
         public Task<bool> SignInConnection()
@@ -111,6 +89,11 @@ namespace JhipsterXamarin.ViewModels
                 RememberMe = RememberMe
             };
             return _authenticationService.SignIn(model);
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
         }
     }
 }

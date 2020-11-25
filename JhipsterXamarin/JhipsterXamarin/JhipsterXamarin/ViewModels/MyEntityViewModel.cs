@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Akavache;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
@@ -21,9 +19,9 @@ namespace JhipsterXamarin.ViewModels
         private List<MyEntityModel> _listElement;
         private string _name;
 
-        public IMvxCommand AddCommand => new MvxAsyncCommand(AddCommandClicked);
-        public IMvxCommand RemoveCommand => new MvxAsyncCommand(RemoveCommandClicked);
-        public IMvxCommand EditCommand => new MvxAsyncCommand(EditCommandClicked);
+        public IMvxCommand AddCommand { get; }
+        public IMvxCommand RemoveCommand { get; }
+        public IMvxCommand EditCommand { get; }
 
         public List<MyEntityModel> ListElement
         {
@@ -75,26 +73,24 @@ namespace JhipsterXamarin.ViewModels
         {
             _navigationService = navigationService;
             _myEntityService = myEntityService;
-        }
 
-        public async Task AddCommandClicked()
-        {
-            await _myEntityService.CreateEntity(Name, Age);
-            await RefreshList();
-        }
-
-        public async Task RemoveCommandClicked()
-        {
-            await _myEntityService.DeleteEntity(CurrentElement);
-            await RefreshList();
-        }
-
-        public async Task EditCommandClicked()
-        {
-            CurrentElement.Age = Age;
-            CurrentElement.Name = Name;
-            await _myEntityService.UpdateEntity(CurrentElement);
-            await RefreshList();
+            AddCommand = new MvxCommand(async () =>
+            {
+                await _myEntityService.CreateEntity(Name, Age);
+                await RefreshList();
+            });
+            RemoveCommand = new MvxCommand(async () =>
+            {
+                await _myEntityService.DeleteEntity(CurrentElement);
+                await RefreshList();
+            });
+            EditCommand = new MvxCommand(async () =>
+            {
+                CurrentElement.Age = Age;
+                CurrentElement.Name = Name;
+                await _myEntityService.UpdateEntity(CurrentElement);
+                await RefreshList();
+            });
         }
 
         public async Task RefreshList()
