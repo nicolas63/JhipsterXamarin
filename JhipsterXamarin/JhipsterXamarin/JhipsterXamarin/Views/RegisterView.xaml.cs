@@ -5,9 +5,9 @@ using MvvmCross.Forms.Views;
 namespace JhipsterXamarin.Views
 {
     [MvxMasterDetailPagePresentation(MasterDetailPosition.Detail, WrapInNavigationPage = true, NoHistory = true)]
-    public partial class LoginView : MvxContentPage<LoginViewModel>
+    public partial class RegisterView : MvxContentPage<RegisterViewModel>
     {
-        public LoginView()
+        public RegisterView()
         {
             InitializeComponent();
         }

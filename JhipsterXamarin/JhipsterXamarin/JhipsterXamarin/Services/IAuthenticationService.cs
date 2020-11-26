@@ -8,8 +8,8 @@ namespace JhipsterXamarin.Services
     {
         bool IsAuthenticated { get; set; }
         UserModel CurrentUser { get; set; }
+        JwtToken JwtToken { get; }
         Task<bool> SignIn(LoginModel model);
-        JwtToken JwtToken { get; set; }
         void SignOut();
     }
 }

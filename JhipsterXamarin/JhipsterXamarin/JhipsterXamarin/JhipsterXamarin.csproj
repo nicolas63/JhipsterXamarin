@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="akavache" Version="7.1.1" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="MvvmCross.Forms" Version="7.1.1" />
     <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
@@ -23,8 +23,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\UserEntityView.xaml.cs">
-      <DependentUpon>UserEntityView.xaml</DependentUpon>
+    <ProjectReference Include="..\..\..\SharedModel\SharedModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\WelcomeView.xaml.cs">
+      <DependentUpon>WelcomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\RegisterView.xaml.cs">
+      <DependentUpon>RegisterView.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\MyEntityView.xaml.cs">
       <DependentUpon>MyEntityView.xaml</DependentUpon>
@@ -37,6 +47,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\LoginView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MenuPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

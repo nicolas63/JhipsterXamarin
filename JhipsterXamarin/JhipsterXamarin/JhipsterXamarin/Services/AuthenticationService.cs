@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Akavache;
 using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
@@ -11,7 +13,7 @@ namespace JhipsterXamarin.Services
         private const string AuthenticationUrl = "api/authenticate";
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";
-        private readonly HttpClient _httpClient; 
+        private readonly HttpClient _httpClient;
 
         public bool IsAuthenticated { get; set; }
         public UserModel CurrentUser { get; set; }
@@ -19,8 +21,7 @@ namespace JhipsterXamarin.Services
 
         public AuthenticationService(HttpClient httpClient)
         {
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri(Configuration.BaseUri);
+            _httpClient = httpClient;           
         }
 
         public async Task<bool> SignIn(LoginModel loginModel)
@@ -29,9 +30,14 @@ namespace JhipsterXamarin.Services
             if (result.IsSuccessStatusCode)
             {
                 JwtToken = await result.Content.ReadFromJsonAsync<JwtToken>();
-                await SetUserAndAuthorizationHeader(JwtToken);
+                await SetUserAndAuthorizationHeader(JwtToken, loginModel.RememberMe);
             }
+            return IsAuthenticated;
+        }
 
+        public async Task<bool> SignIn(JwtToken jwtToken)
+        {
+            await SetUserAndAuthorizationHeader(jwtToken);
             return IsAuthenticated;
         }
 
@@ -41,9 +47,10 @@ namespace JhipsterXamarin.Services
             JwtToken = null;
             IsAuthenticated = false;
             CurrentUser = null;
+            BlobCache.Secure.InvalidateAll();
         }
 
-        private async Task SetUserAndAuthorizationHeader(JwtToken jwtToken)
+        private async Task SetUserAndAuthorizationHeader(JwtToken jwtToken, bool save = false)
         {
             IsAuthenticated = true;
             _httpClient.DefaultRequestHeaders.Remove(AuthorizationHeader);
@@ -51,6 +58,11 @@ namespace JhipsterXamarin.Services
             try
             {
                 CurrentUser = await _httpClient.GetFromJsonAsync<UserModel>(AccountUrl);
+                if (save)
+                {
+                    await BlobCache.Secure.InvalidateAll();
+                    await BlobCache.Secure.InsertObject<JwtToken>("token", jwtToken);
+                }
             }
             catch
             {
