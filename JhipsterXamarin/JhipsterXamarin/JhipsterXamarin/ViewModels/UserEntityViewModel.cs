@@ -106,7 +106,7 @@ namespace JhipsterXamarin.ViewModels
             });
             RemoveCommand = new MvxCommand(async () =>
             {
-                await _userService.Delete(CurrentElement.Id);
+                await _userService.Delete(CurrentElement.Id.ToString());
                 await RefreshList();
             });
             EditCommand = new MvxCommand(async () =>
