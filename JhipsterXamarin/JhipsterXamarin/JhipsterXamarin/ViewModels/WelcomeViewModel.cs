@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using JhipsterXamarin.Services;
+﻿using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace JhipsterXamarin.ViewModels
 {

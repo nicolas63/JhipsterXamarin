@@ -14898,10 +14898,13 @@ namespace JhipsterXamarin.Droid
 			public const int preference_list_divider_material = 2131165311;
 			
 			// aapt resource value: 0x7F070080
-			public const int tooltip_frame_dark = 2131165312;
+			public const int splashscreen = 2131165312;
 			
 			// aapt resource value: 0x7F070081
-			public const int tooltip_frame_light = 2131165313;
+			public const int tooltip_frame_dark = 2131165313;
+			
+			// aapt resource value: 0x7F070082
+			public const int tooltip_frame_light = 2131165314;
 			
 			static Drawable()
 			{
@@ -16084,13 +16087,16 @@ namespace JhipsterXamarin.Droid
 			public const int ShellContent = 2131427416;
 			
 			// aapt resource value: 0x7F0B0059
-			public const int support_simple_spinner_dropdown_item = 2131427417;
+			public const int SplashScreen = 2131427417;
 			
 			// aapt resource value: 0x7F0B005A
-			public const int Tabbar = 2131427418;
+			public const int support_simple_spinner_dropdown_item = 2131427418;
 			
 			// aapt resource value: 0x7F0B005B
-			public const int Toolbar = 2131427419;
+			public const int Tabbar = 2131427419;
+			
+			// aapt resource value: 0x7F0B005C
+			public const int Toolbar = 2131427420;
 			
 			static Layout()
 			{

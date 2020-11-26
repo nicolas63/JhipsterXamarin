@@ -5,9 +5,7 @@ using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 using SharedModel.Constants;
-using Xamarin.Essentials;
 
 namespace JhipsterXamarin.ViewModels
 {

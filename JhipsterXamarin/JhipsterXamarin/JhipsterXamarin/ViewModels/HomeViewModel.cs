@@ -1,9 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using JhipsterXamarin.Services;
+﻿using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 
 namespace JhipsterXamarin.ViewModels
 {
