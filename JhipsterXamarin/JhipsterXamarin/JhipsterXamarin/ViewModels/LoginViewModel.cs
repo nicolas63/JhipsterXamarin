@@ -3,7 +3,6 @@ using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using MvvmCross.ViewModels;
 
 namespace JhipsterXamarin.ViewModels
 {

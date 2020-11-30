@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JhipsterXamarin.Services
+﻿namespace JhipsterXamarin.Services
 {
     public static class Configuration
     {
