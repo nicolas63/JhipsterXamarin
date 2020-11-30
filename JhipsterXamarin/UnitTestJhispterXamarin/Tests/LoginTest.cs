@@ -26,6 +26,7 @@ namespace UnitTestJhispterXamarin
 
             Ioc.RegisterSingleton<IAuthenticationService>(mockAuthService.Object);
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavLoginService.Object);
+
         }
         [TestMethod]
         public void Should_SignInAdmin_When_LoginButtonClicked()

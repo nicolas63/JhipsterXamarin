@@ -8,6 +8,7 @@ using MvvmCross.Tests;
 using FluentAssertions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using AutoFixture;
 
 namespace UnitTestJhispterXamarin
 {
@@ -17,9 +18,9 @@ namespace UnitTestJhispterXamarin
         private Mock<IMyEntityService> myEntityService;
         private List<MyEntityModel> myEntities;
         private MyEntityViewModel myEntityViewModel;        
+        private Fixture fixture;
+        private MyEntityModel myEntityModel = new MyEntityModel();
 
-        private readonly MyEntityModelSimple myFirstEntityModelSimple = new MyEntityModel();
-        private readonly MyEntityModelSimple mySecondEntityModelSimple = new MyEntityModel();
 
         [TestInitialize]
         public async Task Initialize()
@@ -36,58 +37,58 @@ namespace UnitTestJhispterXamarin
             await myEntityViewModel.Initialize();
 
             myEntityViewModel.ListElement = myEntities;
+
         }
+
         protected override void AdditionalSetup()
         {
-            myFirstEntityModelSimple.Name = "the first entity";
-            myFirstEntityModelSimple.Age = 1;
-
-            mySecondEntityModelSimple.Name = "the second entity";
-            mySecondEntityModelSimple.Age = 2;
-
-            MyEntityModelSimple myThirdEntityModelSimple = new MyEntityModel();
-            myThirdEntityModelSimple.Name = "the third entity";
-            myThirdEntityModelSimple.Age = 3;
+            fixture = new Fixture();
+            myEntityModel.Name = fixture.Create<string>();
+            myEntityModel.Age = fixture.Create<int>();
 
             myEntities = new List<MyEntityModel>();
-
-            myEntities.Add((MyEntityModel)myFirstEntityModelSimple);
-            myEntities.Add((MyEntityModel)mySecondEntityModelSimple);
-            myEntities.Add((MyEntityModel)myThirdEntityModelSimple);
         }
 
         [TestMethod]
         public void Should_UpdateTheFirstEntity_When_NameOfFirstEntityChange()
         {
             //Arrange
+            MyEntityModel sut = fixture.Create<MyEntityModel>();
+            myEntityViewModel.ListElement.Add(sut);
             string expected = "the first entity updated";
-            myFirstEntityModelSimple.Name = expected;
 
             //Act
-            var listElement = myEntityViewModel.ListElement;
-            if (listElement.Contains((MyEntityModel)myFirstEntityModelSimple))
-                myEntityViewModel.CurrentElement = (MyEntityModel)myFirstEntityModelSimple;
+            myEntityViewModel.CurrentElement = myEntityViewModel.ListElement[0];
+            myEntityViewModel.CurrentElement.Name = expected;
+            string result = sut.Name;
 
             //Assert
-            myEntityViewModel.CurrentElement.Name
-                .Should().Be(expected, "Test failed: We wanted : " + expected);
+            result.Should().Be(expected, "Test failed: We wanted : " + expected);
+
         }
 
         [TestMethod]
         public void Should_DeleteTheFirstEntity_When_DeleteButtonClicked()
         {
             //Arrange
-            var listElement = myEntityViewModel.ListElement;
+            MyEntityModel sut = fixture.Create<MyEntityModel>();
+            MyEntityModel sut2 = fixture.Create<MyEntityModel>();
+
+            myEntityViewModel.ListElement.Add(sut);
+            myEntityViewModel.ListElement.Add(sut2);
+
 
             //Act
-            if (listElement.Contains((MyEntityModel)myFirstEntityModelSimple))
-                myEntityViewModel.ListElement.Remove((MyEntityModel)myFirstEntityModelSimple);
+            if (myEntityViewModel.ListElement.Contains(sut))
+                myEntityViewModel.ListElement.Remove(sut);
                 myEntityViewModel.CurrentElement = myEntityViewModel.ListElement[0];
 
             //Assert
             myEntityViewModel.ListElement.Count
-                .Should().Be(2, "Test Failed : We wanted : " + 2);
-            myEntityViewModel.CurrentElement.Should().Be(mySecondEntityModelSimple, "Test Failed : we wanted : " + mySecondEntityModelSimple.ToString());
+                .Should().Be(1, "Test Failed : We wanted : " + 1);
+            myEntityViewModel.CurrentElement
+                .Should().Be(sut2, "Test Failed : we wanted : " + sut2.ToString());
+
         }
     }
 }
