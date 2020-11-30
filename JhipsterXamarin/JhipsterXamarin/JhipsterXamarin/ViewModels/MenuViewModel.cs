@@ -1,6 +1,7 @@
 ﻿using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
+using System;
 using System.Threading.Tasks;
 
 namespace JhipsterXamarin.ViewModels
@@ -14,7 +15,7 @@ namespace JhipsterXamarin.ViewModels
         public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
         public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
         public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
-        public IMvxCommand SignOut => new MvxCommand(SignOutClicked);
+        public IMvxCommand SignOut => new MvxAsyncCommand(SignOutClicked);
         public bool IsConnected  => _authenticationService.IsAuthenticated;
 
         public MenuViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
@@ -43,11 +44,11 @@ namespace JhipsterXamarin.ViewModels
             await _navigationService.Navigate<RegisterViewModel>();
         }
 
-        private void SignOutClicked()
+        private async Task SignOutClicked()
         {
             _authenticationService.SignOut();
-            RaisePropertyChanged(() => IsConnected);
-            _navigationService.Navigate<WelcomeViewModel>();
+            await RaisePropertyChanged(() => IsConnected);
+            await _navigationService.Navigate<WelcomeViewModel>();
         }
     }
 }

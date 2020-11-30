@@ -10,7 +10,7 @@ namespace JhipsterXamarin.ViewModels
 {
     public class MyEntityViewModel : MvxViewModel
     {
-        private readonly IMyEntityService _myEntityService;
+        private readonly IMyEntityService<MyEntityModel> _myEntityService;
         private readonly IMvxNavigationService _navigationService;
 
         private int _age;
@@ -68,7 +68,7 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public MyEntityViewModel(IMvxNavigationService navigationService, IMyEntityService myEntityService)
+        public MyEntityViewModel(IMvxNavigationService navigationService, IMyEntityService<MyEntityModel> myEntityService)
         {
             _navigationService = navigationService;
             _myEntityService = myEntityService;
@@ -76,13 +76,20 @@ namespace JhipsterXamarin.ViewModels
 
         public async Task AddCommandClicked()
         {
-            await _myEntityService.CreateEntity(Name, Age);
+            var entity = new MyEntityModel
+            {
+                Id = null,
+                Name = Name,
+                Age = Age
+            };
+
+            await _myEntityService.CreateEntity(entity);
             await RefreshList();
         }
 
         public async Task RemoveCommandClicked()
         {
-            await _myEntityService.DeleteEntity(CurrentElement);
+            await _myEntityService.DeleteEntity(CurrentElement.Id);
             await RefreshList();
         }
 

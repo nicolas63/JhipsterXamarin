@@ -27,6 +27,7 @@
                         </Label.FormattedText>
                     </Label>
                 </StackLayout>
+                
                 <Entry Placeholder="Username" x:Name="UsernameEntry" Text="{Binding Username}" />
                 <Entry IsPassword="True" Placeholder="Password" x:Name="PasswordEntry" Text="{Binding Password}" />
 

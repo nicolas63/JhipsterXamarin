@@ -6,42 +6,40 @@ using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
 {
-    public class MyEntityService : IMyEntityService
+    public class MyEntityService<T> : IMyEntityService<T> where T : class
     {
-        private const string ListEntitiesUrl = "api/myentities";
         private readonly HttpClient _httpClient;
+        private readonly string _baseUrl;
 
-        public MyEntityService(HttpClient httpClient)
+        public MyEntityService(HttpClient httpClient, string baseUrl)
         {
             _httpClient = httpClient;
+            _baseUrl = baseUrl;
         }
 
-        public async Task<List<MyEntityModel>> GetEntities()
+        public async Task<List<T>> GetEntities()
         {
-            return await _httpClient.GetFromJsonAsync<List<MyEntityModel>>(ListEntitiesUrl);
+            return await _httpClient.GetFromJsonAsync<List<T>>(_baseUrl);
         }
 
-        public async Task<MyEntityModel> GetEntity(int id)
+        public async Task<T> GetEntity(int? id)
         {
-            return await _httpClient.GetFromJsonAsync<MyEntityModel>($"{ListEntitiesUrl}/{id}");
+            return await _httpClient.GetFromJsonAsync<T>($"{_baseUrl}/{id}");
         }
 
-        public async Task CreateEntity(string name, int age)
+        public async Task CreateEntity(T entity)
         {
-            var entity = new MyEntityModelSimple();
-            entity.Name = name;
-            entity.Age = age;
-            await _httpClient.PostAsJsonAsync(ListEntitiesUrl, entity);
+            await _httpClient.PostAsJsonAsync(_baseUrl, entity);
         }
 
-        public async Task DeleteEntity(MyEntityModel currentElement)
+        public async Task DeleteEntity(int? id)
         {
-            await _httpClient.DeleteAsync($"{ListEntitiesUrl}/{currentElement.Id}");
+            await _httpClient.DeleteAsync($"{_baseUrl}/{id}");
         }
 
-        public async Task UpdateEntity(MyEntityModel currentElement)
+        public async Task UpdateEntity(T entity)
         {
-            await _httpClient.PutAsJsonAsync(ListEntitiesUrl, currentElement);
+            await _httpClient.PutAsJsonAsync(_baseUrl, entity);
         }
     }
 }

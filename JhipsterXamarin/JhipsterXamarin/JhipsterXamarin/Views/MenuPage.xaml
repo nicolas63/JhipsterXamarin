@@ -80,9 +80,9 @@
                     VerticalOptions="StartAndExpand" 
                     Padding="8"
                     IsVisible="{Binding IsConnected}">
-                    <Label Text="Entities"/>
+                    <Label Text="Test Entity"/>
                     <Grid.GestureRecognizers>
-                        <TapGestureRecognizer  Tapped="ToggleClicked" Command="{Binding ShowMyEntitiesCommand}"/>
+                        <TapGestureRecognizer  Tapped="ToggleClicked" Command="{Binding ShowMyEntitiesCommand}" CommandParameter="TODO"/>
                     </Grid.GestureRecognizers>
                 </Grid>
                 <BoxView

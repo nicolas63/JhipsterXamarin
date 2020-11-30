@@ -4,12 +4,12 @@ using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
 {
-    public interface IMyEntityService
+    public interface IMyEntityService<T>
     {
-        Task<List<MyEntityModel>> GetEntities();
-        Task<MyEntityModel> GetEntity(int v);
-        Task CreateEntity(string name, int age);
-        Task DeleteEntity(MyEntityModel currentElement);
-        Task UpdateEntity(MyEntityModel currentElement);
+        Task<List<T>> GetEntities();
+        Task<T> GetEntity(int? id);
+        Task DeleteEntity(int? id);
+        Task CreateEntity(T entity);
+        Task UpdateEntity(T entity);
     }
 }

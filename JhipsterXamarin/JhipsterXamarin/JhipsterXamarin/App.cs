@@ -24,11 +24,11 @@ namespace JhipsterXamarin
 
             var authenticationService = new AuthenticationService(httpClient);
             var registerService = new RegisterService(httpClient, log);
-            var myEntityService = new MyEntityService(httpClient);
+            var myEntityService = new MyEntityService<MyEntityModel>(httpClient, "api/myentities");
 
             Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
             Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
-            Mvx.IoCProvider.RegisterSingleton<IMyEntityService>(myEntityService);
+            Mvx.IoCProvider.RegisterSingleton<IMyEntityService<MyEntityModel>>(myEntityService);
             Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
             Mvx.IoCProvider.RegisterSingleton(httpClient);
 
