@@ -15,52 +15,45 @@ namespace UnitTestJhispterXamarin
     [TestClass]
     public class MyEntityViewModelTest : MvxIoCSupportingTest
     {
-        private Mock<IMyEntityService> myEntityService;
-        private List<MyEntityModel> myEntities;
-        private MyEntityViewModel myEntityViewModel;        
-        private Fixture fixture;
-        private MyEntityModel myEntityModel = new MyEntityModel();
+        private readonly Mock<IMyEntityService> _mockMyEntityService = new Mock<IMyEntityService>();
+        private readonly List<MyEntityModel> _myEntities = new List<MyEntityModel>();
+        private readonly Fixture _fixture = new Fixture();
 
+        private MyEntityViewModel _myEntityViewModel;
 
         [TestInitialize]
         public async Task Initialize()
         {
-            myEntityService = new Mock<IMyEntityService>();
             var mockNavService = new Mock<IMvxNavigationService>();
 
             base.Setup(); // from MvxIoCSupportingTest 
 
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);
-            Ioc.RegisterSingleton<IMyEntityService>(myEntityService.Object);
+            Ioc.RegisterSingleton<IMyEntityService>(_mockMyEntityService.Object);
 
-            myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService.Object);
-            await myEntityViewModel.Initialize();
+            _myEntityViewModel = new MyEntityViewModel(mockNavService.Object, _mockMyEntityService.Object);
+            await _myEntityViewModel.Initialize();
 
-            myEntityViewModel.ListElement = myEntities;
+            _myEntityViewModel.ListElement = _myEntities;
 
-        }
-
-        protected override void AdditionalSetup()
-        {
-            fixture = new Fixture();
-            myEntityModel.Name = fixture.Create<string>();
-            myEntityModel.Age = fixture.Create<int>();
-
-            myEntities = new List<MyEntityModel>();
         }
 
         [TestMethod]
         public void Should_UpdateTheFirstEntity_When_NameOfFirstEntityChange()
         {
             //Arrange
-            MyEntityModel sut = fixture.Create<MyEntityModel>();
-            myEntityViewModel.ListElement.Add(sut);
-            string expected = "the first entity updated";
+            var sut = _fixture.Create<MyEntityModel>();
+            _myEntityViewModel.ListElement.Add(sut);
+
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
+
+            var expected = "the first entity updated";
+            _myEntityViewModel.Name = expected;
 
             //Act
-            myEntityViewModel.CurrentElement = myEntityViewModel.ListElement[0];
-            myEntityViewModel.CurrentElement.Name = expected;
-            string result = sut.Name;
+            _myEntityViewModel.EditCommandClicked().Wait();
+
+            var result = sut.Name;
 
             //Assert
             result.Should().Be(expected, "Test failed: We wanted : " + expected);
@@ -71,23 +64,50 @@ namespace UnitTestJhispterXamarin
         public void Should_DeleteTheFirstEntity_When_DeleteButtonClicked()
         {
             //Arrange
-            MyEntityModel sut = fixture.Create<MyEntityModel>();
-            MyEntityModel sut2 = fixture.Create<MyEntityModel>();
+            var sut = _fixture.Create<MyEntityModel>();
+            var sut2 = _fixture.Create<MyEntityModel>();
 
-            myEntityViewModel.ListElement.Add(sut);
-            myEntityViewModel.ListElement.Add(sut2);
+            _myEntityViewModel.ListElement.Add(sut);
+            _myEntityViewModel.ListElement.Add(sut2);
 
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
 
             //Act
-            if (myEntityViewModel.ListElement.Contains(sut))
-                myEntityViewModel.ListElement.Remove(sut);
-                myEntityViewModel.CurrentElement = myEntityViewModel.ListElement[0];
+            _myEntityViewModel.ListElement.Remove(_myEntityViewModel.CurrentElement);
+
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
 
             //Assert
-            myEntityViewModel.ListElement.Count
+            _myEntityViewModel.ListElement.Count
                 .Should().Be(1, "Test Failed : We wanted : " + 1);
-            myEntityViewModel.CurrentElement
+
+            _myEntityViewModel.CurrentElement
                 .Should().Be(sut2, "Test Failed : we wanted : " + sut2.ToString());
+
+        }
+        [TestMethod]
+        public void Should_AddNewEntity_When_AddCommandClicked()
+        {
+            //Arrange
+            var sut = _fixture.Create<MyEntityModel>();
+            var sut2 = _fixture.Create<MyEntityModel>();
+
+            List<MyEntityModel> listEntityModels = new List<MyEntityModel>
+            {
+                sut
+            };
+            _myEntityViewModel.ListElement = listEntityModels;
+
+            //Act
+            _myEntityViewModel.ListElement.Add(sut2);
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[1];
+
+            //Assert
+            _myEntityViewModel.ListElement.Count
+                .Should().Be(2, "Test Failed : We wanted : " + 2);
+
+            _myEntityViewModel.CurrentElement
+                .Should().Be(sut2, "Test Failed : we wanted : " + sut2);
 
         }
     }
