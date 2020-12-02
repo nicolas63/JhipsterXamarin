@@ -6,12 +6,12 @@ using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.Services
 {
-    public class MyEntityService<T> : IMyEntityService<T> where T : class
+    public class AbstractEntityService<T> : IAbstractEntityService<T> where T : class
     {
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl;
 
-        public MyEntityService(HttpClient httpClient, string baseUrl)
+        public AbstractEntityService(HttpClient httpClient, string baseUrl)
         {
             _httpClient = httpClient;
             _baseUrl = baseUrl;
@@ -22,7 +22,7 @@ namespace JhipsterXamarin.Services
             return await _httpClient.GetFromJsonAsync<List<T>>(_baseUrl);
         }
 
-        public async Task<T> GetEntity(int? id)
+        public async Task<T> GetEntity(long id)
         {
             return await _httpClient.GetFromJsonAsync<T>($"{_baseUrl}/{id}");
         }
@@ -32,7 +32,7 @@ namespace JhipsterXamarin.Services
             await _httpClient.PostAsJsonAsync(_baseUrl, entity);
         }
 
-        public async Task DeleteEntity(int? id)
+        public async Task DeleteEntity(long id)
         {
             await _httpClient.DeleteAsync($"{_baseUrl}/{id}");
         }

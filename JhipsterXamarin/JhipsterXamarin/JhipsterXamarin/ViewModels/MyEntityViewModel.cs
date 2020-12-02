@@ -10,19 +10,19 @@ namespace JhipsterXamarin.ViewModels
 {
     public class MyEntityViewModel : MvxViewModel
     {
-        private readonly IMyEntityService<MyEntityModel> _myEntityService;
+        private readonly IAbstractEntityService<AbstractEntityModel> _myEntityService;
         private readonly IMvxNavigationService _navigationService;
 
         private int _age;
-        private MyEntityModel _currentElement;
-        private List<MyEntityModel> _listElement;
+        private AbstractEntityModel _currentElement;
+        private List<AbstractEntityModel> _listElement;
         private string _name;
 
         public IMvxCommand AddCommand => new MvxAsyncCommand(AddCommandClicked);
         public IMvxCommand RemoveCommand => new MvxAsyncCommand(RemoveCommandClicked);
         public IMvxCommand EditCommand => new MvxAsyncCommand(EditCommandClicked);
 
-        public List<MyEntityModel> ListElement
+        public List<AbstractEntityModel> ListElement
         {
             get => _listElement;
             set
@@ -32,7 +32,7 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public MyEntityModel CurrentElement
+        public AbstractEntityModel CurrentElement
         {
             get => _currentElement;
             set
@@ -68,7 +68,7 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public MyEntityViewModel(IMvxNavigationService navigationService, IMyEntityService<MyEntityModel> myEntityService)
+        public MyEntityViewModel(IMvxNavigationService navigationService, IAbstractEntityService<AbstractEntityModel> myEntityService)
         {
             _navigationService = navigationService;
             _myEntityService = myEntityService;
@@ -76,7 +76,7 @@ namespace JhipsterXamarin.ViewModels
 
         public async Task AddCommandClicked()
         {
-            var entity = new MyEntityModel
+            var entity = new AbstractEntityModel
             {
                 Id = null,
                 Name = Name,
@@ -89,8 +89,11 @@ namespace JhipsterXamarin.ViewModels
 
         public async Task RemoveCommandClicked()
         {
-            await _myEntityService.DeleteEntity(CurrentElement.Id);
-            await RefreshList();
+            if (CurrentElement.Id.HasValue)
+            {
+                await _myEntityService.DeleteEntity(CurrentElement.Id.Value);
+                await RefreshList();
+            }  // TODO: Handle errors
         }
 
         public async Task EditCommandClicked()
