@@ -1,4 +1,5 @@
-﻿using JhipsterXamarin.Models;
+﻿using System;
+using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using JhipsterXamarin.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,6 +10,7 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoFixture;
+using MvvmCross.Commands;
 
 namespace UnitTestJhispterXamarin
 {
@@ -39,11 +41,77 @@ namespace UnitTestJhispterXamarin
         }
 
         [TestMethod]
-        public void Should_UpdateTheFirstEntity_When_NameOfFirstEntityChange()
+        public void Should_CallTheServiceForAddCommand_When_AddCommandAsked()
         {
             //Arrange
-            var sut = _fixture.Create<MyEntityModel>();
-            _myEntityViewModel.ListElement.Add(sut);
+            var myEntity = _fixture.Create<MyEntityModel>();
+
+            _myEntityViewModel.Name = myEntity.Name;
+            _myEntityViewModel.Age = myEntity.Age;
+
+            //Act
+            var result = _myEntityViewModel.AddCommand;
+            var addCommandClickedResult = _myEntityViewModel.AddCommandClicked();
+
+            //Assert
+            result
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+            addCommandClickedResult
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+        }
+
+        [TestMethod]
+        public void Should_CallTheServiceForRemoveCommand_When_RemoveCommandAsked()
+        {
+            //Arrange
+            var myEntity = _fixture.Create<MyEntityModel>();
+
+            _myEntityViewModel.ListElement.Add(myEntity);
+
+            //Act
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
+
+            var removeCommandResult = _myEntityViewModel.RemoveCommand;
+            var removeCommandClickedResult =  _myEntityViewModel.RemoveCommandClicked();
+
+            //Assert
+            removeCommandResult
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+            removeCommandClickedResult
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+        }
+
+        [TestMethod]
+        public void Should_CallTheServiceForEditCommand_When_EditCommandAsked()
+        {
+            //Arrange
+            var myEntity = _fixture.Create<MyEntityModel>();
+
+            _myEntityViewModel.Name = "the first entity updated";
+
+            _myEntityViewModel.ListElement.Add(myEntity);
+
+            //Act
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
+
+            var editCommandResult = _myEntityViewModel.EditCommand;
+
+            //Assert
+            editCommandResult
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+        }
+
+        [TestMethod]
+        public void Should_UpdateTheFirstEntity_When_NameOfFirstEntityChanged()
+        {
+            //Arrange
+            var myEntity = _fixture.Create<MyEntityModel>();
+            _myEntityViewModel.ListElement.Add(myEntity);
 
             _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
 
@@ -53,7 +121,7 @@ namespace UnitTestJhispterXamarin
             //Act
             _myEntityViewModel.EditCommandClicked().Wait();
 
-            var result = sut.Name;
+            var result = myEntity.Name;
 
             //Assert
             result.Should().Be(expected, "Test failed: We wanted : " + expected);
@@ -64,11 +132,11 @@ namespace UnitTestJhispterXamarin
         public void Should_DeleteTheFirstEntity_When_DeleteButtonClicked()
         {
             //Arrange
-            var sut = _fixture.Create<MyEntityModel>();
-            var sut2 = _fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<MyEntityModel>();
+            var mySecondEntity = _fixture.Create<MyEntityModel>();
 
-            _myEntityViewModel.ListElement.Add(sut);
-            _myEntityViewModel.ListElement.Add(sut2);
+            _myEntityViewModel.ListElement.Add(myEntity);
+            _myEntityViewModel.ListElement.Add(mySecondEntity);
 
             _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
 
@@ -82,24 +150,25 @@ namespace UnitTestJhispterXamarin
                 .Should().Be(1, "Test Failed : We wanted : " + 1);
 
             _myEntityViewModel.CurrentElement
-                .Should().Be(sut2, "Test Failed : we wanted : " + sut2.ToString());
+                .Should().Be(mySecondEntity, "Test Failed : we wanted : " + mySecondEntity.ToString());
 
         }
+
         [TestMethod]
         public void Should_AddNewEntity_When_AddCommandClicked()
         {
             //Arrange
-            var sut = _fixture.Create<MyEntityModel>();
-            var sut2 = _fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<MyEntityModel>();
+            var mySecondEntity = _fixture.Create<MyEntityModel>();
 
             List<MyEntityModel> listEntityModels = new List<MyEntityModel>
             {
-                sut
+                myEntity
             };
             _myEntityViewModel.ListElement = listEntityModels;
 
             //Act
-            _myEntityViewModel.ListElement.Add(sut2);
+            _myEntityViewModel.ListElement.Add(mySecondEntity);
             _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[1];
 
             //Assert
@@ -107,7 +176,7 @@ namespace UnitTestJhispterXamarin
                 .Should().Be(2, "Test Failed : We wanted : " + 2);
 
             _myEntityViewModel.CurrentElement
-                .Should().Be(sut2, "Test Failed : we wanted : " + sut2);
+                .Should().Be(mySecondEntity, "Test Failed : we wanted : " + mySecondEntity);
 
         }
     }

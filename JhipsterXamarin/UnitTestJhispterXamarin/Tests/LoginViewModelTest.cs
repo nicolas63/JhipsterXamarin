@@ -9,7 +9,7 @@ using FluentAssertions;
 namespace UnitTestJhispterXamarin
 {
     [TestClass]
-    public class LoginTest : MvxIoCSupportingTest
+    public class LoginViewModelTest : MvxIoCSupportingTest
     {
          private LoginViewModel loginViewModel;
 
