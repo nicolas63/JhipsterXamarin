@@ -8,9 +8,9 @@
     <ContentPage.Content>
         <StackLayout>
             <Frame BackgroundColor="#2196F3" Padding="5" CornerRadius="0">
-                <Label Text="MyEntities Management" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
+                <Label Text="Users Management" HorizontalOptions="Center" TextColor="White" FontSize="Title" />
             </Frame>
-            <StackLayout Margin="10">
+            <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
                 <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Horizontal">
                     <Button Text="Ajouter" Command="{Binding AddCommand}" FontSize="16" />
                     <Button Text="Supprimer" Command="{Binding RemoveCommand}" FontSize="16" />
@@ -23,7 +23,7 @@
 
                 <Entry Placeholder="LastName" Keyboard="Numeric" Text="{Binding LastName}" />
 
-                <Label Text="Entities" HorizontalOptions="StartAndExpand" FontSize="Title" />
+                <Label Text="Users" HorizontalOptions="StartAndExpand" FontSize="Title" />
 
                 <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentElement}" x:Name="listView"
                           ItemsSource="{Binding ListElement}">

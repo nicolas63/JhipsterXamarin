@@ -16,35 +16,43 @@ namespace JhipsterXamarin
     {
         public override void Initialize()
         {
-            Akavache.Registrations.Start("JhipsterXamarin");
-            var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
-
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(Configuration.BaseUri);
-
-            var authenticationService = new AuthenticationService(httpClient);
-            var registerService = new RegisterService(httpClient, log);
-            var myEntityService = new MyEntityService(httpClient);
-
-            Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
-            Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
-            Mvx.IoCProvider.RegisterSingleton<IMyEntityService>(myEntityService);
-            Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
-            Mvx.IoCProvider.RegisterSingleton(httpClient);
-
-            try
+            var httpHandler = new HttpClientHandler
             {
-                BlobCache.Secure.GetObject<JwtToken>("token").Subscribe(async token =>
+                ServerCertificateCustomValidationCallback = (o, cert, chain, errors) => true
+            };
+
+            var client = new HttpClient(httpHandler);
+            
+                Akavache.Registrations.Start("JhipsterXamarin");
+                var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
+
+                client.BaseAddress = new Uri(Configuration.BaseUri);
+
+                var authenticationService = new AuthenticationService(client);
+                var registerService = new RegisterService(client, log);
+                var myEntityService = new MyEntityService(client);
+
+                Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
+                Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
+                Mvx.IoCProvider.RegisterSingleton<IMyEntityService>(myEntityService);
+                Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
+                Mvx.IoCProvider.RegisterSingleton(client);
+
+                try
                 {
-                    await authenticationService.SignIn(token);
-                });
-            }
-            catch (Exception ex)
-            {
-                log.ErrorException("Failed to fetch token and auto-login.", ex);
-            }
+                    BlobCache.Secure.GetObject<JwtToken>("token").Subscribe(async token =>
+                    {
+                        await authenticationService.SignIn(token);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    log.ErrorException("Failed to fetch token and auto-login.", ex);
+                }
 
-            RegisterAppStart<HomeViewModel>();
+                RegisterAppStart<HomeViewModel>();
+            
+
         }
     }
 }

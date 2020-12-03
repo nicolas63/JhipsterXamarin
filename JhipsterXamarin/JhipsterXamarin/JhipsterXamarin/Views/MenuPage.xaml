@@ -80,11 +80,22 @@
                     VerticalOptions="StartAndExpand" 
                     Padding="8"
                     IsVisible="{Binding IsConnected}">
+                    <Label Text="Users"/>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer  Tapped="ToggleClicked" Command="{Binding ShowMyUsersCommand}"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+                <Grid
+                    HorizontalOptions="FillAndExpand" 
+                    VerticalOptions="StartAndExpand" 
+                    Padding="8"
+                    IsVisible="{Binding IsConnected}">
                     <Label Text="Entities"/>
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer  Tapped="ToggleClicked" Command="{Binding ShowMyEntitiesCommand}"/>
                     </Grid.GestureRecognizers>
                 </Grid>
+
                 <BoxView
                     HorizontalOptions="FillAndExpand"
                     HeightRequest="2"

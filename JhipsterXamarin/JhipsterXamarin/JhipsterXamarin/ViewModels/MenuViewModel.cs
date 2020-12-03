@@ -10,6 +10,7 @@ namespace JhipsterXamarin.ViewModels
         private readonly IMvxNavigationService _navigationService;
         private readonly IAuthenticationService _authenticationService;
 
+        public IMvxCommand ShowMyUsersCommand => new MvxAsyncCommand(ShowMyUsersCommandClicked);
         public IMvxCommand ShowMyEntitiesCommand => new MvxAsyncCommand(ShowMyEntitiesCommandClicked);
         public IMvxCommand ShowWelcomeCommand => new MvxAsyncCommand(ShowWelcomeCommandClicked);
         public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
@@ -26,6 +27,11 @@ namespace JhipsterXamarin.ViewModels
         private async Task ShowMyEntitiesCommandClicked()
         {
             await _navigationService.Navigate<MyEntityViewModel>();
+        }
+
+        private async Task ShowMyUsersCommandClicked()
+        {
+            await _navigationService.Navigate<UserEntityViewModel>();
         }
 
         private async Task ShowWelcomeCommandClicked()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reactive.Linq;
@@ -14,7 +15,6 @@ namespace JhipsterXamarin.Services
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";
         private readonly HttpClient _httpClient;
-
         public bool IsAuthenticated { get; set; }
         public UserModel CurrentUser { get; set; }
         public JwtToken JwtToken { get; set; }
