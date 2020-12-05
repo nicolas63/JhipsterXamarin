@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -12,6 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="akavache" Version="7.1.1" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="MvvmCross.Forms" Version="7.1.1" />
     <PackageReference Include="System.Net.Http.Json" Version="3.2.1" />
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.1141" />

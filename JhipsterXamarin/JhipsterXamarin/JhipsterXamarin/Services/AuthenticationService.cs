@@ -17,7 +17,7 @@ namespace JhipsterXamarin.Services
 
         public bool IsAuthenticated { get; set; }
         public UserModel CurrentUser { get; set; }
-        private JwtToken JwtToken { get; set; }
+        public JwtToken JwtToken { get; set; }
 
         public AuthenticationService(HttpClient httpClient)
         {
