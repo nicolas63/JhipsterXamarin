@@ -23,7 +23,8 @@ namespace JhipsterXamarin.Services
 
         public AuthenticationService(HttpClient httpClient, IMvxLog log)
         {
-            _httpClient = httpClient;           
+            _httpClient = httpClient;
+            _log = log;
         }
 
         public async Task<bool> SignIn(LoginModel loginModel)

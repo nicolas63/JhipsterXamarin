@@ -7761,7 +7761,6 @@ namespace JhipsterXamarin.Droid
 			global::Xamarin.Forms.Platform.Android.Resource.Style.CardView = global::JhipsterXamarin.Droid.Resource.Style.CardView;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.CardView_Dark = global::JhipsterXamarin.Droid.Resource.Style.CardView_Dark;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.CardView_Light = global::JhipsterXamarin.Droid.Resource.Style.CardView_Light;
-			global::Xamarin.Forms.Platform.Android.Resource.Style.collectionViewStyle = global::JhipsterXamarin.Droid.Resource.Style.collectionViewStyle;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.MainTheme = global::JhipsterXamarin.Droid.Resource.Style.MainTheme;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.MainTheme_Base = global::JhipsterXamarin.Droid.Resource.Style.MainTheme_Base;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Platform_AppCompat = global::JhipsterXamarin.Droid.Resource.Style.Platform_AppCompat;
@@ -10434,7 +10433,6 @@ namespace JhipsterXamarin.Droid
 			global::Xamarin.Forms.Platform.Resource.Style.CardView = global::JhipsterXamarin.Droid.Resource.Style.CardView;
 			global::Xamarin.Forms.Platform.Resource.Style.CardView_Dark = global::JhipsterXamarin.Droid.Resource.Style.CardView_Dark;
 			global::Xamarin.Forms.Platform.Resource.Style.CardView_Light = global::JhipsterXamarin.Droid.Resource.Style.CardView_Light;
-			global::Xamarin.Forms.Platform.Resource.Style.collectionViewStyle = global::JhipsterXamarin.Droid.Resource.Style.collectionViewStyle;
 			global::Xamarin.Forms.Platform.Resource.Style.MainTheme = global::JhipsterXamarin.Droid.Resource.Style.MainTheme;
 			global::Xamarin.Forms.Platform.Resource.Style.MainTheme_Base = global::JhipsterXamarin.Droid.Resource.Style.MainTheme_Base;
 			global::Xamarin.Forms.Platform.Resource.Style.Platform_AppCompat = global::JhipsterXamarin.Droid.Resource.Style.Platform_AppCompat;
