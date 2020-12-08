@@ -11,7 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JhipsterXamarin", "Jhipster
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedModel", "..\SharedModel\SharedModel.csproj", "{70E183C6-EFD2-4F4C-8C65-8A7F3B6A445A}"
 EndProject
+<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestJhipsterXamarin", "UnitTestJhispterXamarin\UnitTestJhipsterXamarin.csproj", "{C5091CA5-9BA7-4864-ACE5-89202179309A}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestJhispterXamarin", "UnitTestJhispterXamarin\UnitTestJhispterXamarin.csproj", "{C5091CA5-9BA7-4864-ACE5-89202179309A}"
+>>>>>>> 249ea66dbad2ddc2b3318c1bd8fec017678fe110
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
