@@ -25,25 +25,25 @@ namespace UnitTestJhispterXamarin
 
             var mockUserEntityService = new Mock<IUserEntityService<UserModel>>();
             var mockNavLoginService = new Mock<IMvxNavigationService>();
+            var mockAuthLoginService = new Mock<IAuthenticationService>();
 
-            userEntityViewModel = new UserEntityViewModel(mockNavLoginService.Object, mockUserEntityService.Object);
+            userEntityViewModel = new UserEntityViewModel(mockNavLoginService.Object, mockUserEntityService.Object, mockAuthLoginService.Object);
 
             Ioc.RegisterSingleton<IUserEntityService<UserModel>>(mockUserEntityService.Object);
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavLoginService.Object);
+            Ioc.RegisterSingleton<IAuthenticationService>(mockAuthLoginService.Object);
+
         }
 
         protected override void AdditionalSetup()
         {
             admin = new UserModel();
-            admin.Id = "admin";
             admin.Login = "admin";
 
             paul = new UserModel();
-            paul.Id = "paul";
             paul.Login = "paul";
 
             john = new UserModel();
-            john.Id = "john";
             john.Login = "john";
         }
 
