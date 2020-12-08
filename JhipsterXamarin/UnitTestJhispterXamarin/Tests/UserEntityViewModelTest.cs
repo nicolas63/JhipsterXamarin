@@ -58,7 +58,7 @@ namespace UnitTestJhispterXamarin
             var result = userEntityViewModel.UserModels.Count;
 
             //Assert
-            result.Should().Be(3,"Test failed because of a bad move to login the admin");
+            result.Should().Be(2,"Test failed because of a bad move to login the admin");
         }
 
         [TestMethod]
@@ -73,7 +73,7 @@ namespace UnitTestJhispterXamarin
             var result = userEntityViewModel.UserModels.Count;
 
             //Assert
-            result.Should().Be(2, "Test failed because of a bad move to login the admin");
+            result.Should().Be(1, "Test failed because of a bad move to login the admin");
         }
     }
 }

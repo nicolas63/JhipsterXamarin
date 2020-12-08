@@ -1,4 +1,5 @@
-﻿using JhipsterXamarin.Models;
+﻿using System;
+using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using JhipsterXamarin.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,58 +10,118 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoFixture;
+using MvvmCross.Commands;
 
 namespace UnitTestJhispterXamarin
 {
     [TestClass]
     public class MyEntityViewModelTest : MvxIoCSupportingTest
     {
-        private Mock<IMyEntityService> myEntityService;
-        private List<MyEntityModel> myEntities;
-        private MyEntityViewModel myEntityViewModel;        
-        private Fixture fixture;
-        private MyEntityModel myEntityModel = new MyEntityModel();
+        private readonly Mock<IMyEntityService> _mockMyEntityService = new Mock<IMyEntityService>();
+        private readonly List<MyEntityModel> _myEntities = new List<MyEntityModel>();
+        private readonly Fixture _fixture = new Fixture();
 
+        private MyEntityViewModel _myEntityViewModel;
 
         [TestInitialize]
         public async Task Initialize()
         {
-            myEntityService = new Mock<IMyEntityService>();
             var mockNavService = new Mock<IMvxNavigationService>();
 
             base.Setup(); // from MvxIoCSupportingTest 
 
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);
-            Ioc.RegisterSingleton<IMyEntityService>(myEntityService.Object);
+            Ioc.RegisterSingleton<IMyEntityService>(_mockMyEntityService.Object);
 
-            myEntityViewModel = new MyEntityViewModel(mockNavService.Object, myEntityService.Object);
-            await myEntityViewModel.Initialize();
+            _myEntityViewModel = new MyEntityViewModel(mockNavService.Object, _mockMyEntityService.Object);
+            await _myEntityViewModel.Initialize();
 
-            myEntityViewModel.ListElement = myEntities;
+            _myEntityViewModel.ListElement = _myEntities;
 
-        }
-
-        protected override void AdditionalSetup()
-        {
-            fixture = new Fixture();
-            myEntityModel.Name = fixture.Create<string>();
-            myEntityModel.Age = fixture.Create<int>();
-
-            myEntities = new List<MyEntityModel>();
         }
 
         [TestMethod]
-        public void Should_UpdateTheFirstEntity_When_NameOfFirstEntityChange()
+        public void Should_CallTheServiceForAddCommand_When_AddCommandAsked()
         {
             //Arrange
-            MyEntityModel sut = fixture.Create<MyEntityModel>();
-            myEntityViewModel.ListElement.Add(sut);
-            string expected = "the first entity updated";
+            var myEntity = _fixture.Create<MyEntityModel>();
+
+            _myEntityViewModel.Name = myEntity.Name;
+            _myEntityViewModel.Age = myEntity.Age;
 
             //Act
-            myEntityViewModel.CurrentElement = myEntityViewModel.ListElement[0];
-            myEntityViewModel.CurrentElement.Name = expected;
-            string result = sut.Name;
+            var result = _myEntityViewModel.AddCommand;
+            var addCommandClickedResult = _myEntityViewModel.AddCommandClicked();
+
+            //Assert
+            result
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+            addCommandClickedResult
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+        }
+
+        [TestMethod]
+        public void Should_CallTheServiceForRemoveCommand_When_RemoveCommandAsked()
+        {
+            //Arrange
+            var myEntity = _fixture.Create<MyEntityModel>();
+
+            _myEntityViewModel.ListElement.Add(myEntity);
+
+            //Act
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
+
+            var removeCommandResult = _myEntityViewModel.RemoveCommand;
+            var removeCommandClickedResult =  _myEntityViewModel.RemoveCommandClicked();
+
+            //Assert
+            removeCommandResult
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+            removeCommandClickedResult
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+        }
+
+        [TestMethod]
+        public void Should_CallTheServiceForEditCommand_When_EditCommandAsked()
+        {
+            //Arrange
+            var myEntity = _fixture.Create<MyEntityModel>();
+
+            _myEntityViewModel.Name = "the first entity updated";
+
+            _myEntityViewModel.ListElement.Add(myEntity);
+
+            //Act
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
+
+            var editCommandResult = _myEntityViewModel.EditCommand;
+
+            //Assert
+            editCommandResult
+                .Should().NotBe(null, "Test failed: We wanted to call the service: ");
+
+        }
+
+        [TestMethod]
+        public void Should_UpdateTheFirstEntity_When_NameOfFirstEntityChanged()
+        {
+            //Arrange
+            var myEntity = _fixture.Create<MyEntityModel>();
+            _myEntityViewModel.ListElement.Add(myEntity);
+
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
+
+            var expected = "the first entity updated";
+            _myEntityViewModel.Name = expected;
+
+            //Act
+            _myEntityViewModel.EditCommandClicked().Wait();
+
+            var result = myEntity.Name;
 
             //Assert
             result.Should().Be(expected, "Test failed: We wanted : " + expected);
@@ -71,23 +132,51 @@ namespace UnitTestJhispterXamarin
         public void Should_DeleteTheFirstEntity_When_DeleteButtonClicked()
         {
             //Arrange
-            MyEntityModel sut = fixture.Create<MyEntityModel>();
-            MyEntityModel sut2 = fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<MyEntityModel>();
+            var mySecondEntity = _fixture.Create<MyEntityModel>();
 
-            myEntityViewModel.ListElement.Add(sut);
-            myEntityViewModel.ListElement.Add(sut2);
+            _myEntityViewModel.ListElement.Add(myEntity);
+            _myEntityViewModel.ListElement.Add(mySecondEntity);
 
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
 
             //Act
-            if (myEntityViewModel.ListElement.Contains(sut))
-                myEntityViewModel.ListElement.Remove(sut);
-                myEntityViewModel.CurrentElement = myEntityViewModel.ListElement[0];
+            _myEntityViewModel.ListElement.Remove(_myEntityViewModel.CurrentElement);
+
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
 
             //Assert
-            myEntityViewModel.ListElement.Count
+            _myEntityViewModel.ListElement.Count
                 .Should().Be(1, "Test Failed : We wanted : " + 1);
-            myEntityViewModel.CurrentElement
-                .Should().Be(sut2, "Test Failed : we wanted : " + sut2.ToString());
+
+            _myEntityViewModel.CurrentElement
+                .Should().Be(mySecondEntity, "Test Failed : we wanted : " + mySecondEntity.ToString());
+
+        }
+
+        [TestMethod]
+        public void Should_AddNewEntity_When_AddCommandClicked()
+        {
+            //Arrange
+            var myEntity = _fixture.Create<MyEntityModel>();
+            var mySecondEntity = _fixture.Create<MyEntityModel>();
+
+            List<MyEntityModel> listEntityModels = new List<MyEntityModel>
+            {
+                myEntity
+            };
+            _myEntityViewModel.ListElement = listEntityModels;
+
+            //Act
+            _myEntityViewModel.ListElement.Add(mySecondEntity);
+            _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[1];
+
+            //Assert
+            _myEntityViewModel.ListElement.Count
+                .Should().Be(2, "Test Failed : We wanted : " + 2);
+
+            _myEntityViewModel.CurrentElement
+                .Should().Be(mySecondEntity, "Test Failed : we wanted : " + mySecondEntity);
 
         }
     }
