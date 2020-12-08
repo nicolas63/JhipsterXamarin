@@ -6,8 +6,6 @@ using JhipsterXamarin.ViewModels;
 using MvvmCross;
 using MvvmCross.ViewModels;
 using System.Net.Http;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
 using MvvmCross.Logging;
 
 namespace JhipsterXamarin
@@ -23,36 +21,37 @@ namespace JhipsterXamarin
 
             var client = new HttpClient(httpHandler);
             
-                Akavache.Registrations.Start("JhipsterXamarin");
-                var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
+            Akavache.Registrations.Start("JhipsterXamarin");
+            var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
 
-                client.BaseAddress = new Uri(Configuration.BaseUri);
+            client.BaseAddress = new Uri(Configuration.BaseUri);
 
-                var authenticationService = new AuthenticationService(client);
-                var registerService = new RegisterService(client, log);
-                var myEntityService = new MyEntityService(client);
+            var authenticationService = new AuthenticationService(client);
+            var registerService = new RegisterService(client, log);
+            var myEntityService = new MyEntityService(client);
+            var userEntityService = new UserEntityService(client,authenticationService);
 
-                Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
-                Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
-                Mvx.IoCProvider.RegisterSingleton<IMyEntityService>(myEntityService);
-                Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
-                Mvx.IoCProvider.RegisterSingleton(client);
+            Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
+            Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
+            Mvx.IoCProvider.RegisterSingleton<IMyEntityService>(myEntityService);
+            Mvx.IoCProvider.RegisterSingleton<IUserEntityService<UserModel>>(userEntityService);
+            Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
+            Mvx.IoCProvider.RegisterSingleton(client);
 
-                try
+            try
+            {
+                BlobCache.Secure.GetObject<JwtToken>("token").Subscribe(async token =>
                 {
-                    BlobCache.Secure.GetObject<JwtToken>("token").Subscribe(async token =>
-                    {
-                        await authenticationService.SignIn(token);
-                    });
-                }
-                catch (Exception ex)
-                {
-                    log.ErrorException("Failed to fetch token and auto-login.", ex);
-                }
+                    await authenticationService.SignIn(token);
+                });
+            }
+            catch (Exception ex)
+            {
+                log.ErrorException("Failed to fetch token and auto-login.", ex);
+            }
 
-                RegisterAppStart<HomeViewModel>();
+            RegisterAppStart<HomeViewModel>();
             
-
         }
     }
 }

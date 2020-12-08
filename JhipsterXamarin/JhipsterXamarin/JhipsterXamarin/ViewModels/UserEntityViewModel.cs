@@ -1,10 +1,12 @@
-﻿using JhipsterXamarin.Models;
+﻿using System;
+using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using JhipsterXamarin.Constants;
 
 namespace JhipsterXamarin.ViewModels
 {
@@ -12,32 +14,39 @@ namespace JhipsterXamarin.ViewModels
     {
         private readonly IUserEntityService<UserModel> _userService;
         private readonly IMvxNavigationService _navigationService;
+        private readonly IAuthenticationService _authenticationService;
 
-        private UserModel _currentElement;
+        private readonly List<string> _listAuth = new List<string>()
+        {
+            RolesConstants.ADMIN,
+            RolesConstants.ANONYMOUS,
+            RolesConstants.USER
+        };
+
+        private string _currentRole;
+        private UserModel _currentElement = new UserModel();
         private List<UserModel> _userModels = new List<UserModel>();
 
-        public IMvxCommand AddCommand { get; }
-        public IMvxCommand RemoveCommand { get; }
-        public IMvxCommand EditCommand { get; }
+        public IMvxCommand AddCommand => new MvxAsyncCommand(AddCommandClicked);
+        public IMvxCommand RemoveCommand => new MvxAsyncCommand(RemoveCommandClicked);
+        public IMvxCommand EditCommand => new MvxAsyncCommand(EditCommandClicked);
 
-        private UserModel _currentUser;
+        public bool IsConnected => _authenticationService.IsAuthenticated;
+        public string Username => (IsConnected) ? _authenticationService.CurrentUser.Login : null;
 
-        public UserModel CurrentUser
+        public List<string> ListAuth
         {
-            get => _currentUser;
-            set
-            {
-                _currentUser = value;
-                _userModels.Add(_currentUser);
-                _userService.Update(_currentUser).Wait();
-            }
+            get => _listAuth;
         }
 
-        private async Task ActiveUser(UserModel user, bool activated)
+        public string CurrentRole
         {
-            _currentUser = user;
-            _currentUser.Activated = activated;
-            await _userService.Update(user);          
+            get => _currentRole;
+            set
+            {
+                _currentRole = value;
+                RaisePropertyChanged(() => CurrentRole);
+            }
         }
 
         public List<UserModel> UserModels
@@ -46,7 +55,7 @@ namespace JhipsterXamarin.ViewModels
             set
             {
                 _userModels = value;
-                RaisePropertyChanged(() => _userModels);
+                RaisePropertyChanged(() => UserModels);
             }
         }
 
@@ -60,6 +69,7 @@ namespace JhipsterXamarin.ViewModels
                 {
                     FirstName = _currentElement.FirstName;
                     LastName = _currentElement.LastName;
+                    Email = _currentElement.Email;
                 }
                 RaisePropertyChanged(() => CurrentElement);
             }
@@ -94,39 +104,83 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public UserEntityViewModel(IMvxNavigationService navigationService, IUserEntityService<UserModel> userService)
+        public string Email
+        {
+            get => _currentElement.Email;
+            set
+            {
+                _currentElement.Email = value;
+                RaisePropertyChanged(() => Email);
+            }
+        }
+
+        public UserEntityViewModel(IMvxNavigationService navigationService, IUserEntityService<UserModel> userService, IAuthenticationService authenticationService)
         {
             _navigationService = navigationService;
             _userService = userService;
-
-            AddCommand = new MvxCommand(async () =>
-            {
-                await _userService.Add(CurrentElement);
-                await RefreshList();
-            });
-            RemoveCommand = new MvxCommand(async () =>
-            {
-                await _userService.Delete(CurrentElement.Id.ToString());
-                await RefreshList();
-            });
-            EditCommand = new MvxCommand(async () =>
-            {
-                CurrentElement.FirstName = FirstName;
-                CurrentElement.LastName = LastName;
-
-                await _userService.Update(CurrentElement);
-                await RefreshList();
-            });
+            _authenticationService = authenticationService;
         }
 
         public async Task RefreshList()
         {
             UserModels = (List<UserModel>)await _userService.GetAll();
+            CurrentElement = _userModels[0];
         }
 
         public override async Task Initialize()
         {
             await base.Initialize();
+            await RefreshList();
+            CurrentElement = _userModels[0];
+        }
+
+        public async Task AddCommandClicked()
+        {
+            var model = new UserModel
+            {
+                Login = FirstName + "_" + LastName,
+                Activated = true,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                CreatedBy = Username,
+                LastModifiedDate = DateTime.Now,
+            };
+            var listAuthModel = new List<string>();
+            switch (CurrentRole)
+            {
+                case "ROLE_ADMIN":
+                    model.Authorities = ListAuth;
+                    break;
+                case "ROLE_USER":
+                    listAuthModel.Add(CurrentRole);
+                    model.Authorities = listAuthModel; 
+                    break;
+                case "ROLE_ANONYMOUS":
+                    listAuthModel.Add(CurrentRole);
+                    model.Authorities = listAuthModel;
+                    break;
+            }
+
+            await _userService.Add(model);
+            await RefreshList();
+        }
+
+        public async Task RemoveCommandClicked()
+        {
+            await _userService.Delete(CurrentElement.Login);
+            await RefreshList();
+        }
+
+        public async Task EditCommandClicked()
+        {
+            CurrentElement.FirstName = FirstName;
+            CurrentElement.LastName = LastName;
+            CurrentElement.Email = Email;
+            CurrentElement.LastModifiedDate = DateTime.Now;
+            CurrentElement.LastModifiedBy = Username;
+
+            await _userService.Update(CurrentElement);
             await RefreshList();
         }
     }

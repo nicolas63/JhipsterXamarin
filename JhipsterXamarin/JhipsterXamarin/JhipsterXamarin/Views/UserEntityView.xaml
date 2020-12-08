@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+
 <views:MvxContentPage xmlns:views="clr-namespace:MvvmCross.Forms.Views;assembly=MvvmCross.Forms"
                       x:TypeArguments="viewModels:UserEntityViewModel"
                       xmlns:viewModels="clr-namespace:JhipsterXamarin.ViewModels;assembly=JhipsterXamarin"
@@ -17,16 +18,28 @@
                     <Button Text="Modifier" Command="{Binding EditCommand}" FontSize="16" />
                 </StackLayout>
 
-                <Entry Placeholder="Login" Text="{Binding Login}" />
-
                 <Entry Placeholder="FirstName" Text="{Binding FirstName}" />
 
-                <Entry Placeholder="LastName" Keyboard="Numeric" Text="{Binding LastName}" />
+                <Entry Placeholder="LastName" Text="{Binding LastName}" />
 
-                <Label Text="Users" HorizontalOptions="StartAndExpand" FontSize="Title" />
+                <Entry Placeholder="Email" Text="{Binding Email}" />
+
+                <Label Text="Role" HorizontalOptions="StartAndExpand" FontSize="Title" />
+                <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentRole}" x:Name="listViewRole"
+                          ItemsSource="{Binding ListAuth}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding}" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
 
                 <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentElement}" x:Name="listView"
-                          ItemsSource="{Binding ListElement}">
+                          ItemsSource="{Binding UserModels}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>

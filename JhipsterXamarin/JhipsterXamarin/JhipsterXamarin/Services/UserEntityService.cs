@@ -15,13 +15,11 @@ namespace JhipsterXamarin.Services
         private IAuthenticationService _authenticationService;
 
         protected JwtToken JwtToken { get; set; }
-        protected string BaseUrl { get; }
-
-        public UserEntityService(HttpClient httpClient, IAuthenticationService authenticationService, string baseUrl)
+        protected string BaseUrl = "api/users";
+        public UserEntityService(HttpClient httpClient, IAuthenticationService authenticationService)
         {
             _httpClient = httpClient;
             _authenticationService = authenticationService;
-            BaseUrl = baseUrl;
 
             _httpClient.BaseAddress = new Uri(Configuration.BaseUri);
             JwtToken = authenticationService.JwtToken;
@@ -32,7 +30,7 @@ namespace JhipsterXamarin.Services
 
 
         public virtual async Task<IList<UserModel>> GetAll()
-        {
+        { 
             return await _httpClient.GetFromJsonAsync<IList<UserModel>>(BaseUrl);
         }
 
@@ -41,21 +39,18 @@ namespace JhipsterXamarin.Services
             return await _httpClient.GetFromJsonAsync<UserModel>($"{BaseUrl}/{id}");
         }
 
-        public virtual async Task Add(UserModel _model)
+        public virtual async Task Add(UserModel model)
         {
-            var model = _model;
-            model.LastModifiedDate = DateTime.Now;
-
-            await _httpClient.PostAsJsonAsync(BaseUrl, model);
+            await _httpClient.PostAsJsonAsync($"{BaseUrl}", model);
         }
         public virtual async Task Update(UserModel model)
         {
             await _httpClient.PutAsJsonAsync(BaseUrl, model);
         }
 
-        public virtual async Task Delete(string id)
+        public virtual async Task Delete(string login)
         {
-            await _httpClient.DeleteAsync($"{BaseUrl}/{id}");
+            await _httpClient.DeleteAsync($"{BaseUrl}/{login}");
         }
 
     }
