@@ -131,13 +131,7 @@ namespace JhipsterXamarin.ViewModels
             {
                 _success = value;
                 RaisePropertyChanged(() => Success);
-                RaisePropertyChanged(() => NotSuccess);
             }
-        }
-
-        public bool NotSuccess
-        {
-            get => !_success;
         }
 
         public RegisterViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService, IRegisterService registerService)

@@ -1,12 +1,10 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
 using MvvmCross.Forms.Platforms.Android.Core;
 using MvvmCross.Forms.Platforms.Android.Views;
-using MvvmCross.Platforms.Android.Views;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
+using JhipsterXamarin;
 
 namespace JhipsterXamarin.Droid
 {
