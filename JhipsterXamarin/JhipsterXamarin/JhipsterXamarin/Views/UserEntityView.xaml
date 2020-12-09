@@ -38,6 +38,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
+                <Label Text="Users" HorizontalOptions="StartAndExpand" FontSize="Title" />
                 <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentElement}" x:Name="listView"
                           ItemsSource="{Binding UserModels}">
                     <ListView.ItemTemplate>

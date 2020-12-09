@@ -41,7 +41,7 @@ namespace JhipsterXamarin.Services
 
         public virtual async Task Add(UserModel model)
         {
-            await _httpClient.PostAsJsonAsync($"{BaseUrl}", model);
+            await _httpClient.PostAsJsonAsync(BaseUrl, model);
         }
         public virtual async Task Update(UserModel model)
         {
