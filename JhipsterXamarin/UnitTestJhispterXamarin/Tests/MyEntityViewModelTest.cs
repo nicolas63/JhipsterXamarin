@@ -1,5 +1,4 @@
-﻿using System;
-using JhipsterXamarin.Models;
+﻿using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using JhipsterXamarin.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -10,7 +9,6 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoFixture;
-using MvvmCross.Commands;
 
 namespace UnitTestJhispterXamarin
 {

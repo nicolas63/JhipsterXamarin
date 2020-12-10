@@ -131,6 +131,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SharedModel\SharedModel.csproj">
+      <Project>{70e183c6-efd2-4f4c-8c65-8a7f3b6a445a}</Project>
+      <Name>SharedModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JhipsterXamarin\JhipsterXamarin\JhipsterXamarin.csproj">
       <Project>{3d1af2b1-a215-48ad-8394-522f437b0874}</Project>
       <Name>JhipsterXamarin</Name>

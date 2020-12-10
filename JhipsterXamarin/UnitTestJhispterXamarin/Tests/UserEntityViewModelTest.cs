@@ -1,4 +1,8 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoFixture;
+using FluentAssertions;
+using JhipsterXamarin.Constants;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using JhipsterXamarin.ViewModels;
@@ -12,68 +16,190 @@ namespace UnitTestJhispterXamarin
     [TestClass]
     public class UserEntityViewModelTest : MvxIoCSupportingTest
     {
+        private readonly List<string> listAuthorities = new List<string>()
+        {
+            RolesConstants.ADMIN,
+            RolesConstants.ANONYMOUS,
+            RolesConstants.USER
+        };
+
+        private readonly Fixture _fixture = new Fixture();
+        private readonly List<UserModel> _users = new List<UserModel>();
+        private readonly Mock<IMvxNavigationService> _mockNavLoginService = new Mock<IMvxNavigationService>();
+        private readonly Mock<IAuthenticationService> _mockAuthLoginService = new Mock<IAuthenticationService>();
+        private readonly Mock<IUserEntityService<UserModel>> _mockUserEntityService
+            = new Mock<IUserEntityService<UserModel>>();
+
         private UserEntityViewModel userEntityViewModel;
 
-        private UserModel admin;
-        private UserModel paul;
-        private UserModel john;
-
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             base.Setup(); // from MvxIoCSupportingTest
 
-            var mockUserEntityService = new Mock<IUserEntityService<UserModel>>();
-            var mockNavLoginService = new Mock<IMvxNavigationService>();
-            var mockAuthLoginService = new Mock<IAuthenticationService>();
+            Ioc.RegisterSingleton<IUserEntityService<UserModel>>(_mockUserEntityService.Object);
+            Ioc.RegisterSingleton<IMvxNavigationService>(_mockNavLoginService.Object);
+            Ioc.RegisterSingleton<IAuthenticationService>(_mockAuthLoginService.Object);
 
-            userEntityViewModel = new UserEntityViewModel(mockNavLoginService.Object, mockUserEntityService.Object, mockAuthLoginService.Object);
+            userEntityViewModel = new UserEntityViewModel(_mockNavLoginService.Object, _mockUserEntityService.Object, _mockAuthLoginService.Object);
 
-            Ioc.RegisterSingleton<IUserEntityService<UserModel>>(mockUserEntityService.Object);
-            Ioc.RegisterSingleton<IMvxNavigationService>(mockNavLoginService.Object);
-            Ioc.RegisterSingleton<IAuthenticationService>(mockAuthLoginService.Object);
-
+            await userEntityViewModel.Initialize();
+            userEntityViewModel.UserModels = _users;
         }
 
-        protected override void AdditionalSetup()
+        private UserModel GenerateUser(string firstName, string lastName)
         {
-            admin = new UserModel();
-            admin.Login = "admin";
+            var authorities = new List<string>()
+            {
+                listAuthorities[0]
+            };
 
-            paul = new UserModel();
-            paul.Login = "paul";
+            var user = _fixture.Create<UserModel>();
 
-            john = new UserModel();
-            john.Login = "john";
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.Email = firstName+lastName+"@localhost";
+            user.Activated = true;
+            user.Authorities = authorities;
+
+
+            userEntityViewModel.FirstName = user.FirstName;
+            userEntityViewModel.LastName = user.LastName;
+            userEntityViewModel.Email = user.Email;
+            userEntityViewModel.CurrentRole = listAuthorities[0];
+
+            return user;
+
         }
 
         [TestMethod]
-        public void Should_AddUsers_When_AddCommandMade()
+        public void Should_AddUser_When_AddCommandClickedAsked()
         {
             //Arrange
-            userEntityViewModel.UserModels.Add(paul);
-            userEntityViewModel.UserModels.Add(john);
+            var user = GenerateUser("test", "testUser");
 
             //Act
-            var result = userEntityViewModel.UserModels.Count;
+            var addCommandClickedResult =  userEntityViewModel.AddCommandClicked();
 
             //Assert
-            result.Should().Be(2,"Test failed because of a bad move to login the admin");
+            addCommandClickedResult
+                .Should().NotBe(null,"Test failed because of a bad move");
+
         }
 
         [TestMethod]
-        public void Should_DeleteUsers_When_DeleteCommandMade()
+        public void Should_AddUser_When_AddCommandAsked()
         {
             //Arrange
-            userEntityViewModel.UserModels.Add(paul);
-            userEntityViewModel.UserModels.Add(john);
+            var user = GenerateUser("test", "testUser");
 
             //Act
-            userEntityViewModel.UserModels.Remove(john);
-            var result = userEntityViewModel.UserModels.Count;
+            var addCommandResult = userEntityViewModel.AddCommand;
 
             //Assert
-            result.Should().Be(1, "Test failed because of a bad move to login the admin");
+            addCommandResult
+                .Should().NotBe(null, "Test failed because of a bad move");
+
         }
+
+        [TestMethod]
+        public void Should_RemoveUser_When_RemoveCommandClicked()
+        {
+            //Arrange
+            GenerateUser("first", "firstTestUser");
+            userEntityViewModel.AddCommandClicked();
+
+            GenerateUser("second", "secondTestUser");
+            userEntityViewModel.AddCommandClicked();
+
+            //Act
+            var removeCommandClickedResult = userEntityViewModel.RemoveCommandClicked();
+
+            //Assert
+            removeCommandClickedResult
+                .Should().NotBe(null, "Test failed because of a bad move");
+
+        }
+
+        [TestMethod]
+        public void Should_RemoveUser_When_RemoveCommandAsked()
+        {
+            //Arrange
+            GenerateUser("first", "firstTestUser");
+            userEntityViewModel.AddCommandClicked();
+            
+            GenerateUser("second", "secondTestUser");
+            userEntityViewModel.AddCommandClicked();
+
+            //Act
+            var removeCommandResult = userEntityViewModel.RemoveCommand;
+
+            //Assert
+            removeCommandResult
+                .Should().NotBe(null, "Test failed because of a bad move");
+        }
+
+        [TestMethod]
+        public void Should_EditUser_When_EditCommandClicked()
+        {
+            //Arrange
+            GenerateUser("first", "firstTestUser");
+
+            userEntityViewModel.AddCommandClicked();
+
+            var newFirstName = "firstUpdated";
+            var newLastName = "firstTestUserUpdated";
+
+            userEntityViewModel.FirstName = newFirstName;
+            userEntityViewModel.LastName = newLastName;
+
+            //Act
+            var editCommandClickedResult = userEntityViewModel.EditCommandClicked();
+
+            //Assert
+            editCommandClickedResult
+                .Should().NotBe(null, "Test failed because of a bad move");
+        }
+
+        [TestMethod]
+        public void Should_EditUser_When_EditCommandAsked()
+        {
+            //Arrange
+            GenerateUser("first", "firstTestUser");
+
+            userEntityViewModel.AddCommandClicked();
+
+            var newFirstName = "firstUpdated";
+            var newLastName = "firstTestUserUpdated";
+
+            userEntityViewModel.FirstName = newFirstName;
+            userEntityViewModel.LastName = newLastName;
+
+            //Act
+            var editCommandClickedResult = userEntityViewModel.EditCommand;
+
+            //Assert
+            editCommandClickedResult
+                .Should().NotBe(null, "Test failed because of a bad move");
+
+        }
+
+        [TestMethod]
+        public void Should_ShowUserData_When_UserSelected()
+        {
+            //Arrange
+            var user =GenerateUser("first", "firstTestUser");
+            
+            userEntityViewModel.UserModels.Add(user);
+            userEntityViewModel.CurrentElement = userEntityViewModel.UserModels[0];
+
+            //Act
+            var currentUser = userEntityViewModel.CurrentElement;
+
+            //Assert
+            currentUser
+                .Should().Be(user, "Test failed because of a bad move");
+        }
+
     }
 }
