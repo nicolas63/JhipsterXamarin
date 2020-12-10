@@ -75,15 +75,6 @@ namespace JhipsterXamarin.ViewModels
             }
         }
 
-        public string Login
-        {
-            get => _currentElement.Login;
-            set
-            {
-                _currentElement.Login = value;
-                RaisePropertyChanged(() => Login);
-            }
-        }
         public string FirstName
         {
             get => _currentElement.FirstName;
@@ -124,14 +115,14 @@ namespace JhipsterXamarin.ViewModels
         public async Task RefreshList()
         {
             UserModels = (List<UserModel>)await _userService.GetAll();
-            CurrentElement = _userModels[0];
+            if (UserModels != null)
+                CurrentElement = _userModels[0];
         }
 
         public override async Task Initialize()
         {
             await base.Initialize();
             await RefreshList();
-            CurrentElement = _userModels[0];
         }
 
         public async Task AddCommandClicked()
