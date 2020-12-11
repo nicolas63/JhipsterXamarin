@@ -7,7 +7,6 @@
     xmlns:mvx="clr-namespace:MvvmCross.Forms.Bindings;assembly=MvvmCross.Forms"
     xmlns:viewModels="clr-namespace:JhipsterXamarin.ViewModels;assembly=JhipsterXamarin"
     x:Class="JhipsterXamarin.Views.MenuPage"
-    BackgroundColor="White"
     Title="Menu"
     Icon = "ic_menu">
     <ContentPage.Content>
