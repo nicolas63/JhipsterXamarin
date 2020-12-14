@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
-using JhipsterXamarin.Constants;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using JhipsterXamarin.ViewModels;
@@ -16,12 +15,6 @@ namespace UnitTestJhispterXamarin
     [TestClass]
     public class UserEntityViewModelTest : MvxIoCSupportingTest
     {
-        private readonly List<string> listAuthorities = new List<string>()
-        {
-            RolesConstants.ADMIN,
-            RolesConstants.ANONYMOUS,
-            RolesConstants.USER
-        };
 
         private readonly Fixture _fixture = new Fixture();
         private readonly List<UserModel> _users = new List<UserModel>();
@@ -49,10 +42,6 @@ namespace UnitTestJhispterXamarin
 
         private UserModel GenerateUser(string firstName, string lastName)
         {
-            var authorities = new List<string>()
-            {
-                listAuthorities[0]
-            };
 
             var user = _fixture.Create<UserModel>();
 
@@ -60,13 +49,11 @@ namespace UnitTestJhispterXamarin
             user.LastName = lastName;
             user.Email = firstName+lastName+"@localhost";
             user.Activated = true;
-            user.Authorities = authorities;
 
 
             userEntityViewModel.FirstName = user.FirstName;
             userEntityViewModel.LastName = user.LastName;
             userEntityViewModel.Email = user.Email;
-            userEntityViewModel.CurrentRole = listAuthorities[0];
 
             return user;
 
