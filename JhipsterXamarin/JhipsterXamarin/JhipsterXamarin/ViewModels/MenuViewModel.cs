@@ -1,7 +1,12 @@
-﻿using JhipsterXamarin.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using System.Threading.Tasks;
+using JhipsterXamarin.Constants;
+using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.ViewModels
 {
@@ -17,7 +22,8 @@ namespace JhipsterXamarin.ViewModels
         public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
         public IMvxCommand SignOut => new MvxCommand(SignOutClicked);
         public bool IsConnected  => _authenticationService.IsAuthenticated;
-
+        public UserModel User => IsConnected ? _authenticationService.CurrentUser : null;
+        public bool IsAdmin => IsConnected && User != null && User.Authorities.Contains(RolesConstants.ADMIN);
         public MenuViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
         {
             _navigationService = navigationService;

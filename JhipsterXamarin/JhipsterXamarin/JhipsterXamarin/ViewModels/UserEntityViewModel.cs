@@ -6,7 +6,6 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JhipsterXamarin.Constants;
 
 namespace JhipsterXamarin.ViewModels
 {
@@ -16,16 +15,9 @@ namespace JhipsterXamarin.ViewModels
         private readonly IMvxNavigationService _navigationService;
         private readonly IAuthenticationService _authenticationService;
 
-        private readonly List<string> _listAuth = new List<string>()
-        {
-            RolesConstants.ADMIN,
-            RolesConstants.ANONYMOUS,
-            RolesConstants.USER
-        };
-
-        private string _currentRole;
         private UserModel _currentElement = new UserModel();
         private List<UserModel> _userModels = new List<UserModel>();
+        private List<string> _listAuth = new List<string>();
 
         public IMvxCommand AddCommand => new MvxAsyncCommand(AddCommandClicked);
         public IMvxCommand RemoveCommand => new MvxAsyncCommand(RemoveCommandClicked);
@@ -37,15 +29,10 @@ namespace JhipsterXamarin.ViewModels
         public List<string> ListAuth
         {
             get => _listAuth;
-        }
-
-        public string CurrentRole
-        {
-            get => _currentRole;
             set
             {
-                _currentRole = value;
-                RaisePropertyChanged(() => CurrentRole);
+                _listAuth = (List<string>) CurrentElement.Authorities;
+                RaisePropertyChanged(() => UserModels);
             }
         }
 
@@ -137,22 +124,6 @@ namespace JhipsterXamarin.ViewModels
                 CreatedBy = Username,
                 LastModifiedDate = DateTime.Now,
             };
-            var listAuthModel = new List<string>();
-            switch (CurrentRole)
-            {
-                case "ROLE_ADMIN":
-                    model.Authorities = ListAuth;
-                    break;
-                case "ROLE_USER":
-                    listAuthModel.Add(CurrentRole);
-                    model.Authorities = listAuthModel; 
-                    break;
-                case "ROLE_ANONYMOUS":
-                    listAuthModel.Add(CurrentRole);
-                    model.Authorities = listAuthModel;
-                    break;
-            }
-
             await _userService.Add(model);
             await RefreshList();
         }
