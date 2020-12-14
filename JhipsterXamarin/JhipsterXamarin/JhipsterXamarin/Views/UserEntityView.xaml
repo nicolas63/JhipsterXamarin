@@ -25,7 +25,7 @@
                 <Entry Placeholder="Email" Text="{Binding Email}" />
 
                 <Label Text="Role" HorizontalOptions="StartAndExpand" FontSize="Title" />
-                <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentRole}" x:Name="listViewRole"
+                <ListView BackgroundColor="LightGray" SelectionMode="None" x:Name="listViewRole"
                           ItemsSource="{Binding ListAuth}">
                     <ListView.ItemTemplate>
                         <DataTemplate>

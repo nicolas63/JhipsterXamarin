@@ -79,7 +79,7 @@
                     HorizontalOptions="FillAndExpand" 
                     VerticalOptions="StartAndExpand" 
                     Padding="8"
-                    IsVisible="{Binding IsConnected}">
+                    IsVisible="{Binding IsAdmin}">
                     <Label Text="Users"/>
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer  Tapped="ToggleClicked" Command="{Binding ShowMyUsersCommand}"/>
