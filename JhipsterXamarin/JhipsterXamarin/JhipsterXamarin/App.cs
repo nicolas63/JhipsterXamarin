@@ -19,24 +19,24 @@ namespace JhipsterXamarin
                 ServerCertificateCustomValidationCallback = (o, cert, chain, errors) => true
             };
 
-            var httpclient = new HttpClient(httpHandler);
+            var httpClient = new HttpClient(httpHandler);
             
             Akavache.Registrations.Start("JhipsterXamarin");
             var log = Mvx.IoCProvider.Resolve<IMvxLogProvider>().GetLogFor("JhipsterXamarin");
 
-            httpclient.BaseAddress = new Uri(Configuration.BaseUri);
+            httpClient.BaseAddress = new Uri(Configuration.BaseUri);
 
-            var authenticationService = new AuthenticationService(httpclient);
-            var registerService = new RegisterService(httpclient, log);
-            var myEntityService = new MyEntityService(httpclient);
-            var userEntityService = new UserEntityService(httpclient, authenticationService);
+            var authenticationService = new AuthenticationService(httpClient);
+            var registerService = new RegisterService(httpClient, log);
+            var myEntityService = new MyEntityService(httpClient);
+            var userEntityService = new UserEntityService(httpClient, authenticationService);
 
             Mvx.IoCProvider.RegisterSingleton<IAuthenticationService>(authenticationService);
             Mvx.IoCProvider.RegisterSingleton<IRegisterService>(registerService);
             Mvx.IoCProvider.RegisterSingleton<IMyEntityService>(myEntityService);
             Mvx.IoCProvider.RegisterSingleton<IUserEntityService<UserModel>>(userEntityService);
             Mvx.IoCProvider.RegisterSingleton<IMvxLog>(log);
-            Mvx.IoCProvider.RegisterSingleton(httpclient);
+            Mvx.IoCProvider.RegisterSingleton(httpClient);
 
             try
             {
