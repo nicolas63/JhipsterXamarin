@@ -14,6 +14,7 @@ namespace JhipsterXamarin
     {
         public override void Initialize()
         {
+
             var httpHandler = new HttpClientHandler
             {
                 ServerCertificateCustomValidationCallback = (o, cert, chain, errors) => true
@@ -51,7 +52,7 @@ namespace JhipsterXamarin
             }
 
             RegisterAppStart<HomeViewModel>();
-            
+
         }
     }
 }

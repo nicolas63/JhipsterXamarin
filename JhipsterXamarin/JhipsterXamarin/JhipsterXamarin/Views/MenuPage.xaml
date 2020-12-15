@@ -95,7 +95,6 @@
                         <TapGestureRecognizer  Tapped="ToggleClicked" Command="{Binding ShowMyEntitiesCommand}"/>
                     </Grid.GestureRecognizers>
                 </Grid>
-
                 <BoxView
                     HorizontalOptions="FillAndExpand"
                     HeightRequest="2"

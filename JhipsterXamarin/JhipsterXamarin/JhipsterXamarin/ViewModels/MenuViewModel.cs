@@ -21,9 +21,11 @@ namespace JhipsterXamarin.ViewModels
         public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
         public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
         public IMvxCommand SignOut => new MvxCommand(SignOutClicked);
+        
         public bool IsConnected  => _authenticationService.IsAuthenticated;
         public UserModel User => IsConnected ? _authenticationService.CurrentUser : null;
         public bool IsAdmin => IsConnected && User != null && User.Authorities.Contains(RolesConstants.ADMIN);
+        
         public MenuViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
         {
             _navigationService = navigationService;
