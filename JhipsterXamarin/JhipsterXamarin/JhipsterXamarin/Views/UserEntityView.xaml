@@ -25,18 +25,19 @@
                 <Entry Placeholder="Email" Text="{Binding Email}" />
 
                 <Label Text="Role" HorizontalOptions="StartAndExpand" FontSize="Title" />
-                <ListView BackgroundColor="LightGray" SelectionMode="None" x:Name="listViewRole"
-                          ItemsSource="{Binding ListAuth}">
-                    <ListView.ItemTemplate>
+                <CollectionView ItemsSource="{Binding ListAuth}" BackgroundColor="LightGray"  
+                                x:Name="CollectionViewRole" SelectionMode="Multiple" 
+                                SelectedItems="{Binding SelectedRoles}" >
+                    <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell>
-                                <StackLayout Orientation="Horizontal">
-                                    <Label Text="{Binding}" />
+                            <Grid>
+                                <StackLayout>
+                                    <Label Text="{Binding}"/>
                                 </StackLayout>
-                            </ViewCell>
+                            </Grid>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
                 <Label Text="Users" HorizontalOptions="StartAndExpand" FontSize="Title" />
                 <ListView BackgroundColor="LightGray" SelectedItem="{Binding CurrentElement}" x:Name="listView"
