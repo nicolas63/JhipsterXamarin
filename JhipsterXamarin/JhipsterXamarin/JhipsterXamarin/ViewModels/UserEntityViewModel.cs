@@ -1,9 +1,10 @@
-﻿using System;
+﻿using JhipsterXamarin.Constants;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace JhipsterXamarin.ViewModels
 
         private UserModel _currentElement = new UserModel();
         private List<UserModel> _userModels = new List<UserModel>();
-        private List<string> _listAuth = new List<string>();
+        private IList<string>_listSelectedRoles = new List<string>();
 
         public IMvxCommand AddCommand => new MvxAsyncCommand(AddCommandClicked);
         public IMvxCommand RemoveCommand => new MvxAsyncCommand(RemoveCommandClicked);
@@ -26,13 +27,20 @@ namespace JhipsterXamarin.ViewModels
         public bool IsConnected => _authenticationService.IsAuthenticated;
         public string Username => (IsConnected) ? _authenticationService.CurrentUser.Login : null;
 
-        public List<string> ListAuth
+        public List<string> ListAuth { get; } = new List<string>()
         {
-            get => _listAuth;
+            RolesConstants.ADMIN,
+            RolesConstants.ANONYMOUS,
+            RolesConstants.USER,
+        };
+
+        public IList<string> SelectedRoles
+        {
+            get => _listSelectedRoles;
             set
             {
-                _listAuth = (List<string>) CurrentElement.Authorities;
-                RaisePropertyChanged(() => UserModels);
+                _listSelectedRoles = value;
+                RaisePropertyChanged(() => SelectedRoles);
             }
         }
 
@@ -57,6 +65,7 @@ namespace JhipsterXamarin.ViewModels
                     FirstName = _currentElement.FirstName;
                     LastName = _currentElement.LastName;
                     Email = _currentElement.Email;
+                    SelectedRoles = (IList<string>)_currentElement.Authorities;
                 }
                 RaisePropertyChanged(() => CurrentElement);
             }
@@ -123,6 +132,7 @@ namespace JhipsterXamarin.ViewModels
                 Email = Email,
                 CreatedBy = Username,
                 LastModifiedDate = DateTime.Now,
+                Authorities = SelectedRoles
             };
             await _userService.Add(model);
             await RefreshList();
