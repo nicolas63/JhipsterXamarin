@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Akavache;
 using JhipsterXamarin.Models;
+using MvvmCross.Logging;
 
 namespace JhipsterXamarin.Services
 {
@@ -14,14 +15,16 @@ namespace JhipsterXamarin.Services
         private const string AccountUrl = "api/account";
         private const string AuthorizationHeader = "Authorization";
         private readonly HttpClient _httpClient;
+        private readonly IMvxLog _log;
 
         public bool IsAuthenticated { get; set; }
         public UserModel CurrentUser { get; set; }
         public JwtToken JwtToken { get; set; }
 
-        public AuthenticationService(HttpClient httpClient)
+        public AuthenticationService(HttpClient httpClient, IMvxLog log)
         {
-            _httpClient = httpClient;           
+            _httpClient = httpClient;
+            _log = log;
         }
 
         public async Task<bool> SignIn(LoginModel loginModel)
@@ -64,8 +67,9 @@ namespace JhipsterXamarin.Services
                     await BlobCache.Secure.InsertObject<JwtToken>("token", jwtToken);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _log.ErrorException("Failed to fetch user and login.", ex);
                 IsAuthenticated = false;
             }
         }
