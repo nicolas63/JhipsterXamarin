@@ -37,10 +37,9 @@ namespace JhipsterXamarin
 
             try
             {
-                BlobCache.Secure.GetObject<JwtToken>("token").Subscribe(async token =>
-                {
-                    await authenticationService.SignIn(token);
-                });
+                // sync trying to connect before loading home view
+                var token = Task.Run(async () => await BlobCache.Secure.GetObject<JwtToken>("token")).Result;
+                Task.Run(async () => await authenticationService.SignIn(token));
             }
             catch (Exception ex)
             {
