@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using System;
 using System.Threading.Tasks;
 using JhipsterXamarin.Constants;
 using JhipsterXamarin.Models;
@@ -58,11 +55,11 @@ namespace JhipsterXamarin.ViewModels
             await _navigationService.Navigate<RegisterViewModel>();
         }
 
-        private void SignOutClicked()
+        private async Task SignOutClicked()
         {
             _authenticationService.SignOut();
-            RaisePropertyChanged(() => IsConnected);
-            _navigationService.Navigate<WelcomeViewModel>();
+            await RaisePropertyChanged(() => IsConnected);
+            await _navigationService.Navigate<WelcomeViewModel>();
         }
     }
 }
