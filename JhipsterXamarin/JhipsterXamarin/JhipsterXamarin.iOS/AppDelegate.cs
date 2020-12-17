@@ -1,6 +1,7 @@
 ﻿using Foundation;
 using MvvmCross.Forms.Platforms.Ios.Core;
 using UIKit;
+using JhipsterXamarin;
 
 namespace JhipsterXamarin.iOS
 {
