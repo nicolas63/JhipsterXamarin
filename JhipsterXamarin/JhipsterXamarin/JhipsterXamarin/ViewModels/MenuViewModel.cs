@@ -11,7 +11,7 @@ using JhipsterXamarin.Models;
 
 namespace JhipsterXamarin.ViewModels
 {
-    public class MenuViewModel : BaseViewModel
+     public class MenuViewModel : BaseViewModel
     {
         private readonly IMvxNavigationService _navigationService;
         private readonly IAuthenticationService _authenticationService;
@@ -22,11 +22,11 @@ namespace JhipsterXamarin.ViewModels
         public IMvxCommand SignIn => new MvxAsyncCommand(SignInClicked);
         public IMvxCommand SignUp => new MvxAsyncCommand(SignUpClicked);
         public IMvxCommand SignOut => new MvxAsyncCommand(SignOutClicked);
-
         public bool IsConnected  => _authenticationService.IsAuthenticated;
+        
         public UserModel User => IsConnected ? _authenticationService.CurrentUser : null;
         public bool IsAdmin => IsConnected && User != null && User.Authorities.Contains(RolesConstants.ADMIN);
-        
+
         public MenuViewModel(IMvxNavigationService navigationService, IAuthenticationService authenticationService)
         {
             _navigationService = navigationService;
@@ -58,11 +58,11 @@ namespace JhipsterXamarin.ViewModels
             await _navigationService.Navigate<RegisterViewModel>();
         }
 
-        private async Task SignOutClicked()
+        private void SignOutClicked()
         {
             _authenticationService.SignOut();
-            await RaisePropertyChanged(() => IsConnected);
-            await _navigationService.Navigate<WelcomeViewModel>();
+            RaisePropertyChanged(() => IsConnected);
+            _navigationService.Navigate<WelcomeViewModel>();
         }
     }
 }
