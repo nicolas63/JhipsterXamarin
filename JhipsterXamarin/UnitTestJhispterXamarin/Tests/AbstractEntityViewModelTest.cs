@@ -1,6 +1,4 @@
-﻿using JhipsterXamarin.Models;
-using JhipsterXamarin.Services;
-using JhipsterXamarin.ViewModels;
+﻿using JhipsterXamarin.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using MvvmCross.Navigation;
@@ -9,14 +7,16 @@ using FluentAssertions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using AutoFixture;
+using JhipsterXamarin.Models;
+using JhipsterXamarin.Services;
 
 namespace UnitTestJhispterXamarin
 {
     [TestClass]
     public class MyEntityViewModelTest : MvxIoCSupportingTest
     {
-        private readonly Mock<IMyEntityService> _mockMyEntityService = new Mock<IMyEntityService>();
-        private readonly List<MyEntityModel> _myEntities = new List<MyEntityModel>();
+        private readonly Mock<IAbstractEntityService<AbstractEntityModel>> _mockMyEntityService = new Mock<IAbstractEntityService<AbstractEntityModel>>();
+        private readonly List<AbstractEntityModel> _myEntities = new List<AbstractEntityModel>();
         private readonly Fixture _fixture = new Fixture();
 
         private MyEntityViewModel _myEntityViewModel;
@@ -29,7 +29,7 @@ namespace UnitTestJhispterXamarin
             base.Setup(); // from MvxIoCSupportingTest 
 
             Ioc.RegisterSingleton<IMvxNavigationService>(mockNavService.Object);
-            Ioc.RegisterSingleton<IMyEntityService>(_mockMyEntityService.Object);
+            Ioc.RegisterSingleton<IAbstractEntityService<AbstractEntityModel>>(_mockMyEntityService.Object);
 
             _myEntityViewModel = new MyEntityViewModel(mockNavService.Object, _mockMyEntityService.Object);
             await _myEntityViewModel.Initialize();
@@ -42,7 +42,7 @@ namespace UnitTestJhispterXamarin
         public void Should_CallTheServiceForAddCommand_When_AddCommandAsked()
         {
             //Arrange
-            var myEntity = _fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<AbstractEntityModel>();
 
             _myEntityViewModel.Name = myEntity.Name;
             _myEntityViewModel.Age = myEntity.Age;
@@ -64,7 +64,7 @@ namespace UnitTestJhispterXamarin
         public void Should_CallTheServiceForRemoveCommand_When_RemoveCommandAsked()
         {
             //Arrange
-            var myEntity = _fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<AbstractEntityModel>();
 
             _myEntityViewModel.ListElement.Add(myEntity);
 
@@ -87,7 +87,7 @@ namespace UnitTestJhispterXamarin
         public void Should_CallTheServiceForEditCommand_When_EditCommandAsked()
         {
             //Arrange
-            var myEntity = _fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<AbstractEntityModel>();
 
             _myEntityViewModel.Name = "the first entity updated";
 
@@ -108,7 +108,7 @@ namespace UnitTestJhispterXamarin
         public void Should_UpdateTheFirstEntity_When_NameOfFirstEntityChanged()
         {
             //Arrange
-            var myEntity = _fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<AbstractEntityModel>();
             _myEntityViewModel.ListElement.Add(myEntity);
 
             _myEntityViewModel.CurrentElement = _myEntityViewModel.ListElement[0];
@@ -130,8 +130,8 @@ namespace UnitTestJhispterXamarin
         public void Should_DeleteTheFirstEntity_When_DeleteButtonClicked()
         {
             //Arrange
-            var myEntity = _fixture.Create<MyEntityModel>();
-            var mySecondEntity = _fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<AbstractEntityModel>();
+            var mySecondEntity = _fixture.Create<AbstractEntityModel>();
 
             _myEntityViewModel.ListElement.Add(myEntity);
             _myEntityViewModel.ListElement.Add(mySecondEntity);
@@ -156,10 +156,10 @@ namespace UnitTestJhispterXamarin
         public void Should_AddNewEntity_When_AddCommandClicked()
         {
             //Arrange
-            var myEntity = _fixture.Create<MyEntityModel>();
-            var mySecondEntity = _fixture.Create<MyEntityModel>();
+            var myEntity = _fixture.Create<AbstractEntityModel>();
+            var mySecondEntity = _fixture.Create<AbstractEntityModel>();
 
-            List<MyEntityModel> listEntityModels = new List<MyEntityModel>
+            List<AbstractEntityModel> listEntityModels = new List<AbstractEntityModel>
             {
                 myEntity
             };

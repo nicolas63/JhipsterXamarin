@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Akavache;
 using JhipsterXamarin.Models;
 using JhipsterXamarin.Services;
 using MvvmCross.Commands;

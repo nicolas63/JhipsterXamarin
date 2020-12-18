@@ -39,8 +39,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoFixture, Version=4.14.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoFixture.4.14.0\lib\net452\AutoFixture.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Fare, Version=2.1.0.0, Culture=neutral, PublicKeyToken=ea68d375bf33a7c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fare.2.1.1\lib\net35\Fare.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions, Version=5.10.3.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.5.10.3\lib\net47\FluentAssertions.dll</HintPath>
@@ -65,6 +71,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Console, Version=4.0.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Console.4.3.1\lib\net46\System.Console.dll</HintPath>
@@ -118,7 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tests\LoginTest.cs" />
-    <Compile Include="Tests\MyEntityViewModelTest.cs" />
+    <Compile Include="Tests\AbstractEntityViewModelTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\UserEntityViewModelTest.cs" />
   </ItemGroup>
@@ -127,6 +134,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SharedModel\SharedModel.csproj">
+      <Project>{70e183c6-efd2-4f4c-8c65-8a7f3b6a445a}</Project>
+      <Name>SharedModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JhipsterXamarin\JhipsterXamarin\JhipsterXamarin.csproj">
       <Project>{3d1af2b1-a215-48ad-8394-522f437b0874}</Project>
       <Name>JhipsterXamarin</Name>
