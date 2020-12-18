@@ -9,23 +9,13 @@ namespace JhipsterXamarin.Services
 {
     public class UserEntityService : IUserEntityService<UserModel>
     {
-        private const string AuthorizationHeader = "Authorization";
 
         protected readonly HttpClient _httpClient;
-        private IAuthenticationService _authenticationService;
 
-        protected JwtToken JwtToken { get; set; }
         protected string BaseUrl = "api/users";
-        public UserEntityService(HttpClient httpClient, IAuthenticationService authenticationService)
+        public UserEntityService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _authenticationService = authenticationService;
-
-            _httpClient.BaseAddress = new Uri(Configuration.BaseUri);
-            JwtToken = authenticationService.JwtToken;
-
-            if (JwtToken != null)
-                _httpClient.DefaultRequestHeaders.Add(AuthorizationHeader, $"Bearer {JwtToken.IdToken}");
         }
 
 
