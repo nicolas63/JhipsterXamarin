@@ -7,7 +7,7 @@ namespace JhipsterXamarin.Services
 {
     public class UserService : UserEntityService, IUserService
     {
-        public UserService(HttpClient httpClient, IAuthenticationService authenticationService) : base(httpClient, authenticationService)
+        public UserService(HttpClient httpClient) : base(httpClient)
         {
         }
         public async Task<IEnumerable<string>> GetAllAuthorities()
